@@ -305,32 +305,34 @@
         </div>
     </footer>
 
-    <script>
-        // Set default theme to dark mode on initial load
-        document.documentElement.className = 'theme-dark';
+    <script>// 1. Set default theme to Night Vision Green on initial load
+        document.documentElement.className = 'theme-green';
 
-        // 1. Theme Switcher Logic (Fixed to target documentElement)
+        // 2. Theme Switcher Logic
         function setTheme(themeName) {
             document.documentElement.className = themeName;
         }
 
-        // 2. Telemetry Jitter Simulation
+        // 3. Telemetry Jitter (Now only simulating Elevation and Accuracy)
         setInterval(() => {
-            const baseLat = 45.48500;
-            const baseLon = -122.67300;
-            
-            document.getElementById('lat').innerText = (baseLat + (Math.random() * 0.00099)).toFixed(5);
-            document.getElementById('lon').innerText = (baseLon + (Math.random() * 0.00099)).toFixed(5);
-            
             document.getElementById('elev').innerText = Math.floor(140 + (Math.random() * 4)) + ' ft';
             document.getElementById('acc').innerText = '± ' + Math.floor(9 + (Math.random() * 5)) + ' ft';
         }, 2000);
 
-        // 3. Interactive Compass
+        // 4. Interactive Compass & Spatial Coordinate Tracking
         const compass = document.getElementById('compass');
         const bearingText = document.getElementById('bearing');
+        const latText = document.getElementById('lat');
+        const lonText = document.getElementById('lon');
+
+        // Define a geographic bounding box for the screen
+        const centerLat = 45.48500;
+        const centerLon = -122.67300;
+        const latSpread = 0.05; // Total degrees top-to-bottom
+        const lonSpread = 0.05; // Total degrees left-to-right
 
         document.addEventListener('mousemove', (e) => {
+            // --- COMPASS MATH ---
             const rect = compass.getBoundingClientRect();
             const cx = rect.left + rect.width / 2;
             const cy = rect.top + rect.height / 2;
@@ -345,7 +347,20 @@
             
             compass.style.transform = `rotate(${bearing}deg)`;
             bearingText.innerText = Math.floor(bearing).toString().padStart(3, '0') + '°';
+
+            // --- COORDINATE MATH ---
+            // Map cursor pixel position to a percentage of the screen dimensions
+            const xPercent = e.clientX / window.innerWidth;
+            const yPercent = e.clientY / window.innerHeight;
+
+            // Calculate precise coordinates 
+            // (Note: Y-axis increases as you move down the screen, so Latitude must subtract)
+            const currentLon = centerLon - (lonSpread / 2) + (xPercent * lonSpread);
+            const currentLat = centerLat + (latSpread / 2) - (yPercent * latSpread);
+
+            latText.innerText = currentLat.toFixed(5);
+            lonText.innerText = currentLon.toFixed(5);
         });
-    </script>
+</script>
 </body>
 </html>
