@@ -78,12 +78,16 @@
             max-width: 900px;
             margin: 0 auto;
             padding: 2rem;
-            background-image: 
-                linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
-            background-size: 40px 40px;
-            /* Added smooth panning animation */
-            animation: panGrid 20s linear infinite;
+            
+            /* --- NEW MAP BACKGROUND --- */
+            background-image: url('topo-bg.jpg'); /* Make sure this matches your file name exactly */
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            
+            /* Dims the map so your HUD and text remain highly readable */
+            opacity: 0.8; 
+            
             transition: background-color 0.3s, color 0.3s;
         }
 
