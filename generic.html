@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultralight Geospatial | Field Tools</title>
+    <style>
+        /* CSS Reset & Basic Variables */
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --accent-color: #d9534f; /* Topographical red */
+            --card-bg: #ffffff;
+            --border-color: #dee2e6;
+        }
+        
+        /* Native Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --text-color: #e0e0e0;
+                --accent-color: #ff6b6b;
+                --card-bg: #1e1e1e;
+                --border-color: #333333;
+            }
+        }
+
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: -0.05rem;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: var(--accent-color);
+            margin-top: 0.5rem;
+        }
+
+        .manifesto {
+            font-size: 1.15rem;
+            margin-bottom: 3rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .tool-card {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tool-card h3 {
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+            font-size: 0.9rem;
+            color: #777;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Ultralight Geospatial</h1>
+        <h2>Offline-first. No bloat. Built for the field.</h2>
+    </header>
+
+    <main>
+        <section class="manifesto">
+            <p>We build rugged, standalone Android and iOS utilities for remote environments. Our tools are engineered with an "ultralight" philosophy: high-speed user experiences, zero unnecessary dependencies, and uncompromising performance in the backcountry where cellular reception does not exist.</p>
+        </section>
+
+        <section>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3>Tapping Data Logger</h3>
+                    <p>A rapid, heads-up ecological data collection tool designed to keep fast-moving field crews moving.</p>
+                </div>
+                <div class="tool-card">
+                    <h3>GeoPDF Navigator</h3>
+                    <p>A strictly offline, lightweight spatial viewer for navigating complex, remote project boundaries.</p>
+                </div>
+                <div class="tool-card">
+                    <h3>Telemetry Camera</h3>
+                    <p>A hardware-locked watermarking utility that embeds critical spatial telemetry directly into site documentation.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div>
+            <p><strong>Contact & Support</strong><br>
+            Email: <a href="mailto:contact@ulgeospatial.com">contact@ulgeospatial.com</a></p>
+        </div>
+        
+        <div>
+            <p><strong>Corporate Headquarters</strong><br>
+            Ultralight Geospatial LLC<br>
+            5441 S Macadam Ave, Ste N<br>
+            Portland, OR 97239</p>
+        </div>
+        
+        <div style="grid-column: 1 / -1; margin-top: 1rem; font-size: 0.8rem;">
+            <p>&copy; 2026 Ultralight Geospatial LLC. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
