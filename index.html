@@ -19,6 +19,7 @@
             --accent-color: #ff4700; 
             --card-bg: #ffffff;
             --border-color: #cccccc;
+            --hud-glow: none; /* No shadow in light mode */
             --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
             --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
@@ -30,6 +31,7 @@
             --accent-color: #ff4700; 
             --card-bg: #ffffff;
             --border-color: #cccccc;
+            --hud-glow: none;
         }
 
         :root.theme-dark {
@@ -39,6 +41,7 @@
             --accent-color: #ff5e1a;
             --card-bg: #151515;
             --border-color: #333333;
+            --hud-glow: 0px 0px 4px rgba(0,0,0,1);
         }
 
         :root.theme-green {
@@ -48,6 +51,7 @@
             --accent-color: #00ff00;
             --card-bg: #051a05;
             --border-color: #00ff00;
+            --hud-glow: 0px 0px 6px rgba(0, 255, 0, 0.2);
         }
 
         :root.theme-red {
@@ -57,9 +61,15 @@
             --accent-color: #ff0000;
             --card-bg: #1a0505;
             --border-color: #ff0000;
+            --hud-glow: 0px 0px 6px rgba(255, 0, 0, 0.2);
         }
 
         /* --- GLOBAL STYLES --- */
+        @keyframes panGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+
         body {
             font-family: var(--font-sans);
             line-height: 1.6;
@@ -72,6 +82,8 @@
                 linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
                 linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
             background-size: 40px 40px;
+            /* Added smooth panning animation */
+            animation: panGrid 20s linear infinite;
             transition: background-color 0.3s, color 0.3s;
         }
 
@@ -128,6 +140,7 @@
             margin-bottom: 3rem;
             font-family: var(--font-mono);
             box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+            transition: all 0.3s;
         }
 
         .telemetry-stack p {
@@ -138,50 +151,27 @@
             width: 220px;
         }
         .telemetry-stack span:first-child { opacity: 0.7; }
-
-        .compass-container {
-            text-align: center;
+        
+        /* NEW COMPASS CLUSTER CSS */
+        .compass-cluster {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 120px;
+            text-shadow: var(--hud-glow);
         }
 
-        .compass-ring {
-            width: 80px;
-            height: 80px;
-            border: 2px solid var(--accent-color);
-            border-radius: 50%;
-            margin: 0 auto 10px auto;
-            position: relative;
-            transition: transform 0.1s ease-out;
+        .compass-cluster svg {
+            width: 70px; 
+            height: 70px; 
+            overflow: visible; 
+            filter: drop-shadow(var(--hud-glow)); 
+            transition: transform 0.1s ease-out; /* Tuned down slightly from 0.2s for snappier tracking */
+            margin: 6px 0;
         }
 
-        /* The North Pointer */
-        .compass-ring::before {
-            content: "";
-            position: absolute;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 15px;
-            background-color: var(--accent-color);
-            border-radius: 2px;
-        }
-        /* The Center Dot */
-        .compass-ring::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 6px;
-            height: 6px;
-            background-color: var(--text-color);
-            border-radius: 50%;
-            opacity: 0.5;
-        }
-
-        .bearing-text {
-            font-size: 1.2rem;
+        #val-bearing {
+            font-size: 1.1rem;
             font-weight: bold;
             color: var(--accent-color);
         }
@@ -211,6 +201,7 @@
         .tool-card:hover {
             border-color: var(--accent-color);
             box-shadow: inset 0 0 0 1px var(--accent-color);
+            transform: translateY(-2px); /* Slight lift on hover */
         }
 
         .tool-card h3 {
@@ -260,9 +251,18 @@
                 <p><span>H_ACC:</span> <strong id="acc">± 12 ft</strong></p>
             </div>
             
-            <div class="compass-container">
-                <div class="compass-ring" id="compass"></div>
-                <div class="bearing-text" id="bearing">000°</div>
+            <div class="compass-cluster">
+                <div style="font-size: 14px; font-weight: bold; margin-bottom: -4px;">N</div>
+                
+                <svg id="compass-dial" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="var(--accent-color)" stroke-width="2.25" stroke-linecap="round" />
+                    <line x1="50" y1="50" x2="50" y2="63.5" stroke="var(--accent-color)" stroke-width="2.25" stroke-linecap="round" style="opacity: 0.6;" />
+                    <line x1="50" y1="50" x2="50" y2="14" stroke="var(--accent-color)" stroke-width="2.25" stroke-linecap="round" />
+                    <circle cx="50" cy="14" r="1.8" fill="var(--accent-color)" />
+                    <circle cx="50" cy="50" r="2.25" fill="var(--accent-color)" style="opacity: 0.5;" />
+                </svg>
+
+                <div id="val-bearing">000° N</div>
             </div>
         </div>
 
@@ -305,7 +305,8 @@
         </div>
     </footer>
 
-    <script>// 1. Set default theme to Night Vision Green on initial load
+    <script>
+        // 1. Set default theme to Night Vision Green on initial load
         document.documentElement.className = 'theme-green';
 
         // 2. Theme Switcher Logic
@@ -313,27 +314,30 @@
             document.documentElement.className = themeName;
         }
 
-        // 3. Telemetry Jitter (Now only simulating Elevation and Accuracy)
+        // 3. Telemetry Jitter (Simulating Elevation and Accuracy)
         setInterval(() => {
             document.getElementById('elev').innerText = Math.floor(140 + (Math.random() * 4)) + ' ft';
             document.getElementById('acc').innerText = '± ' + Math.floor(9 + (Math.random() * 5)) + ' ft';
         }, 2000);
 
         // 4. Interactive Compass & Spatial Coordinate Tracking
-        const compass = document.getElementById('compass');
-        const bearingText = document.getElementById('bearing');
+        const compassDial = document.getElementById('compass-dial');
+        const bearingText = document.getElementById('val-bearing');
         const latText = document.getElementById('lat');
         const lonText = document.getElementById('lon');
+        
+        // Cardinal direction mapping array
+        const compassSectors = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
 
         // Define a geographic bounding box for the screen
         const centerLat = 45.48500;
         const centerLon = -122.67300;
-        const latSpread = 0.05; // Total degrees top-to-bottom
-        const lonSpread = 0.05; // Total degrees left-to-right
+        const latSpread = 0.05;
+        const lonSpread = 0.05;
 
         document.addEventListener('mousemove', (e) => {
             // --- COMPASS MATH ---
-            const rect = compass.getBoundingClientRect();
+            const rect = compassDial.getBoundingClientRect();
             const cx = rect.left + rect.width / 2;
             const cy = rect.top + rect.height / 2;
             
@@ -345,22 +349,28 @@
             let bearing = theta + 90; 
             if (bearing < 0) bearing += 360;
             
-            compass.style.transform = `rotate(${bearing}deg)`;
-            bearingText.innerText = Math.floor(bearing).toString().padStart(3, '0') + '°';
+            // Apply rotation to the SVG
+            compassDial.style.transform = `rotate(${bearing}deg)`;
+            
+            // Calculate Cardinal Direction
+            // Divide by 45 degrees, round to nearest integer, map to array index
+            const sectorIndex = Math.round(bearing / 45) % 8;
+            const cardinal = compassSectors[sectorIndex];
+            
+            // Format output: e.g., "342° NW"
+            const formattedDegrees = Math.floor(bearing).toString().padStart(3, '0') + '°';
+            bearingText.innerText = `${formattedDegrees} ${cardinal}`;
 
             // --- COORDINATE MATH ---
-            // Map cursor pixel position to a percentage of the screen dimensions
             const xPercent = e.clientX / window.innerWidth;
             const yPercent = e.clientY / window.innerHeight;
 
-            // Calculate precise coordinates 
-            // (Note: Y-axis increases as you move down the screen, so Latitude must subtract)
             const currentLon = centerLon - (lonSpread / 2) + (xPercent * lonSpread);
             const currentLat = centerLat + (latSpread / 2) - (yPercent * latSpread);
 
             latText.innerText = currentLat.toFixed(5);
             lonText.innerText = currentLon.toFixed(5);
         });
-</script>
+    </script>
 </body>
 </html>
