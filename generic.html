@@ -4,59 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ultralight Geospatial | Field Tools</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* CSS Reset & Basic Variables */
+        /* --- THEME VARIABLES --- */
         :root {
-            --bg-color: #f8f9fa;
-            --text-color: #212529;
-            --accent-color: #d9534f; /* Topographical red */
+            /* Default: LIGHT MODE */
+            --bg-color: #f4f4f4;
+            --grid-color: rgba(0, 0, 0, 0.04);
+            --text-color: #111111;
+            --accent-color: #ff4700; 
             --card-bg: #ffffff;
-            --border-color: #dee2e6;
-        }
-        
-        /* Native Dark Mode Support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #121212;
-                --text-color: #e0e0e0;
-                --accent-color: #ff6b6b;
-                --card-bg: #1e1e1e;
-                --border-color: #333333;
-            }
+            --border-color: #cccccc;
+            --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
+        :root.theme-dark {
+            --bg-color: #0a0a0a;
+            --grid-color: rgba(255, 255, 255, 0.05);
+            --text-color: #f0f0f0;
+            --accent-color: #ff5e1a;
+            --card-bg: #151515;
+            --border-color: #333333;
+        }
+
+        :root.theme-green {
+            --bg-color: #000000;
+            --grid-color: rgba(0, 255, 0, 0.08);
+            --text-color: #00ff00;
+            --accent-color: #00ff00;
+            --card-bg: #051a05;
+            --border-color: #00ff00;
+        }
+
+        :root.theme-red {
+            --bg-color: #000000;
+            --grid-color: rgba(255, 0, 0, 0.08);
+            --text-color: #ff0000;
+            --accent-color: #ff0000;
+            --card-bg: #1a0505;
+            --border-color: #ff0000;
+        }
+
+        /* --- GLOBAL STYLES --- */
         body {
-            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            font-family: var(--font-sans);
             line-height: 1.6;
             background-color: var(--bg-color);
             color: var(--text-color);
-            max-width: 850px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 2rem;
+            background-image: 
+                linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transition: background-color 0.3s, color 0.3s;
         }
 
+        h1, h2, h3, .tnum, footer {
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+        }
+
+        /* --- HEADER & THEME SWITCHER --- */
         header {
             border-bottom: 2px solid var(--accent-color);
             padding-bottom: 1.5rem;
             margin-bottom: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            letter-spacing: -0.05rem;
+        .brand h1 { margin: 0; font-size: 2.2rem; letter-spacing: -1px; }
+        .brand h2 { margin: 0.25rem 0 0 0; font-size: 0.9rem; color: var(--accent-color); }
+
+        .theme-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
         }
 
-        h2 {
+        .color-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--border-color);
+            transition: transform 0.2s;
+        }
+        .color-dot:hover { transform: scale(1.2); }
+        .dot-light { background-color: #ffffff; border-color: #cccccc;}
+        .dot-dark { background-color: #333333; }
+        .dot-green { background-color: #00ff00; }
+        .dot-red { background-color: #ff0000; }
+
+        /* --- LIVE INTERACTIVE HUD --- */
+        .live-hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent-color);
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            font-family: var(--font-mono);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        .telemetry-stack p {
+            margin: 4px 0;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            width: 220px;
+        }
+        .telemetry-stack span:first-child { opacity: 0.7; }
+
+        .compass-container {
+            text-align: center;
+            width: 120px;
+        }
+
+        .compass-ring {
+            width: 80px;
+            height: 80px;
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
+            position: relative;
+            transition: transform 0.1s ease-out; /* Smooth mechanical rotation */
+        }
+
+        /* The North Pointer */
+        .compass-ring::before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 15px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+        /* The Center Dot */
+        .compass-ring::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background-color: var(--text-color);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .bearing-text {
             font-size: 1.2rem;
-            font-weight: 400;
+            font-weight: bold;
             color: var(--accent-color);
-            margin-top: 0.5rem;
         }
 
+        /* --- MANIFESTO & TOOLS --- */
         .manifesto {
             font-size: 1.15rem;
             margin-bottom: 3rem;
+            border-left: 4px solid var(--border-color);
+            padding-left: 1.5rem;
         }
 
         .tools-grid {
@@ -69,60 +195,84 @@
         .tool-card {
             background-color: var(--card-bg);
             padding: 1.5rem;
-            border-radius: 6px;
             border: 1px solid var(--border-color);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .tool-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: inset 0 0 0 1px var(--accent-color);
         }
 
         .tool-card h3 {
             margin-top: 0;
             font-size: 1.1rem;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
         }
+
+        .tool-card p { font-size: 0.95rem; margin-bottom: 0; }
 
         footer {
-            border-top: 1px solid var(--border-color);
+            border-top: 2px solid var(--border-color);
             padding-top: 2rem;
-            font-size: 0.9rem;
-            color: #777;
+            font-size: 0.85rem;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
-        a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
+        a { color: var(--accent-color); text-decoration: none; }
+        a:hover { background-color: var(--accent-color); color: var(--bg-color); }
     </style>
 </head>
-<body>
-
-    <header>
-        <h1>Ultralight Geospatial</h1>
-        <h2>Offline-first. No bloat. Built for the field.</h2>
+<body class="theme-dark"> <header>
+        <div class="brand">
+            <h1>Ultralight Geospatial</h1>
+            <h2>SYS: OFFLINE-FIRST // ZERO BLOAT</h2>
+        </div>
+        <div class="theme-controls">
+            <span>COLORWAY:</span>
+            <div class="color-dot dot-light" onclick="setTheme('theme-light')" title="Light"></div>
+            <div class="color-dot dot-dark" onclick="setTheme('theme-dark')" title="Dark"></div>
+            <div class="color-dot dot-green" onclick="setTheme('theme-green')" title="Night Vision Green"></div>
+            <div class="color-dot dot-red" onclick="setTheme('theme-red')" title="Tactical Red"></div>
+        </div>
     </header>
 
     <main>
+        <div class="live-hud">
+            <div class="telemetry-stack">
+                <p><span>LAT:</span> <strong id="lat">45.48512</strong></p>
+                <p><span>LON:</span> <strong id="lon">-122.67389</strong></p>
+                <p><span>ELEV:</span> <strong id="elev">142 ft</strong></p>
+                <p><span>H_ACC:</span> <strong id="acc">± 12 ft</strong></p>
+            </div>
+            
+            <div class="compass-container">
+                <div class="compass-ring" id="compass"></div>
+                <div class="bearing-text" id="bearing">000°</div>
+            </div>
+        </div>
+
         <section class="manifesto">
-            <p>We build rugged, standalone Android and iOS utilities for remote environments. Our tools are engineered with an "ultralight" philosophy: high-speed user experiences, zero unnecessary dependencies, and uncompromising performance in the backcountry where cellular reception does not exist.</p>
+            <p>We engineer rugged, offline-first field utilities for Android and iOS. Built on an "ultralight" philosophy: zero bloat, instant response, and absolute reliability in zero-connectivity environments.</p>
         </section>
 
         <section>
             <div class="tools-grid">
                 <div class="tool-card">
-                    <h3>Tapping Data Logger</h3>
-                    <p>A rapid, heads-up ecological data collection tool designed to keep fast-moving field crews moving.</p>
+                    <h3>Quick-Strike Logger</h3>
+                    <p>Heads-up ecological data collection. Designed for high-velocity field crews where screen-time must be minimized and accuracy maximized.</p>
                 </div>
                 <div class="tool-card">
-                    <h3>GeoPDF Navigator</h3>
-                    <p>A strictly offline, lightweight spatial viewer for navigating complex, remote project boundaries.</p>
+                    <h3>Offline Spatial Viewer</h3>
+                    <p>Render complex, multi-layered project boundaries with zero cellular dependency. Infinite canvas, sub-meter GPS tracking.</p>
                 </div>
                 <div class="tool-card">
                     <h3>Telemetry Camera</h3>
-                    <p>A hardware-locked watermarking utility that embeds critical spatial telemetry directly into site documentation.</p>
+                    <p>Cryptographically stamps precise GNSS coordinates, bearing, and datum data directly onto site photography. Unimpeachable record keeping.</p>
                 </div>
             </div>
         </section>
@@ -130,21 +280,68 @@
 
     <footer>
         <div>
-            <p><strong>Contact & Support</strong><br>
-            Email: <a href="mailto:contact@ulgeospatial.com">contact@ulgeospatial.com</a></p>
+            <p><strong>[ CONTACT ]</strong><br>
+            EMAIL: <a href="mailto:contact@ulgeospatial.com">jj at ulgeospatial dot com</a></p>
         </div>
         
         <div>
-            <p><strong>Corporate Headquarters</strong><br>
-            Ultralight Geospatial LLC<br>
+            <p><strong>[ HQ_COORD ]</strong><br>
             5441 S Macadam Ave, Ste N<br>
             Portland, OR 97239</p>
         </div>
         
-        <div style="grid-column: 1 / -1; margin-top: 1rem; font-size: 0.8rem;">
-            <p>&copy; 2026 Ultralight Geospatial LLC. All rights reserved.</p>
+        <div style="grid-column: 1 / -1; margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+            <p>&copy; 2026 ULTRALIGHT GEOSPATIAL LLC.</p>
         </div>
     </footer>
 
+    <script>
+        // 1. Theme Switcher Logic
+        function setTheme(themeName) {
+            document.body.className = themeName;
+        }
+
+        // 2. Telemetry Jitter Simulation (Simulates active GPS polling)
+        setInterval(() => {
+            // Base coordinates for Portland area
+            const baseLat = 45.48500;
+            const baseLon = -122.67300;
+            
+            // Add tiny random jitter to the last decimal places
+            document.getElementById('lat').innerText = (baseLat + (Math.random() * 0.00099)).toFixed(5);
+            document.getElementById('lon').innerText = (baseLon + (Math.random() * 0.00099)).toFixed(5);
+            
+            // Jitter elevation and accuracy slightly
+            document.getElementById('elev').innerText = Math.floor(140 + (Math.random() * 4)) + ' ft';
+            document.getElementById('acc').innerText = '± ' + Math.floor(9 + (Math.random() * 5)) + ' ft';
+        }, 2000); // Updates every 2 seconds
+
+        // 3. Interactive Compass (Tracks mouse cursor)
+        const compass = document.getElementById('compass');
+        const bearingText = document.getElementById('bearing');
+
+        document.addEventListener('mousemove', (e) => {
+            // Get center position of the compass element
+            const rect = compass.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            
+            // Calculate angle between compass center and mouse cursor
+            const dy = e.clientY - cy;
+            const dx = e.clientX - cx;
+            let theta = Math.atan2(dy, dx); // radians
+            theta *= 180 / Math.PI; // convert to degrees
+            
+            // Add 90 degrees so top of screen is North (0 deg)
+            let bearing = theta + 90; 
+            if (bearing < 0) bearing += 360;
+            
+            // Apply visual rotation to the CSS ring
+            compass.style.transform = `rotate(${bearing}deg)`;
+            
+            // Pad bearing text with leading zeros (e.g., 045°)
+            bearingText.innerText = Math.floor(bearing).toString().padStart(3, '0') + '°';
+        });
+    </script>
 </body>
 </html>
