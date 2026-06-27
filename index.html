@@ -225,13 +225,38 @@
 
         a { color: var(--accent-color); text-decoration: none; }
         a:hover { background-color: var(--accent-color); color: var(--bg-color); }
+    /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .live-hud {
+                flex-direction: column;
+                gap: 2rem;
+                padding: 2rem 1.5rem;
+            }
+
+            .telemetry-stack {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+
+            .telemetry-stack p {
+                width: 100%;
+                max-width: 250px; /* Keeps the spacing tight and readable */
+            }
+        }
     </style>
 </head>
 <body> 
     <header>
         <div class="brand">
             <h1>Ultralight Geospatial</h1>
-            <h2>SYS: OFFLINE-FIRST // ZERO BLOAT</h2>
+            <h2>SYS: OFFLINE (No Problem!) // ZERO BLOAT // PRIVACY CENTERED</h2>
         </div>
         <div class="theme-controls">
             <span>COLORWAY:</span>
@@ -267,23 +292,24 @@
         </div>
 
         <section class="manifesto">
-            <p>We engineer rugged, offline-first field utilities for Android and iOS. Built on an "ultralight" philosophy: zero bloat, instant response, and absolute reliability in zero-connectivity environments.</p>
+            <p>We engineer rugged, offline-first field utilities for Android and iOS. Built on an "ultralight" philosophy: zero bloat, instant response, and absolute reliability in backcountry cellular data shadows.</p>
         </section>
 
         <section>
             <div class="tools-grid">
                 <div class="tool-card">
-                    <h3>Quick Spatial Data Logger</h3>
-                    <p>Heads-up biological field data collection. Designed for simplicity and offline use where battery life is extended, screen-time must be minimized, and accuracy maximized.</p>
-                </div>
-                <div class="tool-card">
                     <h3>Ultralight Offline Navigation</h3>
                     <p>A stripped-down, high-performance navigation tool built for off-grid precision with zero data dependency. It merges custom map rendering with relentless battery efficiency.</p>
                 </div>
                 <div class="tool-card">
-                    <h3>Field Telemetry Camera</h3>
+                    <h3>Visual Data Collection w/ Telemetry</h3>
                     <p>A standalone field utility that fuses optical capture with real-time geospatial data. It provides immediate, verifiable location context for backcountry documentation and project boundaries.</p>
                 </div>
+<div class="tool-card">
+                    <h3>Catagoric Data Spatial Logger</h3>
+                    <p>Heads-up field data collecting. Designed for simplicity, reliability and offline use. For collecting biological field data, GIS points and lines, asset locations and more.</p>
+                </div>
+
             </div>
         </section>
     </main>
@@ -291,13 +317,14 @@
     <footer>
         <div>
             <p><strong>[ CONTACT ]</strong><br>
-            EMAIL: <a href="mailto:contact@ulgeospatial.com">jj at ulgeospatial dot com</a></p>
+            EMAIL: <a href="mailto:jj@ulgeospatial.com">jj at ulgeospatial</a></p>
         </div>
         
         <div>
             <p><strong>[ HQ_COORD ]</strong><br>
             5441 S Macadam Ave, Ste N<br>
-            Portland, OR 97239</p>
+            Portland, OR 97239<br>
+            45°29'02", -122°40'34"</p>
         </div>
         
         <div style="grid-column: 1 / -1; margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
@@ -305,7 +332,7 @@
         </div>
     </footer>
 
-    <script>
+<script>
         // 1. Set default theme to Night Vision Green on initial load
         document.documentElement.className = 'theme-green';
 
@@ -329,6 +356,9 @@
         // Cardinal direction mapping array
         const compassSectors = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
 
+        // State variable to track absolute rotation (CRITICAL FOR FIXING THE GLITCH)
+        let currentRotation = 0; 
+
         // Define a geographic bounding box for the screen
         const centerLat = 45.48500;
         const centerLon = -122.67300;
@@ -349,11 +379,19 @@
             let bearing = theta + 90; 
             if (bearing < 0) bearing += 360;
             
-            // Apply rotation to the SVG
-            compassDial.style.transform = `rotate(${bearing}deg)`;
+            // --- WRAP-AROUND FIX ---
+            // Calculate shortest angular distance (delta)
+            let delta = bearing - (currentRotation % 360);
+            if (delta > 180) delta -= 360;
+            if (delta < -180) delta += 360;
+            
+            // Add delta to absolute rotation tally
+            currentRotation += delta; 
+            
+            // Apply rotation to the SVG using the absolute tally
+            compassDial.style.transform = `rotate(${currentRotation}deg)`;
             
             // Calculate Cardinal Direction
-            // Divide by 45 degrees, round to nearest integer, map to array index
             const sectorIndex = Math.round(bearing / 45) % 8;
             const cardinal = compassSectors[sectorIndex];
             
