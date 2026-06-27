@@ -1,429 +1,578 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultralight Geospatial | Field Tools</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- THEME VARIABLES --- */
-        :root {
-            /* Default: LIGHT MODE fallback */
-            --bg-color: #f4f4f4;
-            --grid-color: rgba(0, 0, 0, 0.04);
-            --text-color: #111111;
-            --accent-color: #ff4700; 
-            --card-bg: #ffffff;
-            --border-color: #cccccc;
-            --hud-glow: none; /* No shadow in light mode */
-            --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
-            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ultralight Geospatial | Field Tools</title>
 
-        :root.theme-light {
-            --bg-color: #f4f4f4;
-            --grid-color: rgba(0, 0, 0, 0.04);
-            --text-color: #111111;
-            --accent-color: #ff4700; 
-            --card-bg: #ffffff;
-            --border-color: #cccccc;
-            --hud-glow: none;
-        }
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
 
-        :root.theme-dark {
-            --bg-color: #0a0a0a;
-            --grid-color: rgba(255, 255, 255, 0.05);
-            --text-color: #f0f0f0;
-            --accent-color: #ff5e1a;
-            --card-bg: #151515;
-            --border-color: #333333;
-            --hud-glow: 0px 0px 4px rgba(0,0,0,1);
-        }
+        <style>
+            /* --- THEME VARIABLES --- */
+            :root {
+                /* Default: LIGHT MODE fallback */
+                --bg-color: #f4f4f4;
+                --grid-color: rgba(0, 0, 0, 0.04);
+                --text-color: #111111;
+                --accent-color: #ff4700;
+                --card-bg: #ffffff;
+                --border-color: #cccccc;
+                --hud-glow: none; /* No shadow in light mode */
+                --font-mono:
+                    "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+                --font-sans:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    sans-serif;
+            }
 
-        :root.theme-green {
-            --bg-color: #000000;
-            --grid-color: rgba(0, 255, 0, 0.08);
-            --text-color: #00ff00;
-            --accent-color: #00ff00;
-            --card-bg: #051a05;
-            --border-color: #00ff00;
-            --hud-glow: 0px 0px 6px rgba(0, 255, 0, 0.2);
-        }
+            :root.theme-light {
+                --bg-color: #f4f4f4;
+                --grid-color: rgba(0, 0, 0, 0.04);
+                --text-color: #111111;
+                --accent-color: #ff4700;
+                --card-bg: #ffffff;
+                --border-color: #cccccc;
+                --hud-glow: none;
+            }
 
-        :root.theme-red {
-            --bg-color: #000000;
-            --grid-color: rgba(255, 0, 0, 0.08);
-            --text-color: #ff0000;
-            --accent-color: #ff0000;
-            --card-bg: #1a0505;
-            --border-color: #ff0000;
-            --hud-glow: 0px 0px 6px rgba(255, 0, 0, 0.2);
-        }
+            :root.theme-dark {
+                --bg-color: #0a0a0a;
+                --grid-color: rgba(255, 255, 255, 0.05);
+                --text-color: #f0f0f0;
+                --accent-color: #ff5e1a;
+                --card-bg: #151515;
+                --border-color: #333333;
+                --hud-glow: 0px 0px 4px rgba(0, 0, 0, 1);
+            }
 
-        /* --- GLOBAL STYLES --- */
-        body {
-            font-family: var(--font-sans);
-            line-height: 1.6;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        
-        /* --- THE DYNAMIC TOPO BACKGROUND --- */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1; /* Pushes the map behind your HUD */
-            
-            /* This dynamically colors the map lines */
-            background-color: var(--text-color); 
-            opacity: 0.10; /* Tuned down slightly for legibility */
-            
-            /* The Magic: We use your QGIS SVG as a cookie-cutter mask */
-            -webkit-mask-image: url('topo-bg.svg');
-            mask-image: url('topo-bg.svg');
-            -webkit-mask-size: cover;
-            mask-size: cover;
-            -webkit-mask-position: center;
-            mask-position: center;
-            
-            /* Smooth transitions when you click the theme buttons */
-            transition: background-color 0.3s;
-        }
+            :root.theme-green {
+                --bg-color: #000000;
+                --grid-color: rgba(0, 255, 0, 0.08);
+                --text-color: #00ff00;
+                --accent-color: #00ff00;
+                --card-bg: #051a05;
+                --border-color: #00ff00;
+                --hud-glow: 0px 0px 6px rgba(0, 255, 0, 0.2);
+            }
 
-        h1, h2, h3, .tnum, footer {
-            font-family: var(--font-mono);
-            text-transform: uppercase;
-        }
+            :root.theme-red {
+                --bg-color: #000000;
+                --grid-color: rgba(255, 0, 0, 0.08);
+                --text-color: #ff0000;
+                --accent-color: #ff0000;
+                --card-bg: #1a0505;
+                --border-color: #ff0000;
+                --hud-glow: 0px 0px 6px rgba(255, 0, 0, 0.2);
+            }
 
-        /* --- HEADER & THEME SWITCHER --- */
-        header {
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 1.5rem;
-            margin-bottom: 2.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
+            /* --- GLOBAL STYLES --- */
+            body {
+                font-family: var(--font-sans);
+                line-height: 1.6;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 2rem;
+                transition:
+                    background-color 0.3s,
+                    color 0.3s;
+            }
 
-        .brand h1 { margin: 0; font-size: 2.2rem; letter-spacing: -1px; }
-        .brand h2 { margin: 0.25rem 0 0 0; font-size: 0.9rem; color: var(--accent-color); }
+            /* --- THE DYNAMIC TOPO BACKGROUND --- */
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
 
-        .theme-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-        }
+                /* Bring it to the base layer, but make it unclickable */
+                z-index: 0;
+                pointer-events: none;
 
-        .color-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid var(--border-color);
-            transition: transform 0.2s;
-        }
-        .color-dot:hover { transform: scale(1.2); }
-        .dot-light { background-color: #ffffff; border-color: #cccccc;}
-        .dot-dark { background-color: #333333; }
-        .dot-green { background-color: #00ff00; }
-        .dot-red { background-color: #ff0000; }
+                background-color: var(--text-color);
+                opacity: 0.15;
 
-        /* --- LIVE INTERACTIVE HUD --- */
-        .live-hud {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--card-bg);
-            border: 1px solid var(--accent-color);
-            padding: 1.5rem;
-            margin-bottom: 3rem;
-            font-family: var(--font-mono);
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
-            transition: all 0.3s;
-        }
+                -webkit-mask-image: url("topo-bg.svg");
+                mask-image: url("topo-bg.svg");
+                -webkit-mask-size: cover;
+                mask-size: cover;
+                -webkit-mask-position: center;
+                mask-position: center;
 
-        .telemetry-stack p {
-            margin: 4px 0;
-            font-size: 0.95rem;
-            display: flex;
-            justify-content: space-between;
-            width: 220px;
-        }
-        .telemetry-stack span:first-child { opacity: 0.7; }
-        
-        /* NEW COMPASS CLUSTER CSS */
-        .compass-cluster {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 120px;
-            text-shadow: var(--hud-glow);
-        }
+                transition: background-color 0.3s;
+            }
 
-        .compass-cluster svg {
-            width: 70px; 
-            height: 70px; 
-            overflow: visible; 
-            filter: drop-shadow(var(--hud-glow)); 
-            transition: transform 0.1s ease-out; 
-            margin: 6px 0;
-        }
+            /* Elevate the actual content so it sits securely on top of the map */
+            header,
+            main,
+            footer {
+                position: relative;
+                z-index: 10;
+            }
 
-        #val-bearing {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: var(--accent-color);
-        }
+            h1,
+            h2,
+            h3,
+            .tnum,
+            footer {
+                font-family: var(--font-mono);
+                text-transform: uppercase;
+            }
 
-        /* --- MANIFESTO & TOOLS --- */
-        .manifesto {
-            font-size: 1.15rem;
-            margin-bottom: 3rem;
-            border-left: 4px solid var(--border-color);
-            padding-left: 1.5rem;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 4rem;
-        }
-
-        .tool-card {
-            background-color: var(--card-bg);
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            transition: all 0.2s ease-in-out;
-        }
-
-        .tool-card:hover {
-            border-color: var(--accent-color);
-            box-shadow: inset 0 0 0 1px var(--accent-color);
-            transform: translateY(-2px); 
-        }
-
-        .tool-card h3 {
-            margin-top: 0;
-            font-size: 1.1rem;
-            color: var(--accent-color);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.5rem;
-        }
-
-        .tool-card p { font-size: 0.95rem; margin-bottom: 0; }
-
-        footer {
-            border-top: 2px solid var(--border-color);
-            padding-top: 2rem;
-            font-size: 0.85rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        a { color: var(--accent-color); text-decoration: none; }
-        a:hover { background-color: var(--accent-color); color: var(--bg-color); }
-        
-        /* --- MOBILE RESPONSIVENESS --- */
-        @media (max-width: 600px) {
+            /* --- HEADER & THEME SWITCHER --- */
             header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .live-hud {
-                flex-direction: column;
-                gap: 2rem;
-                padding: 2rem 1.5rem;
+                border-bottom: 2px solid var(--accent-color);
+                padding-bottom: 1.5rem;
+                margin-bottom: 2.5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                flex-wrap: wrap;
+                gap: 1rem;
             }
 
-            .telemetry-stack {
+            .brand h1 {
+                margin: 0;
+                font-size: 2.2rem;
+                letter-spacing: -1px;
+            }
+            .brand h2 {
+                margin: 0.25rem 0 0 0;
+                font-size: 0.9rem;
+                color: var(--accent-color);
+            }
+
+            .theme-controls {
                 display: flex;
-                flex-direction: column;
                 align-items: center;
-                width: 100%;
+                gap: 10px;
+                font-family: var(--font-mono);
+                font-size: 0.8rem;
+            }
+
+            .color-dot {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                cursor: pointer;
+                border: 2px solid var(--border-color);
+                transition: transform 0.2s;
+            }
+            .color-dot:hover {
+                transform: scale(1.2);
+            }
+            .dot-light {
+                background-color: #ffffff;
+                border-color: #cccccc;
+            }
+            .dot-dark {
+                background-color: #333333;
+            }
+            .dot-green {
+                background-color: #00ff00;
+            }
+            .dot-red {
+                background-color: #ff0000;
+            }
+
+            /* --- LIVE INTERACTIVE HUD --- */
+            .live-hud {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: var(--card-bg);
+                border: 1px solid var(--accent-color);
+                padding: 1.5rem;
+                margin-bottom: 3rem;
+                font-family: var(--font-mono);
+                box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s;
             }
 
             .telemetry-stack p {
-                width: 100%;
-                max-width: 250px; 
+                margin: 4px 0;
+                font-size: 0.95rem;
+                display: flex;
+                justify-content: space-between;
+                width: 220px;
             }
-        }
-    </style>
-</head>
-<body> 
-    <header>
-        <div class="brand">
-            <h1>Ultralight Geospatial</h1>
-            <h2>SYS: OFFLINE (No Problem!) // ZERO BLOAT // PRIVACY CENTERED</h2>
-        </div>
-        <div class="theme-controls">
-            <span>COLORWAY:</span>
-            <div class="color-dot dot-light" onclick="setTheme('theme-light')" title="Light"></div>
-            <div class="color-dot dot-dark" onclick="setTheme('theme-dark')" title="Dark"></div>
-            <div class="color-dot dot-green" onclick="setTheme('theme-green')" title="Night Vision Green"></div>
-            <div class="color-dot dot-red" onclick="setTheme('theme-red')" title="Tactical Red"></div>
-        </div>
-    </header>
+            .telemetry-stack span:first-child {
+                opacity: 0.7;
+            }
 
-    <main>
-        <div class="live-hud">
-            <div class="telemetry-stack">
-                <p><span>LAT:</span> <strong id="lat">45.48512</strong></p>
-                <p><span>LON:</span> <strong id="lon">-122.67389</strong></p>
-                <p><span>ELEV:</span> <strong id="elev">142 ft</strong></p>
-                <p><span>H_ACC:</span> <strong id="acc">± 12 ft</strong></p>
+            /* NEW COMPASS CLUSTER CSS */
+            .compass-cluster {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 120px;
+                text-shadow: var(--hud-glow);
+            }
+
+            .compass-cluster svg {
+                width: 70px;
+                height: 70px;
+                overflow: visible;
+                filter: drop-shadow(var(--hud-glow));
+                transition: transform 0.1s ease-out;
+                margin: 6px 0;
+            }
+
+            #val-bearing {
+                font-size: 1.1rem;
+                font-weight: bold;
+                color: var(--accent-color);
+            }
+
+            /* --- MANIFESTO & TOOLS --- */
+            .manifesto {
+                font-size: 1.15rem;
+                margin-bottom: 3rem;
+                border-left: 4px solid var(--border-color);
+                padding-left: 1.5rem;
+            }
+
+            .tools-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 4rem;
+            }
+
+            .tool-card {
+                background-color: var(--card-bg);
+                padding: 1.5rem;
+                border: 1px solid var(--border-color);
+                transition: all 0.2s ease-in-out;
+            }
+
+            .tool-card:hover {
+                border-color: var(--accent-color);
+                box-shadow: inset 0 0 0 1px var(--accent-color);
+                transform: translateY(-2px);
+            }
+
+            .tool-card h3 {
+                margin-top: 0;
+                font-size: 1.1rem;
+                color: var(--accent-color);
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 0.5rem;
+            }
+
+            .tool-card p {
+                font-size: 0.95rem;
+                margin-bottom: 0;
+            }
+
+            footer {
+                border-top: 2px solid var(--border-color);
+                padding-top: 2rem;
+                font-size: 0.85rem;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1.5rem;
+            }
+
+            a {
+                color: var(--accent-color);
+                text-decoration: none;
+            }
+            a:hover {
+                background-color: var(--accent-color);
+                color: var(--bg-color);
+            }
+
+            /* --- MOBILE RESPONSIVENESS --- */
+            @media (max-width: 600px) {
+                header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                .live-hud {
+                    flex-direction: column;
+                    gap: 2rem;
+                    padding: 2rem 1.5rem;
+                }
+
+                .telemetry-stack {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 100%;
+                }
+
+                .telemetry-stack p {
+                    width: 100%;
+                    max-width: 250px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="brand">
+                <h1>Ultralight Geospatial</h1>
+                <h2>SYS: OFFLINE (No Problem!) // ZERO BLOAT</h2>
             </div>
-            
-            <div class="compass-cluster">
-                <div style="font-size: 14px; font-weight: bold; margin-bottom: -4px;">N</div>
-                
-                <svg id="compass-dial" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="var(--accent-color)" stroke-width="2.25" stroke-linecap="round" />
-                    <line x1="50" y1="50" x2="50" y2="63.5" stroke="var(--accent-color)" stroke-width="2.25" stroke-linecap="round" style="opacity: 0.6;" />
-                    <line x1="50" y1="50" x2="50" y2="14" stroke="var(--accent-color)" stroke-width="2.25" stroke-linecap="round" />
-                    <circle cx="50" cy="14" r="1.8" fill="var(--accent-color)" />
-                    <circle cx="50" cy="50" r="2.25" fill="var(--accent-color)" style="opacity: 0.5;" />
-                </svg>
-
-                <div id="val-bearing">000° N</div>
+            <div class="theme-controls">
+                <span>COLORWAY:</span>
+                <div
+                    class="color-dot dot-light"
+                    onclick="setTheme('theme-light')"
+                    title="Light"
+                ></div>
+                <div
+                    class="color-dot dot-dark"
+                    onclick="setTheme('theme-dark')"
+                    title="Dark"
+                ></div>
+                <div
+                    class="color-dot dot-green"
+                    onclick="setTheme('theme-green')"
+                    title="Night Vision Green"
+                ></div>
+                <div
+                    class="color-dot dot-red"
+                    onclick="setTheme('theme-red')"
+                    title="Tactical Red"
+                ></div>
             </div>
-        </div>
+        </header>
 
-        <section class="manifesto">
-            <p>We engineer rugged, offline-first field utilities for Android and iOS. Built on an "ultralight" philosophy: zero bloat, instant response, and absolute reliability in backcountry cellular data shadows.</p>
-        </section>
+        <main>
+            <div class="live-hud">
+                <div class="telemetry-stack">
+                    <p><span>LAT:</span> <strong id="lat">45.48512</strong></p>
+                    <p>
+                        <span>LON:</span> <strong id="lon">-122.67389</strong>
+                    </p>
+                    <p><span>ELEV:</span> <strong id="elev">142 ft</strong></p>
+                    <p><span>H_ACC:</span> <strong id="acc">± 12 ft</strong></p>
+                </div>
 
-        <section>
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <h3>Ultralight Offline Navigation</h3>
-                    <p>A stripped-down, high-performance navigation tool built for off-grid precision with zero data dependency. It merges custom map rendering with relentless battery efficiency.</p>
-                </div>
-                <div class="tool-card">
-                    <h3>Visual Data Collection w/ Telemetry</h3>
-                    <p>A standalone field utility that fuses optical capture with real-time geospatial data. It provides immediate, verifiable location context for backcountry documentation and project boundaries.</p>
-                </div>
-                <div class="tool-card">
-                    <h3>Catagoric Data Spatial Logger</h3>
-                    <p>Heads-up field data collecting. Designed for simplicity, reliability and offline use. For collecting biological field data, GIS points and lines, asset locations and more.</p>
+                <div class="compass-cluster">
+                    <div
+                        style="
+                            font-size: 14px;
+                            font-weight: bold;
+                            margin-bottom: -4px;
+                        "
+                    >
+                        N
+                    </div>
+
+                    <svg id="compass-dial" viewBox="0 0 100 100">
+                        <circle
+                            cx="50"
+                            cy="50"
+                            r="45"
+                            fill="none"
+                            stroke="var(--accent-color)"
+                            stroke-width="2.25"
+                            stroke-linecap="round"
+                        />
+                        <line
+                            x1="50"
+                            y1="50"
+                            x2="50"
+                            y2="63.5"
+                            stroke="var(--accent-color)"
+                            stroke-width="2.25"
+                            stroke-linecap="round"
+                            style="opacity: 0.6"
+                        />
+                        <line
+                            x1="50"
+                            y1="50"
+                            x2="50"
+                            y2="14"
+                            stroke="var(--accent-color)"
+                            stroke-width="2.25"
+                            stroke-linecap="round"
+                        />
+                        <circle
+                            cx="50"
+                            cy="14"
+                            r="1.8"
+                            fill="var(--accent-color)"
+                        />
+                        <circle
+                            cx="50"
+                            cy="50"
+                            r="2.25"
+                            fill="var(--accent-color)"
+                            style="opacity: 0.5"
+                        />
+                    </svg>
+
+                    <div id="val-bearing">000° N</div>
                 </div>
             </div>
-        </section>
-    </main>
 
-    <footer>
-        <div>
-            <p><strong>[ CONTACT ]</strong><br>
-            EMAIL: <a href="mailto:jj@ulgeospatial.com">jj at ulgeospatial</a></p>
-        </div>
-        
-        <div>
-            <p><strong>[ HQ_COORD ]</strong><br>
-            5441 S Macadam Ave, Ste N<br>
-            Portland, OR 97239<br>
-            45°29'02", -122°40'34"</p>
-        </div>
-        
-        <div style="grid-column: 1 / -1; margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
-            <p>&copy; 2026 ULTRALIGHT GEOSPATIAL LLC.</p>
-        </div>
-    </footer>
+            <section class="manifesto">
+                <p>
+                    We engineer rugged, offline-first field utilities for
+                    Android and iOS. Built on an "ultralight" philosophy: zero
+                    bloat, instant response, and absolute reliability in
+                    backcountry cellular data shadows.
+                </p>
+            </section>
 
-    <script>
-        // 1. Set default theme to Night Vision Green on initial load
-        document.documentElement.className = 'theme-green';
+            <section>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <h3>Ultralight Offline Navigation</h3>
+                        <p>
+                            A stripped-down, high-performance navigation tool
+                            built for off-grid precision with zero data
+                            dependency. It merges custom map rendering with
+                            relentless battery efficiency.
+                        </p>
+                    </div>
+                    <div class="tool-card">
+                        <h3>Visual Data Collection w/ Telemetry</h3>
+                        <p>
+                            A standalone field utility that fuses optical
+                            capture with real-time geospatial data. It provides
+                            immediate, verifiable location context for
+                            backcountry documentation and project boundaries.
+                        </p>
+                    </div>
+                    <div class="tool-card">
+                        <h3>Catagoric Data Spatial Logger</h3>
+                        <p>
+                            Heads-up field data collecting. Designed for
+                            simplicity, reliability and offline use. For
+                            collecting biological field data, GIS points and
+                            lines, asset locations and more.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
 
-        // 2. Theme Switcher Logic
-        function setTheme(themeName) {
-            document.documentElement.className = themeName;
-        }
+        <footer>
+            <div>
+                <p>
+                    <strong>[ CONTACT ]</strong><br />
+                    EMAIL:
+                    <a href="mailto:jj@ulgeospatial.com">jj at ulgeospatial</a>
+                </p>
+            </div>
 
-        // 3. Telemetry Jitter (Simulating Elevation and Accuracy)
-        setInterval(() => {
-            document.getElementById('elev').innerText = Math.floor(140 + (Math.random() * 4)) + ' ft';
-            document.getElementById('acc').innerText = '± ' + Math.floor(9 + (Math.random() * 5)) + ' ft';
-        }, 2000);
+            <div>
+                <p>
+                    <strong>[ HQ_COORD ]</strong><br />
+                    5441 S Macadam Ave, Ste N<br />
+                    Portland, OR 97239<br />
+                    45°29'02", -122°40'34"
+                </p>
+            </div>
 
-        // 4. Interactive Compass & Spatial Coordinate Tracking
-        const compassDial = document.getElementById('compass-dial');
-        const bearingText = document.getElementById('val-bearing');
-        const latText = document.getElementById('lat');
-        const lonText = document.getElementById('lon');
-        
-        // Cardinal direction mapping array
-        const compassSectors = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+            <div
+                style="
+                    grid-column: 1 / -1;
+                    margin-top: 1rem;
+                    border-top: 1px solid var(--border-color);
+                    padding-top: 1rem;
+                "
+            >
+                <p>&copy; 2026 ULTRALIGHT GEOSPATIAL LLC.</p>
+            </div>
+        </footer>
 
-        // State variable to track absolute rotation (CRITICAL FOR FIXING THE GLITCH)
-        let currentRotation = 0; 
+        <script>
+            // 1. Set default theme to Night Vision Green on initial load
+            document.documentElement.className = "theme-green";
 
-        // Define a geographic bounding box for the screen
-        const centerLat = 45.48500;
-        const centerLon = -122.67300;
-        const latSpread = 0.05;
-        const lonSpread = 0.05;
+            // 2. Theme Switcher Logic
+            function setTheme(themeName) {
+                document.documentElement.className = themeName;
+            }
 
-        document.addEventListener('mousemove', (e) => {
-            // --- COMPASS MATH ---
-            const rect = compassDial.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2;
-            const cy = rect.top + rect.height / 2;
-            
-            const dy = e.clientY - cy;
-            const dx = e.clientX - cx;
-            let theta = Math.atan2(dy, dx);
-            theta *= 180 / Math.PI;
-            
-            let bearing = theta + 90; 
-            if (bearing < 0) bearing += 360;
-            
-            // --- WRAP-AROUND FIX ---
-            // Calculate shortest angular distance (delta)
-            let delta = bearing - (currentRotation % 360);
-            if (delta > 180) delta -= 360;
-            if (delta < -180) delta += 360;
-            
-            // Add delta to absolute rotation tally
-            currentRotation += delta; 
-            
-            // Apply rotation to the SVG using the absolute tally
-            compassDial.style.transform = `rotate(${currentRotation}deg)`;
-            
-            // Calculate Cardinal Direction
-            const sectorIndex = Math.round(bearing / 45) % 8;
-            const cardinal = compassSectors[sectorIndex];
-            
-            // Format output: e.g., "342° NW"
-            const formattedDegrees = Math.floor(bearing).toString().padStart(3, '0') + '°';
-            bearingText.innerText = `${formattedDegrees} ${cardinal}`;
+            // 3. Telemetry Jitter (Simulating Elevation and Accuracy)
+            setInterval(() => {
+                document.getElementById("elev").innerText =
+                    Math.floor(140 + Math.random() * 4) + " ft";
+                document.getElementById("acc").innerText =
+                    "± " + Math.floor(9 + Math.random() * 5) + " ft";
+            }, 2000);
 
-            // --- COORDINATE MATH ---
-            const xPercent = e.clientX / window.innerWidth;
-            const yPercent = e.clientY / window.innerHeight;
+            // 4. Interactive Compass & Spatial Coordinate Tracking
+            const compassDial = document.getElementById("compass-dial");
+            const bearingText = document.getElementById("val-bearing");
+            const latText = document.getElementById("lat");
+            const lonText = document.getElementById("lon");
 
-            const currentLon = centerLon - (lonSpread / 2) + (xPercent * lonSpread);
-            const currentLat = centerLat + (latSpread / 2) - (yPercent * latSpread);
+            // Cardinal direction mapping array
+            const compassSectors = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
 
-            latText.innerText = currentLat.toFixed(5);
-            lonText.innerText = currentLon.toFixed(5);
-        });
-    </script>
-</body>
+            // State variable to track absolute rotation (CRITICAL FOR FIXING THE GLITCH)
+            let currentRotation = 0;
+
+            // Define a geographic bounding box for the screen
+            const centerLat = 45.485;
+            const centerLon = -122.673;
+            const latSpread = 0.05;
+            const lonSpread = 0.05;
+
+            document.addEventListener("mousemove", (e) => {
+                // --- COMPASS MATH ---
+                const rect = compassDial.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+
+                const dy = e.clientY - cy;
+                const dx = e.clientX - cx;
+                let theta = Math.atan2(dy, dx);
+                theta *= 180 / Math.PI;
+
+                let bearing = theta + 90;
+                if (bearing < 0) bearing += 360;
+
+                // --- WRAP-AROUND FIX ---
+                // Calculate shortest angular distance (delta)
+                let delta = bearing - (currentRotation % 360);
+                if (delta > 180) delta -= 360;
+                if (delta < -180) delta += 360;
+
+                // Add delta to absolute rotation tally
+                currentRotation += delta;
+
+                // Apply rotation to the SVG using the absolute tally
+                compassDial.style.transform = `rotate(${currentRotation}deg)`;
+
+                // Calculate Cardinal Direction
+                const sectorIndex = Math.round(bearing / 45) % 8;
+                const cardinal = compassSectors[sectorIndex];
+
+                // Format output: e.g., "342° NW"
+                const formattedDegrees =
+                    Math.floor(bearing).toString().padStart(3, "0") + "°";
+                bearingText.innerText = `${formattedDegrees} ${cardinal}`;
+
+                // --- COORDINATE MATH ---
+                const xPercent = e.clientX / window.innerWidth;
+                const yPercent = e.clientY / window.innerHeight;
+
+                const currentLon =
+                    centerLon - lonSpread / 2 + xPercent * lonSpread;
+                const currentLat =
+                    centerLat + latSpread / 2 - yPercent * latSpread;
+
+                latText.innerText = currentLat.toFixed(5);
+                lonText.innerText = currentLon.toFixed(5);
+            });
+        </script>
+    </body>
 </html>
