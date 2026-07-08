@@ -1,578 +1,585 @@
 <!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Ultralight Geospatial | Field Tools</title>
+<html lang="en" class="cw-black">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ultralight Geospatial | Field Tools</title>
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
-            rel="stylesheet"
-        />
+<!-- Crawler control: allow normal search indexing, opt OUT of AI training.
+     Honor-system only (well-behaved bots comply; determined scrapers won't).
+     robots.txt carries the full per-crawler list. -->
+<meta name="robots" content="index, follow" />
+<meta name="googlebot" content="index, follow" />
+<meta name="google" content="notranslate" />
+<!-- Opt out of AI training corpora (page-level signal, complements robots.txt) -->
+<meta name="robots" content="noai, noimageai" />
 
-        <style>
-            /* --- THEME VARIABLES --- */
-            :root {
-                /* Default: LIGHT MODE fallback */
-                --bg-color: #f4f4f4;
-                --grid-color: rgba(0, 0, 0, 0.04);
-                --text-color: #111111;
-                --accent-color: #ff4700;
-                --card-bg: #ffffff;
-                --border-color: #cccccc;
-                --hud-glow: none; /* No shadow in light mode */
-                --font-mono:
-                    "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-                --font-sans:
-                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                    sans-serif;
-            }
+<!-- Basic SEO / share preview -->
+<meta name="description" content="Rugged, offline-first field data tools for Android and iOS. GeoPDF navigation, photo telemetry, and spatial data logging — no account, no cloud, no subscription. Built in the Pacific Northwest." />
+<meta name="author" content="Ultralight Geospatial LLC" />
+<meta property="og:title" content="Ultralight Geospatial | Field Tools" />
+<meta property="og:description" content="Offline-first field data tools. GeoPDF navigation, photo telemetry, spatial logging. No account, no cloud, no bloat." />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<!--
+  OPTION C, REV B — "CONSOLE, COMPACT"
+  Changes from v6:
+  - Default theme: BLACK (dots still in app order: white, black, green, red)
+  - Device graphics ~1/2 linear size (150px wide, ~1/4 the area); each device
+    now carries its own succinct text directly below it — name, one line of
+    utility/reliability copy, fact chips. Separate detail sections removed.
+  - All copy tightened around utility + reliability.
+  - Pairs with topo-bg.svg in the same folder.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root { --font-mono: "JetBrains Mono", ui-monospace, monospace; --rail: 232px;
+          /* AppColors.kt semantic constants — identical across colorways */
+          --destructive: #ff5555; --warning: #ffcc00; }
+  /* Colorway values trued to ThemeData.kt: RED is #FF0000 (not #FF3333);
+     secondaries are the app's own — 60% alpha for white/black, solid
+     #008800 / #880000 for green/red. */
+  .cw-white { --primary: #141414; --secondary: rgba(20,20,20,0.6);    --bg: #f5f4f0; --panel: #fdfdfc; --topo-op: 0.10; }
+  .cw-black { --primary: #e8e8e8; --secondary: rgba(232,232,232,0.6); --bg: #000000; --panel: #0b0b0b; --topo-op: 0.14; }
+  .cw-green { --primary: #00ff00; --secondary: #008800;               --bg: #000000; --panel: #030a03; --topo-op: 0.13; }
+  .cw-red   { --primary: #ff0000; --secondary: #880000;               --bg: #000000; --panel: #0a0303; --topo-op: 0.13; }
 
-            :root.theme-light {
-                --bg-color: #f4f4f4;
-                --grid-color: rgba(0, 0, 0, 0.04);
-                --text-color: #111111;
-                --accent-color: #ff4700;
-                --card-bg: #ffffff;
-                --border-color: #cccccc;
-                --hud-glow: none;
-            }
+  * { box-sizing: border-box; border-radius: 0 !important; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--primary);
+    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    font-size: 15px; /* TypeScale.body — both apps agree on 15sp */
+    line-height: 1.6;
+    transition: background-color 0.2s linear, color 0.2s linear;
+  }
+  a { color: var(--primary); text-decoration: none; border-bottom: 1px solid var(--primary); }
+  a:hover { background: var(--primary); color: var(--bg); }
+  .dim { opacity: 0.48; }
 
-            :root.theme-dark {
-                --bg-color: #0a0a0a;
-                --grid-color: rgba(255, 255, 255, 0.05);
-                --text-color: #f0f0f0;
-                --accent-color: #ff5e1a;
-                --card-bg: #151515;
-                --border-color: #333333;
-                --hud-glow: 0px 0px 4px rgba(0, 0, 0, 1);
-            }
+  /* ===== LEFT RAIL ===== */
+  .rail {
+    position: fixed; top: 0; bottom: 0; left: 0; width: var(--rail);
+    border-right: 2px solid var(--primary);
+    padding: 1.4rem 1.1rem;
+    display: flex; flex-direction: column; gap: 1.3rem;
+    background: var(--bg); z-index: 20; overflow: hidden;
+  }
+  .rail::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-color: var(--primary); opacity: var(--topo-op);
+    -webkit-mask-image: url("topo-bg.svg"); mask-image: url("topo-bg.svg");
+    -webkit-mask-size: 565.65% auto; mask-size: 565.65% auto;
+    -webkit-mask-position: 68.58% 33.87%; mask-position: 68.58% 33.87%;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  }
+  .rail > * { position: relative; }
+  .rail h1 { margin: 0; font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.4; }
+  .rail .tag { font-size: 10.5px; opacity: 0.6; letter-spacing: 0.08em; margin-top: 3px; }
 
-            :root.theme-green {
-                --bg-color: #000000;
-                --grid-color: rgba(0, 255, 0, 0.08);
-                --text-color: #00ff00;
-                --accent-color: #00ff00;
-                --card-bg: #051a05;
-                --border-color: #00ff00;
-                --hud-glow: 0px 0px 6px rgba(0, 255, 0, 0.2);
-            }
+  .status { font-size: 11px; border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent);
+            padding: 8px 9px; background: var(--panel); }
+  .status div { display: flex; justify-content: space-between; gap: 8px; padding: 1px 0; }
+  .status .lbl { opacity: 0.48; }
+  .status b { font-weight: 800; }
 
-            :root.theme-red {
-                --bg-color: #000000;
-                --grid-color: rgba(255, 0, 0, 0.08);
-                --text-color: #ff0000;
-                --accent-color: #ff0000;
-                --card-bg: #1a0505;
-                --border-color: #ff0000;
-                --hud-glow: 0px 0px 6px rgba(255, 0, 0, 0.2);
-            }
+  .idx { font-size: 11.5px; letter-spacing: 0.06em; }
+  .idx a { display: block; border: none; padding: 5px 0; border-bottom: 1px solid color-mix(in srgb, var(--primary) 22%, transparent); }
+  .idx a:hover { background: none; color: var(--primary); padding-left: 6px; }
+  .idx .n { opacity: 0.48; margin-right: 0.6em; font-weight: 800; }
 
-            /* --- GLOBAL STYLES --- */
-            body {
-                font-family: var(--font-sans);
-                line-height: 1.6;
-                background-color: var(--bg-color);
-                color: var(--text-color);
-                max-width: 900px;
-                margin: 0 auto;
-                padding: 2rem;
-                transition:
-                    background-color 0.3s,
-                    color 0.3s;
-            }
+  .theme-dots { display: flex; gap: 9px; align-items: center; margin-top: auto; }
+  .theme-dots > span { font-size: 10px; opacity: 0.48; letter-spacing: 0.12em; }
+  /* ThemeDot rule from MapUIComponents.kt: rings are uniformly 1px;
+     selection reads by ring COLOR — black on the white dot, white otherwise.
+     A faint halo keeps dots visible on same-color page backgrounds. */
+  .tdot { width: 19px; height: 19px; border-radius: 50% !important; padding: 0; cursor: pointer;
+          border: 1px solid transparent;
+          box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 25%, transparent); }
+  .td-white { background: #ffffff; border-color: #999999; }
+  .td-black { background: #1a1a1a; border-color: #555555; }
+  .td-green { background: #00ff00; border-color: #008800; }
+  .td-red   { background: #ff0000; border-color: #880000; }
+  .tdot[aria-pressed="true"] { border-color: #ffffff; }
+  .td-white[aria-pressed="true"] { border-color: #000000; }
+  .tdot:focus-visible { outline: 2px dashed var(--primary); outline-offset: 2px; }
+  .rail .foot { font-size: 10px; opacity: 0.48; line-height: 1.7; }
 
-            /* --- THE DYNAMIC TOPO BACKGROUND --- */
-            body::before {
-                content: "";
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
+  /* ===== CONTENT PANE ===== */
+  .pane { margin-left: var(--rail); padding: 2rem 2rem 3rem; max-width: 880px; }
+  .pane h2.head {
+    margin: 0 0 0.35rem; font-size: 1.35rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.4; max-width: 26ch;
+  }
+  .pane .sub { margin: 0 0 1.9rem; max-width: 52ch; }
 
-                /* Bring it to the base layer, but make it unclickable */
-                z-index: 0;
-                pointer-events: none;
+  /* ===== DEVICE SHELF: small screens, text below ===== */
+  .shelf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem; align-items: start; }
+  .device .screen {
+    position: relative; width: 150px; aspect-ratio: 1 / 2; overflow: hidden;
+    margin: 0 auto 0.9rem;
+    border: 2px solid var(--primary); background: var(--panel);
+    font-size: 8.5px; font-weight: 700; text-align: left; line-height: 1.5;
+  }
+  .screen::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 12px;
+    border-bottom: 1px solid color-mix(in srgb, var(--primary) 40%, transparent); z-index: 6;
+  }
+  .screen .sbar {
+    position: absolute; top: 0; left: 0; right: 0; height: 12px; z-index: 7;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 5px; font-size: 7px; letter-spacing: 0.05em;
+  }
+  .screen::after {
+    content: ""; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+    width: 34%; height: 2px; background: color-mix(in srgb, var(--primary) 45%, transparent); z-index: 7;
+  }
 
-                background-color: var(--text-color);
-                opacity: 0.15;
+  .device h3 { margin: 0 0 0.25rem; font-size: 13.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; }
+  .device p { margin: 0 0 0.6rem; font-size: 12.5px; text-align: center; }
+  .device .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 0; font-size: 10px; font-weight: 700; }
+  .device .facts span { border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
+                        padding: 2px 7px; margin: 0 -1px -1px 0; background: var(--panel); }
 
-                -webkit-mask-image: url("topo-bg.svg");
-                mask-image: url("topo-bg.svg");
-                -webkit-mask-size: cover;
-                mask-size: cover;
-                -webkit-mask-position: center;
-                mask-position: center;
+  /* screen 1: NAV — anatomy per GeoMapScreen.kt */
+  .scr-nav .topo {
+    position: absolute; inset: 12px 0 0 0; background-color: var(--primary); opacity: 0.5;
+    -webkit-mask-image: url("topo-bg.svg"); mask-image: url("topo-bg.svg");
+    -webkit-mask-size: 565.65% auto; mask-size: 565.65% auto;
+    -webkit-mask-position: 68.58% 33.87%; mask-position: 68.58% 33.87%;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  }
+  .scr-nav svg.route { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; }
+  .scr-nav polyline {
+    fill: none; stroke: var(--primary); stroke-width: 3;
+    stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 500; stroke-dashoffset: 500;
+    animation: navdraw 7s linear infinite;
+  }
+  @keyframes navdraw { 0% { stroke-dashoffset: 500; } 78%, 100% { stroke-dashoffset: 0; } }
+  /* top-center TelemetryOverlay: coords / datum·[±acc] / ELEV / map name */
+  .scr-nav .hud, .scr-nav .sq { border-radius: 2.5px !important; }
+  .scr-nav .hud {
+    position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+    z-index: 3; background: var(--panel);
+    border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
+    padding: 3px 6px; text-align: center; font-size: 7px; line-height: 1.5;
+    white-space: nowrap;
+  }
+  .scr-nav .hud .l2 { color: var(--secondary); }
+  /* top-left: menu, padlock stacked below (padlock stacks below the menu) */
+  .scr-nav .tl-cluster { position: absolute; top: 16px; left: 5px; z-index: 3; display: flex; flex-direction: column; gap: 3px; }
+  .scr-nav .sq {
+    width: 14px; height: 14px; display: grid; place-items: center;
+    background: var(--panel); border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
+    font-size: 8px; line-height: 1;
+  }
+  /* bottom-right MapControls: 48dp tiles, active tile = filled */
+  .scr-nav .ctl { position: absolute; right: 5px; bottom: 24px; z-index: 3; display: flex; flex-direction: column; gap: 3px; }
+  .scr-nav .ctl .sq { font-size: 5.5px; font-weight: 800; letter-spacing: 0.02em; }
+  .scr-nav .ctl .sq svg { width: 9px; height: 9px; display: block; }
+  .scr-nav .ctl .sq.active { background: var(--primary); color: var(--bg); border-color: var(--primary); }
+  .scr-nav .bars { display: flex; gap: 1.5px; }
+  .scr-nav .bars i { width: 2px; height: 6px; background: var(--bg); }
+  /* bottom-left ScaleBar */
+  .scr-nav .scale { position: absolute; left: 6px; bottom: 24px; z-index: 3; font-size: 6px; }
+  .scr-nav .scale .bar { width: 34px; height: 3px; border: 1px solid var(--primary); border-top: none; position: relative; }
+  .scr-nav .scale .bar::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 50%; background: var(--primary); }
 
-                transition: background-color 0.3s;
-            }
+  /* screen 2: PHOTO — four-corner anatomy per the hud/ composables */
+  .scr-cam { font-size: 6.5px; line-height: 1.45; }
+  .scr-cam .subject { position: absolute; top: 47%; left: 50%; transform: translate(-50%,-50%); width: 82%; opacity: 0.7; }
+  .scr-cam .subject path { fill: none; stroke: var(--primary); stroke-width: 1.5; }
+  /* TL: TelemetryStack — six labeled rows, labels NOT dimmed (per code) */
+  .scr-cam .st.tl { position: absolute; top: 16px; left: 5px; z-index: 3; }
+  /* TR: CompassCluster — N outside rim, needle to 0.8r + tip dot, center hub */
+  .scr-cam .comp { position: absolute; top: 16px; right: 5px; z-index: 3; text-align: center; width: 34px; }
+  .scr-cam .comp .n { font-size: 7px; font-weight: 800; }
+  .scr-cam .comp svg { width: 28px; height: 28px; display: block; margin: 0 auto; }
+  .scr-cam .comp circle, .scr-cam .comp line { stroke: var(--primary); }
+  .scr-cam .comp .brg { font-size: 6.5px; margin-top: 1px; }
+  /* BL: MapContainer — boundary outline, waterway, location dot, name below */
+  .scr-cam .vmap { position: absolute; left: 5px; bottom: 30px; z-index: 3; width: 44px; text-align: center; }
+  .scr-cam .vmap svg { width: 38px; height: 34px; display: block; margin: 0 auto 1px; }
+  .scr-cam .vmap .nm { font-size: 5.5px; line-height: 1.35; }
+  /* BR: MetadataStack — right-aligned, description underlined, prefix below */
+  .scr-cam .st.br { position: absolute; right: 5px; bottom: 30px; z-index: 3; text-align: right; max-width: 62px; }
+  .scr-cam .st.br .desc { border-bottom: 1px solid color-mix(in srgb, var(--primary) 30%, transparent); padding-bottom: 1px; margin-bottom: 1px; }
+  /* bottom HardwareControls bar: 4:3 | flash · shutter · preview | menu */
+  .scr-cam .hw { position: absolute; left: 0; right: 0; bottom: 8px; height: 20px; z-index: 3;
+                 display: flex; align-items: center; justify-content: space-between; padding: 0 5px; }
+  .scr-cam .hw .ar { font-size: 6.5px; font-weight: 800; }
+  .scr-cam .hw .core { display: flex; align-items: center; gap: 5px; }
+  .scr-cam .hw .bolt { width: 9px; height: 12px; }
+  .scr-cam .hw .bolt path { fill: none; stroke: var(--primary); stroke-width: 1.2; }
+  .scr-cam .ring { width: 16px; height: 16px; border: 1.5px solid var(--primary); border-radius: 50% !important; position: relative; }
+  .scr-cam .ring::after { content: ""; position: absolute; inset: 2.5px; border-radius: 50%;
+    background: color-mix(in srgb, var(--primary) 60%, transparent); }
+  .scr-cam .pv { width: 12px; height: 12px; border: 1px solid var(--primary); border-radius: 50% !important; }
+  .scr-cam .hw .menu { font-size: 9px; line-height: 1; letter-spacing: 0; }
+  .scr-cam .flash { position: absolute; inset: 12px 0 0 0; background: var(--primary); opacity: 0; z-index: 4;
+                    animation: blink 6s linear infinite; }
+  @keyframes blink { 0%, 47%, 51%, 100% { opacity: 0; } 49% { opacity: 0.35; } }
+  .scr-cam .confirm { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+                      opacity: 0; z-index: 5; font-size: 8px; animation: camok 6s linear infinite; }
+  @keyframes camok { 0%, 49% { opacity: 0; } 53%, 82% { opacity: 1; } 88%, 100% { opacity: 0; } }
 
-            /* Elevate the actual content so it sits securely on top of the map */
-            header,
-            main,
-            footer {
-                position: relative;
-                z-index: 10;
-            }
+  /* screen 3: EDITOR — the real "// EDIT WAYPOINT" dialog from Dialogs.kt */
+  .scr-log { font-size: 6px; line-height: 1.4; }
+  .scr-log .ed { position: absolute; inset: 12px 0 20px 0; padding: 4px 6px;
+                 display: flex; flex-direction: column; gap: 4px; }
+  .scr-log .hdr { display: flex; justify-content: space-between; align-items: flex-start; }
+  .scr-log .back, .scr-log .cancel { color: var(--secondary); font-size: 5px; font-weight: 700; }
+  .scr-log .ttl { font-size: 8px; font-weight: 800; margin-top: 1px; }
+  .scr-log .div { height: 1px; background: color-mix(in srgb, var(--primary) 20%, transparent); }
+  .scr-log .sect { font-size: 5.5px; font-weight: 700; letter-spacing: 0.04em; }
+  .scr-log .field { border-bottom: 1px solid color-mix(in srgb, var(--primary) 50%, transparent);
+                    padding: 1px 1px 2px; font-weight: 700; }
+  .scr-log .field .ph { color: color-mix(in srgb, var(--primary) 40%, transparent); }
+  .scr-log .row2 { display: flex; gap: 5px; } .scr-log .row2 .field { flex: 1; }
+  .scr-log .tiles { display: flex; gap: 3px; }
+  .scr-log .tile { flex: 1; border: 1px solid color-mix(in srgb, var(--primary) 50%, transparent);
+                   text-align: center; padding: 2.5px 0; font-size: 5px; font-weight: 700; }
+  .scr-log .tile.del { color: var(--destructive);
+                       border-color: color-mix(in srgb, var(--destructive) 50%, transparent); }
+  .scr-log .tile.save { animation: saveflash 7s linear infinite; }
+  @keyframes saveflash { 0%, 56%, 63%, 100% { background: transparent; color: var(--primary); }
+                         58%, 61% { background: var(--primary); color: var(--bg); } }
+  .scr-log .dots { display: flex; justify-content: space-between; padding: 0 8px; }
+  .scr-log .mdot { width: 8px; height: 8px; border-radius: 50% !important; border: 1px solid transparent; }
+  .scr-log .md-w { background: #ffffff; border-color: #999999; }
+  .scr-log .md-b { background: #1a1a1a; border-color: #555555; }
+  .scr-log .md-g { background: #00ff00; border-color: #ffffff; } /* selected: white ring */
+  .scr-log .md-r { background: #ff0000; border-color: #880000; }
+  .scr-log .footer { margin-top: auto; }
+  .scr-log .toast { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+                    z-index: 5; background: var(--panel); border: none;
+                    padding: 1.5px 6px; font-size: 5.5px; font-weight: 800; white-space: nowrap;
+                    opacity: 0; animation: toastloop 7s linear infinite; }
+  @keyframes toastloop { 0%, 59% { opacity: 0; } 62%, 90% { opacity: 1; } 94%, 100% { opacity: 0; } }
 
-            h1,
-            h2,
-            h3,
-            .tnum,
-            footer {
-                font-family: var(--font-mono);
-                text-transform: uppercase;
-            }
+  /* ===== SPECS (common) ===== */
+  .sec { margin-top: 2.4rem; padding-top: 0.5rem; border-top: 2px solid var(--primary); }
+  .sec .kicker { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; opacity: 0.48; margin-bottom: 0.5rem; }
+  .spec { font-size: 12.5px; border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); max-width: 640px; }
+  .spec div { display: grid; grid-template-columns: 130px 1fr; gap: 10px; padding: 6px 0;
+              border-bottom: 1px solid color-mix(in srgb, var(--primary) 25%, transparent); }
+  .spec dt { opacity: 0.48; } .spec dd { margin: 0; font-weight: 700; }
 
-            /* --- HEADER & THEME SWITCHER --- */
-            header {
-                border-bottom: 2px solid var(--accent-color);
-                padding-bottom: 1.5rem;
-                margin-bottom: 2.5rem;
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-end;
-                flex-wrap: wrap;
-                gap: 1rem;
-            }
+  /* ===== CONTACT ===== */
+  .contact {
+    margin-top: 2.4rem; border: 2px solid var(--primary); background: var(--panel);
+    padding: 1.2rem 1.4rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: center;
+  }
+  .contact p { margin: 0; font-size: 13px; max-width: 46ch; }
+  .contact b { font-weight: 800; }
+  .contact .cta { display: inline-block; border: 1px solid var(--primary); padding: 12px 20px;
+                  font-size: 12px; font-weight: 800; letter-spacing: 0.1em; }
 
-            .brand h1 {
-                margin: 0;
-                font-size: 2.2rem;
-                letter-spacing: -1px;
-            }
-            .brand h2 {
-                margin: 0.25rem 0 0 0;
-                font-size: 0.9rem;
-                color: var(--accent-color);
-            }
+  .pane footer { margin-top: 2.2rem; padding-top: 1rem; border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); font-size: 11.5px; }
+  .pane footer p { margin: 2px 0; }
 
-            .theme-controls {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                font-family: var(--font-mono);
-                font-size: 0.8rem;
-            }
+  @media (max-width: 900px) {
+    .rail { position: static; width: auto; border-right: none; border-bottom: 2px solid var(--primary);
+            flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem; }
+    .rail::before { -webkit-mask-size: cover; mask-size: cover; -webkit-mask-position: center; mask-position: center; opacity: calc(var(--topo-op) * 0.6); }
+    .rail .idx, .rail .status, .rail .foot { display: none; }
+    .theme-dots { margin-top: 0; margin-left: auto; }
+    .pane { margin-left: 0; padding: 1.5rem 1.25rem 2.5rem; }
+    .shelf { grid-template-columns: 1fr; gap: 2rem; }
+    .device p { max-width: 40ch; margin-left: auto; margin-right: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scr-nav polyline { animation: none; stroke-dashoffset: 0; }
+    .scr-cam .flash { animation: none; }
+    .scr-cam .confirm { animation: none; opacity: 0; }
+    .scr-log .tile.save { animation: none; }
+    .scr-log .toast { animation: none; opacity: 0; }
+  }
+</style>
+</head>
+<body>
 
-            .color-dot {
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-                cursor: pointer;
-                border: 2px solid var(--border-color);
-                transition: transform 0.2s;
-            }
-            .color-dot:hover {
-                transform: scale(1.2);
-            }
-            .dot-light {
-                background-color: #ffffff;
-                border-color: #cccccc;
-            }
-            .dot-dark {
-                background-color: #333333;
-            }
-            .dot-green {
-                background-color: #00ff00;
-            }
-            .dot-red {
-                background-color: #ff0000;
-            }
+<!-- ===== RAIL ===== -->
+<aside class="rail">
+  <div>
+    <h1>Ultralight Geospatial</h1>
+    <div class="tag">FIELD DATA TOOLS · PNW</div>
+  </div>
 
-            /* --- LIVE INTERACTIVE HUD --- */
-            .live-hud {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                background-color: var(--card-bg);
-                border: 1px solid var(--accent-color);
-                padding: 1.5rem;
-                margin-bottom: 3rem;
-                font-family: var(--font-mono);
-                box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
-                transition: all 0.3s;
-            }
+  <div class="status" aria-label="System status">
+    <div><span class="lbl">SYS</span><b>OFFLINE (NO PROBLEM!)</b></div>
+    <div><span class="lbl">UTC</span><b id="utc">--:--:--</b></div>
+    <div><span class="lbl">BLOAT</span><b>ZERO</b></div>
+  </div>
 
-            .telemetry-stack p {
-                margin: 4px 0;
-                font-size: 0.95rem;
-                display: flex;
-                justify-content: space-between;
-                width: 220px;
-            }
-            .telemetry-stack span:first-child {
-                opacity: 0.7;
-            }
+  <nav class="idx" aria-label="Sections">
+    <a href="#tools"><span class="n">01</span>THE TOOLS</a>
+    <a href="#specs"><span class="n">02</span>SPECS</a>
+    <a href="#contact"><span class="n">03</span>CONTACT</a>
+  </nav>
 
-            /* NEW COMPASS CLUSTER CSS */
-            .compass-cluster {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 120px;
-                text-shadow: var(--hud-glow);
-            }
+  <div class="theme-dots" role="group" aria-label="Color theme">
+    <span>THEME</span>
+    <button class="tdot td-white" data-cw="cw-white" aria-pressed="false" title="White"></button>
+    <button class="tdot td-black" data-cw="cw-black" aria-pressed="true" title="Black"></button>
+    <button class="tdot td-green" data-cw="cw-green" aria-pressed="false" title="Green"></button>
+    <button class="tdot td-red" data-cw="cw-red" aria-pressed="false" title="Red"></button>
+  </div>
 
-            .compass-cluster svg {
-                width: 70px;
-                height: 70px;
-                overflow: visible;
-                filter: drop-shadow(var(--hud-glow));
-                transition: transform 0.1s ease-out;
-                margin: 6px 0;
-            }
+  <div class="foot">
+    © 2026 ULTRALIGHT GEOSPATIAL LLC<br/>
+    PORTLAND, OR · BUILT IN THE PNW
+  </div>
+</aside>
 
-            #val-bearing {
-                font-size: 1.1rem;
-                font-weight: bold;
-                color: var(--accent-color);
-            }
+<!-- ===== PANE ===== -->
+<main class="pane">
+  <h2 class="head" id="tools">Field tools that work. No signal required.</h2>
+  <p class="sub">Offline-first utilities for Android and iOS. No account, no cloud,
+  no bloat — just tools that do their job, every time.</p>
 
-            /* --- MANIFESTO & TOOLS --- */
-            .manifesto {
-                font-size: 1.15rem;
-                margin-bottom: 3rem;
-                border-left: 4px solid var(--border-color);
-                padding-left: 1.5rem;
-            }
+  <!-- DEVICE SHELF: small screens, related text below each -->
+  <section class="shelf" aria-label="The three tools">
+    <div class="device">
+      <div class="screen scr-nav">
+        <div class="sbar"><span>ULG NAV</span><span id="clock-1">09:32</span></div>
+        <div class="topo" aria-hidden="true"></div>
+        <svg class="route" viewBox="0 0 310 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <polyline points="200,585 150,540 175,495 120,460 150,415 95,385 120,340 70,320 95,280 60,255"/>
+        </svg>
+        <div class="hud">
+          <div>LAT: 47.80916</div>
+          <div>LON: -123.68759</div>
+          <div class="l2">WGS84 · [±12ft]</div>
+          <div>ELEV 6,240ft · [±25ft]</div>
+          <div class="l2">MOUNT OLYMPUS (2014)</div>
+        </div>
+        <div class="tl-cluster" aria-hidden="true">
+          <div class="sq">☰</div>
+          <div class="sq lock" style="opacity:0.35;">
+            <svg viewBox="0 0 10 12" style="width:7px;height:9px;"><path d="M2.5 5 L2.5 3.5 A2.5 2.5 0 0 1 7.5 3.5 L7.5 4.2" fill="none" stroke="var(--primary)" stroke-width="1"/><rect x="1.5" y="5" width="7" height="5.5" fill="none" stroke="var(--primary)" stroke-width="1"/><circle cx="5" cy="7.7" r="0.9" fill="var(--primary)"/></svg>
+          </div>
+        </div>
+        <div class="ctl" aria-hidden="true">
+          <div class="sq"><svg viewBox="0 0 12 12"><path d="M3 11 L3 1.5 M3 2 C5 1, 7 3.5, 10 2.5 L10 6.5 C7 7.5, 5 5, 3 6" fill="none" stroke="var(--primary)" stroke-width="1.1"/></svg></div>
+          <div class="sq"><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3.4" fill="none" stroke="var(--primary)" stroke-width="1.1"/><circle cx="6" cy="6" r="1" fill="var(--primary)"/><path d="M6 0.6 L6 2.4 M6 9.6 L6 11.4 M0.6 6 L2.4 6 M9.6 6 L11.4 6" stroke="var(--primary)" stroke-width="1.1"/></svg></div>
+          <div class="sq"><svg viewBox="0 0 12 12"><rect x="1.6" y="3" width="8.8" height="6" rx="1.4" fill="none" stroke="var(--primary)" stroke-width="1.1"/></svg></div>
+          <div class="sq" style="opacity:0.35;"><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.4" fill="none" stroke="var(--primary)" stroke-width="1.1"/><path d="M6 1.6 L6 3" stroke="var(--primary)" stroke-width="1.1"/><text x="6" y="5.4" text-anchor="middle" font-size="3.6" fill="var(--primary)" font-family="inherit" font-weight="800">N</text></svg></div>
+          <div class="sq active"><span class="bars"><i></i><i></i></span></div>
+          <div class="sq"><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.4" fill="none" stroke="var(--primary)" stroke-width="1.1"/><circle cx="6" cy="6" r="1.8" fill="var(--primary)"/></svg></div>
+        </div>
+        <div class="scale" aria-hidden="true">
+          <div>5,000ft</div>
+          <div class="bar"></div>
+          <div style="margin-top:2px;">1mi</div>
+          <div class="bar" style="width:22px;"></div>
+        </div>
+      </div>
+      <h3>Navigation</h3>
+      <p>Your GeoPDF maps — current or historic USGS quads included — rendered fast, all day, with zero data dependency.</p>
+      <div class="facts">
+        <span>GEOPDF</span><span>GPX / GEOJSON / PNEZD</span><span>OSM LAYERS</span><span>LIDAR (OR+WA)</span>
+      </div>
+    </div>
 
-            .tools-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 1.5rem;
-                margin-bottom: 4rem;
-            }
+    <div class="device">
+      <div class="screen scr-cam">
+        <div class="sbar"><span>ULG PHOTO</span><span id="clock-2">09:32</span></div>
+        <svg class="subject" viewBox="0 0 160 90" aria-hidden="true">
+          <path id="cam-subj" d="M2 66 C 26 64, 40 60, 60 62 C 82 64, 96 54, 120 56 C 140 58, 148 52, 158 54 M2 72 L 158 72"/>
+          <path d="M2 84 L 158 84" opacity="0.5"/>
+        </svg>
+        <div class="st tl">
+          <div>LAT : <span id="cam-lat">44.31905</span></div>
+          <div>LON : <span id="cam-lon">-122.71640</span></div>
+          <div>H ACC: ±12ft</div>
+          <div>ELEV: 1,912ft</div>
+          <div>V ACC: ±25ft</div>
+          <div>CRS : WGS84</div>
+        </div>
+        <div class="comp" aria-hidden="true">
+          <div class="n">N</div>
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="44" fill="none" stroke-width="5"/>
+            <line x1="50" y1="50" x2="50" y2="64" stroke-width="5" opacity="0.6"/>
+            <line x1="50" y1="50" x2="50" y2="15" stroke-width="5"/>
+            <circle cx="50" cy="15" r="3.5" fill="var(--primary)" stroke="none"/>
+            <circle cx="50" cy="50" r="4" fill="var(--primary)" stroke="none" opacity="0.5"/>
+          </svg>
+          <div class="brg" id="cam-brg">247°</div>
+        </div>
+        <div class="vmap" aria-hidden="true">
+          <svg viewBox="0 0 38 34">
+            <path id="cam-bnd" d="M9 3 L13 5 L15 3 L18 6 L22 4 L24 8 L28 6 L30 10 L34 9 L33 14 L36 17 L33 20 L34 25 L30 27 L31 31 L26 30 L23 32 L20 29 L16 31 L14 28 L9 30 L7 26 L3 24 L5 19 L2 16 L5 12 L4 8 L7 7 Z"
+                  fill="none" stroke="var(--primary)" stroke-width="1.6" stroke-linejoin="round"/>
+            <path id="cam-h2o" d="M7 7 C 11 12, 14 14, 16 19 C 18 23, 22 26, 26 30"
+                  fill="none" stroke="var(--primary)" stroke-width="1" opacity="0.8"/>
+            <circle id="cam-dot" cx="16" cy="19" r="2.2" fill="var(--primary)"/>
+          </svg>
+          <div class="nm" id="cam-site">WINDFALL CREEK<br/>WATERSHED</div>
+        </div>
+        <div class="st br">
+          <div class="desc">STREAM SURVEY</div>
+          <div>20260706_093207</div>
+        </div>
+        <div class="hw" aria-hidden="true">
+          <span class="ar">4:3</span>
+          <span class="core">
+            <svg class="bolt" viewBox="0 0 9 12"><path d="M5.5 0.8 L 2 6.6 L 4.4 6.6 L 3.4 11.2 L 7 5.2 L 4.6 5.2 Z"/></svg>
+            <span class="ring"></span>
+            <span class="pv"></span>
+          </span>
+          <span class="menu">⋮</span>
+        </div>
+        <div class="flash" aria-hidden="true"></div>
+        <div class="confirm">SAVED ✓</div>
+      </div>
+      <h3>Photo + Telemetry</h3>
+      <p>Location on every frame — burned into the pixels and written to EXIF.</p>
+      <div class="facts">
+        <span>BURN-IN + EXIF GPS</span><span>CLEAN-COPY OPTION</span>
+      </div>
+    </div>
 
-            .tool-card {
-                background-color: var(--card-bg);
-                padding: 1.5rem;
-                border: 1px solid var(--border-color);
-                transition: all 0.2s ease-in-out;
-            }
-
-            .tool-card:hover {
-                border-color: var(--accent-color);
-                box-shadow: inset 0 0 0 1px var(--accent-color);
-                transform: translateY(-2px);
-            }
-
-            .tool-card h3 {
-                margin-top: 0;
-                font-size: 1.1rem;
-                color: var(--accent-color);
-                border-bottom: 1px solid var(--border-color);
-                padding-bottom: 0.5rem;
-            }
-
-            .tool-card p {
-                font-size: 0.95rem;
-                margin-bottom: 0;
-            }
-
-            footer {
-                border-top: 2px solid var(--border-color);
-                padding-top: 2rem;
-                font-size: 0.85rem;
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 1.5rem;
-            }
-
-            a {
-                color: var(--accent-color);
-                text-decoration: none;
-            }
-            a:hover {
-                background-color: var(--accent-color);
-                color: var(--bg-color);
-            }
-
-            /* --- MOBILE RESPONSIVENESS --- */
-            @media (max-width: 600px) {
-                header {
-                    flex-direction: column;
-                    align-items: flex-start;
-                }
-
-                .live-hud {
-                    flex-direction: column;
-                    gap: 2rem;
-                    padding: 2rem 1.5rem;
-                }
-
-                .telemetry-stack {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    width: 100%;
-                }
-
-                .telemetry-stack p {
-                    width: 100%;
-                    max-width: 250px;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <header>
-            <div class="brand">
-                <h1>Ultralight Geospatial</h1>
-                <h2>SYS: OFFLINE (No Problem!) // ZERO BLOAT</h2>
-            </div>
-            <div class="theme-controls">
-                <span>THEME:</span>
-                <div
-                    class="color-dot dot-light"
-                    onclick="setTheme('theme-light')"
-                    title="Light"
-                ></div>
-                <div
-                    class="color-dot dot-dark"
-                    onclick="setTheme('theme-dark')"
-                    title="Dark"
-                ></div>
-                <div
-                    class="color-dot dot-green"
-                    onclick="setTheme('theme-green')"
-                    title="Night Vision Green"
-                ></div>
-                <div
-                    class="color-dot dot-red"
-                    onclick="setTheme('theme-red')"
-                    title="Tactical Red"
-                ></div>
-            </div>
-        </header>
-
-        <main>
-            <div class="live-hud">
-                <div class="telemetry-stack">
-                    <p><span>LAT:</span> <strong id="lat">45.48512</strong></p>
-                    <p>
-                        <span>LON:</span> <strong id="lon">-122.67389</strong>
-                    </p>
-                    <p><span>ELEV:</span> <strong id="elev">142 ft</strong></p>
-                    <p><span>H_ACC:</span> <strong id="acc">± 12 ft</strong></p>
-                </div>
-
-                <div class="compass-cluster">
-                    <div
-                        style="
-                            font-size: 14px;
-                            font-weight: bold;
-                            margin-bottom: -4px;
-                        "
-                    >
-                        N
-                    </div>
-
-                    <svg id="compass-dial" viewBox="0 0 100 100">
-                        <circle
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            fill="none"
-                            stroke="var(--accent-color)"
-                            stroke-width="2.25"
-                            stroke-linecap="round"
-                        />
-                        <line
-                            x1="50"
-                            y1="50"
-                            x2="50"
-                            y2="63.5"
-                            stroke="var(--accent-color)"
-                            stroke-width="2.25"
-                            stroke-linecap="round"
-                            style="opacity: 0.6"
-                        />
-                        <line
-                            x1="50"
-                            y1="50"
-                            x2="50"
-                            y2="14"
-                            stroke="var(--accent-color)"
-                            stroke-width="2.25"
-                            stroke-linecap="round"
-                        />
-                        <circle
-                            cx="50"
-                            cy="14"
-                            r="1.8"
-                            fill="var(--accent-color)"
-                        />
-                        <circle
-                            cx="50"
-                            cy="50"
-                            r="2.25"
-                            fill="var(--accent-color)"
-                            style="opacity: 0.5"
-                        />
-                    </svg>
-
-                    <div id="val-bearing">000° N</div>
-                </div>
-            </div>
-
-            <section class="manifesto">
-                <p>
-                    We engineer rugged, offline-first field utilities for
-                    Android and iOS. Built on an "ultralight" philosophy: zero
-                    bloat, instant response, and absolute reliability in
-                    backcountry cellular data shadows.
-                </p>
-            </section>
-
-            <section>
-                <div class="tools-grid">
-                    <div class="tool-card">
-                        <h3>Ultralight Offline Navigation</h3>
-                        <p>
-                            A stripped-down, high-performance navigation tool
-                            built for off-grid precision with zero data
-                            dependency. It merges custom map rendering with
-                            relentless battery efficiency.
-                        </p>
-                    </div>
-                    <div class="tool-card">
-                        <h3>Visual Data Collection w/ Telemetry</h3>
-                        <p>
-                            A standalone field utility that fuses optical
-                            capture with real-time geospatial data. It provides
-                            immediate, verifiable location context for
-                            backcountry documentation and project boundaries.
-                        </p>
-                    </div>
-                    <div class="tool-card">
-                        <h3>Categorical Data Spatial Logger</h3>
-                        <p>
-                            Heads-up field data collection. Designed for
-                            simplicity, reliability and offline use. For
-                            collecting biological field data, GIS points and
-                            lines, asset locations and more.
-                        </p>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer>
+    <div class="device">
+      <div class="screen scr-log">
+        <div class="sbar"><span>ULG LOG</span><span id="clock-3">09:32</span></div>
+        <div class="ed">
+          <div class="hdr">
             <div>
-                <p>
-                    <strong>[ CONTACT ]</strong><br />
-                    EMAIL:
-                    <a href="mailto:jj@ulgeospatial.com">jj at ulgeospatial</a>
-                </p>
+              <div class="back">&lt;- BACK</div>
+              <div class="ttl">// EDIT WAYPOINT</div>
             </div>
-
-            <div>
-                <p>
-                    <strong>[ HQ_COORD ]</strong><br />
-                    5441 S Macadam Ave, Ste N<br />
-                    Portland, OR 97239<br />
-                    45°29'02", -122°40'34"
-                </p>
+            <div class="cancel">CANCEL</div>
+          </div>
+          <div class="div"></div>
+          <div class="sect">WAYPOINT DATA</div>
+          <div class="field">CULVERT_04</div>
+          <div class="row2">
+            <div class="field">45.48561</div>
+            <div class="field">-122.67436</div>
+          </div>
+          <div class="field"><span class="ph">ELEVATION (FT)</span></div>
+          <div class="div"></div>
+          <div class="sect">EXPORT WAYPOINT</div>
+          <div class="tiles">
+            <div class="tile">GPX</div>
+            <div class="tile">GEOJSON</div>
+            <div class="tile">PNEZD</div>
+          </div>
+          <div class="div"></div>
+          <div class="sect">MARKER COLOR</div>
+          <div class="dots" aria-hidden="true">
+            <span class="mdot md-w"></span>
+            <span class="mdot md-b"></span>
+            <span class="mdot md-g"></span>
+            <span class="mdot md-r"></span>
+          </div>
+          <div class="footer">
+            <div class="div" style="margin-bottom:4px;"></div>
+            <div class="tiles">
+              <div class="tile del">DELETE</div>
+              <div class="tile">NAV TO</div>
+              <div class="tile save">SAVE</div>
             </div>
+          </div>
+        </div>
+        <div class="toast">WAYPOINT SAVED</div>
+      </div>
+      <h3>Spatial Logger</h3>
+      <p>Points and lines in two taps. Exports drop straight into QGIS or survey software.</p>
+      <div class="facts">
+        <span>GPX / GEOJSON / PNEZD</span><span>WAYPOINTS + TRACKS</span>
+      </div>
+    </div>
+  </section>
 
-            <div
-                style="
-                    grid-column: 1 / -1;
-                    margin-top: 1rem;
-                    border-top: 1px solid var(--border-color);
-                    padding-top: 1rem;
-                "
-            >
-                <p>&copy; 2026 ULTRALIGHT GEOSPATIAL LLC.</p>
-            </div>
-        </footer>
+  <!-- COMMON SPECS -->
+  <section class="sec" id="specs">
+    <div class="kicker">// EVERY TOOL, EVERY TIME</div>
+    <dl class="spec">
+      <div><dt>OPERATION</dt><dd>100% offline. No connection needed, ever.</dd></div>
+      <div><dt>YOUR DATA</dt><dd>Stays on your device. No account, no cloud.</dd></div>
+      <div><dt>DATA I/O</dt><dd>GPX + GeoJSON in and out; PNEZD (CSV) point export.</dd></div>
+      <div><dt>BUILD</dt><dd>Small install. No ads, no trackers.</dd></div>
+      <div><dt>FIELD UX</dt><dd>Big controls. Readable in full sun, rain, and dark.</dd></div>
+    </dl>
+  </section>
 
-        <script>
-            // 1. Set default theme to Night Vision Green on initial load
-            document.documentElement.className = "theme-green";
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <p>Built for biological field technicians, survey field crews, citizen
+    science programs, and forensic documentation. Honest, low-overhead
+    pricing for nonprofits and local government.</p>
+    <a class="cta" href="mailto:jj@ulgeospatial.com">EMAIL JJ AT ULGEOSPATIAL</a>
+  </section>
 
-            // 2. Theme Switcher Logic
-            function setTheme(themeName) {
-                document.documentElement.className = themeName;
-            }
+  <footer>
+    <p>5441 S MACADAM AVE, STE N · PORTLAND, OR 97239 · 45°29'02" N, 122°40'34" W</p>
+    <p class="dim">© 2026 ULTRALIGHT GEOSPATIAL LLC · BUILT IN THE PNW</p>
+  </footer>
+</main>
 
-            // 3. Telemetry Jitter (Simulating Elevation and Accuracy)
-            setInterval(() => {
-                document.getElementById("elev").innerText =
-                    Math.floor(140 + Math.random() * 4) + " ft";
-                document.getElementById("acc").innerText =
-                    "± " + Math.floor(9 + Math.random() * 5) + " ft";
-            }, 2000);
+<script>
+  const dots = document.querySelectorAll(".tdot");
+  dots.forEach(d => d.addEventListener("click", () => {
+    document.documentElement.className = d.dataset.cw;
+    dots.forEach(x => x.setAttribute("aria-pressed", String(x === d)));
+  }));
 
-            // 4. Interactive Compass & Spatial Coordinate Tracking
-            const compassDial = document.getElementById("compass-dial");
-            const bearingText = document.getElementById("val-bearing");
-            const latText = document.getElementById("lat");
-            const lonText = document.getElementById("lon");
+  function tick() {
+    const now = new Date();
+    const p = n => String(n).padStart(2, "0");
+    document.getElementById("utc").textContent =
+      p(now.getUTCHours()) + ":" + p(now.getUTCMinutes()) + ":" + p(now.getUTCSeconds());
+    const local = p(now.getHours()) + ":" + p(now.getMinutes());
+    ["clock-1","clock-2","clock-3"].forEach(id => document.getElementById(id).textContent = local);
+  }
+  tick(); setInterval(tick, 1000);
 
-            // Cardinal direction mapping array
-            const compassSectors = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
-
-            // State variable to track absolute rotation (CRITICAL FOR FIXING THE GLITCH)
-            let currentRotation = 0;
-
-            // Define a geographic bounding box for the screen
-            const centerLat = 45.485;
-            const centerLon = -122.673;
-            const latSpread = 0.05;
-            const lonSpread = 0.05;
-
-            document.addEventListener("mousemove", (e) => {
-                // --- COMPASS MATH ---
-                const rect = compassDial.getBoundingClientRect();
-                const cx = rect.left + rect.width / 2;
-                const cy = rect.top + rect.height / 2;
-
-                const dy = e.clientY - cy;
-                const dx = e.clientX - cx;
-                let theta = Math.atan2(dy, dx);
-                theta *= 180 / Math.PI;
-
-                let bearing = theta + 90;
-                if (bearing < 0) bearing += 360;
-
-                // --- WRAP-AROUND FIX ---
-                // Calculate shortest angular distance (delta)
-                let delta = bearing - (currentRotation % 360);
-                if (delta > 180) delta -= 360;
-                if (delta < -180) delta += 360;
-
-                // Add delta to absolute rotation tally
-                currentRotation += delta;
-
-                // Apply rotation to the SVG using the absolute tally
-                compassDial.style.transform = `rotate(${currentRotation}deg)`;
-
-                // Calculate Cardinal Direction
-                const sectorIndex = Math.round(bearing / 45) % 8;
-                const cardinal = compassSectors[sectorIndex];
-
-                // Format output: e.g., "342° NW"
-                const formattedDegrees =
-                    Math.floor(bearing).toString().padStart(3, "0") + "°";
-                bearingText.innerText = `${formattedDegrees} ${cardinal}`;
-
-                // --- COORDINATE MATH ---
-                const xPercent = e.clientX / window.innerWidth;
-                const yPercent = e.clientY / window.innerHeight;
-
-                const currentLon =
-                    centerLon - lonSpread / 2 + xPercent * lonSpread;
-                const currentLat =
-                    centerLat + latSpread / 2 - yPercent * latSpread;
-
-                latText.innerText = currentLat.toFixed(5);
-                lonText.innerText = currentLon.toFixed(5);
-            });
-        </script>
-    </body>
+  // PHOTO demo: each capture cycle relocates to the next boundary site.
+  // Swap fires after the flash/SAVED beat of the 6s CSS loop, so it reads
+  // as "photo filed, moved to the next site."
+  const camSites = [
+    // Boundary outlines + names are FABRICATED demo watersheds (not real
+    // councils). Coordinates are plausible OR placements. Shapes are drawn
+    // as ridgeline divides: jagged perimeter + a dendritic drainage line.
+    { site: "WINDFALL CREEK<br/>WATERSHED", lat: "44.31905", lon: "-122.71640", brg: "247\u00b0",
+      subj: "M2 80 L 38 34 L 58 52 L 88 12 L 118 48 L 138 36 L 158 80",
+      bnd: "M9 3 L13 5 L15 3 L18 6 L22 4 L24 8 L28 6 L30 10 L34 9 L33 14 L36 17 L33 20 L34 25 L30 27 L31 31 L26 30 L23 32 L20 29 L16 31 L14 28 L9 30 L7 26 L3 24 L5 19 L2 16 L5 12 L4 8 L7 7 Z",
+      h2o: "M7 7 C 11 12, 14 14, 16 19 C 18 23, 22 26, 26 30", dot: [16, 19] },
+    { site: "DRY FORK<br/>WATERSHED", lat: "45.11872", lon: "-123.04415", brg: "128\u00b0",
+      subj: "M2 62 C 30 58, 44 70, 70 66 C 100 61, 118 74, 158 68 M2 34 L 44 26 L 70 38 L 158 20",
+      bnd: "M12 3 L15 4 L17 2 L19 5 L23 4 L25 7 L29 5 L31 9 L35 11 L33 15 L35 19 L31 22 L33 27 L28 28 L26 32 L22 29 L18 31 L16 27 L12 29 L10 25 L5 24 L7 20 L4 17 L7 14 L5 10 L9 9 Z",
+      h2o: "M9 9 C 13 13, 15 15, 17 18 M17 18 C 15 22, 20 25, 24 27 M17 18 C 20 20, 23 19, 26 21", dot: [17, 18] },
+    { site: "CEDAR HOLLOW<br/>WATERSHED", lat: "44.72210", lon: "-123.21684", brg: "032\u00b0",
+      subj: "M2 74 C 26 62, 50 70, 78 60 C 110 49, 132 58, 158 50 M96 60 L 96 26 M96 32 L 106 40 M96 38 L 88 44",
+      bnd: "M10 4 L14 3 L16 6 L20 4 L22 7 L27 5 L28 9 L33 8 L32 13 L35 16 L32 19 L34 24 L29 25 L30 30 L25 29 L22 32 L18 30 L15 32 L13 28 L8 29 L7 24 L3 22 L6 18 L3 14 L7 11 L6 7 Z",
+      h2o: "M6 7 C 10 11, 13 13, 15 17 C 17 21, 21 24, 25 29", dot: [15, 17] }
+  ];
+  let camIdx = 0;
+  const camEls = ["cam-site","cam-lat","cam-lon","cam-brg","cam-subj","cam-bnd","cam-h2o","cam-dot"]
+    .map(id => document.getElementById(id));
+  function camSwap() {
+    camIdx = (camIdx + 1) % camSites.length;
+    const c = camSites[camIdx];
+    camEls[0].innerHTML = c.site;
+    camEls[1].textContent = c.lat;
+    camEls[2].textContent = c.lon;
+    camEls[3].textContent = c.brg;
+    camEls[4].setAttribute("d", c.subj);
+    camEls[5].setAttribute("d", c.bnd);
+    camEls[6].setAttribute("d", c.h2o);
+    camEls[7].setAttribute("cx", c.dot[0]);
+    camEls[7].setAttribute("cy", c.dot[1]);
+  }
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    // flash peaks at 49% of the 6s loop; swap at 5.4s so SAVED has faded
+    setTimeout(() => setInterval(camSwap, 6000), 5400);
+  }
+</script>
+</body>
 </html>
