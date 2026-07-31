@@ -15,10 +15,10 @@
 <meta name="robots" content="noai, noimageai" />
 
 <!-- Basic SEO / share preview -->
-<meta name="description" content="Rugged, offline-first field data tools for Android and iOS. GeoPDF navigation, photo telemetry, and spatial data logging — no account, no cloud, no subscription." />
+<meta name="description" content="Rugged, offline-first field data tools for Android and iOS. GeoPDF navigation, photo telemetry, spatial data logging, and lidar elevation profiles for hiking and canyoneering — no account, no cloud, no subscription." />
 <meta name="author" content="Ultralight Geospatial LLC" />
 <meta property="og:title" content="Ultralight Geospatial | Field Tools" />
-<meta property="og:description" content="Offline-first field data tools. GeoPDF navigation, photo telemetry, spatial logging. No account, no cloud, no bloat." />
+<meta property="og:description" content="Offline-first field data tools. GeoPDF navigation, photo telemetry, spatial logging, lidar elevation profiles. No account, no cloud, no bloat." />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
 <!--
@@ -55,6 +55,9 @@
     line-height: 1.6;
     transition: background-color 0.2s linear, color 0.2s linear;
   }
+  html { scroll-behavior: smooth; }
+  section[id], h2[id] { scroll-margin-top: 1.2rem; }
+  .pane > section { margin-bottom: 3.25rem; }
   a { color: var(--primary); text-decoration: none; border-bottom: 1px solid var(--primary); }
   a:hover { background: var(--primary); color: var(--bg); }
   .dim { opacity: 0.48; }
@@ -128,7 +131,8 @@
   .rail .foot { font-size: 10px; opacity: 0.48; line-height: 1.7; }
 
   /* ===== CONTENT PANE ===== */
-  .pane { margin-left: var(--rail); padding: 2rem 2rem 3rem; max-width: 880px; }
+  .pane { margin-left: var(--rail);
+          padding: 2.5rem max(2rem, calc((100vw - var(--rail) - 900px) / 2)) 3.5rem; }
   .pane h2.head {
     margin: 0 0 0.35rem; font-size: 1.35rem; font-weight: 800;
     text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.4; max-width: 26ch;
@@ -301,6 +305,7 @@
   .profile-lead .tag { font-size: 11px; font-weight: 800; letter-spacing: 0.16em; opacity: 0.48; }
   .profile-lead p { margin: 0; font-size: 13px; max-width: 56ch; }
   .land-device { max-width: 560px; }
+  .land-device + .land-device { margin-top: 1.8rem; }
   .land-screen {
     position: relative; aspect-ratio: 380 / 150; overflow: hidden;
     border: 2px solid var(--primary); background: var(--panel);
@@ -371,6 +376,20 @@
     .land-screen .pf { animation: none; opacity: 0; }
   }
 
+  /* ===== CANYON MODE (drop markers) ===== */
+  .land-screen .dropbar { stroke: var(--primary); stroke-width: 0.9; stroke-opacity: 0.85; }
+  .land-screen .droptick { stroke: var(--primary); stroke-width: 0.9; stroke-opacity: 0.85; }
+  .land-screen .droplabel { font-family: var(--font-mono); font-weight: 800; }
+  .land-screen .wpline { stroke: var(--primary); stroke-opacity: 0.5; stroke-width: 0.6; }
+  .land-screen .wpchip { fill: var(--panel); fill-opacity: 0.9; stroke: var(--primary);
+                         stroke-opacity: 0.45; stroke-width: 0.5; }
+  .land-screen .wptext { font-family: var(--font-mono); font-weight: 700; }
+  .land-caption .estnote {
+    display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 0.06em;
+    border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent);
+    padding: 3px 7px; margin: 0 0 0.55rem; opacity: 0.8;
+  }
+
   /* ===== SPECS (common) ===== */
   .sec { margin-top: 2.4rem; padding-top: 0.5rem; border-top: 2px solid var(--primary); }
   .sec .kicker { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; opacity: 0.48; margin-bottom: 0.5rem; }
@@ -393,15 +412,28 @@
   .pane footer { margin-top: 2.2rem; padding-top: 1rem; border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); font-size: 11.5px; }
   .pane footer p { margin: 2px 0; }
 
-  @media (max-width: 900px) {
+  @media (max-width: 1080px) {
     .rail { position: static; width: auto; border-right: none; border-bottom: 2px solid var(--primary);
-            flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem; }
+            flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.2rem; }
     .rail::before { -webkit-mask-size: cover; mask-size: cover; -webkit-mask-position: center; mask-position: center; opacity: calc(var(--topo-op) * 0.6); }
-    .rail .idx, .rail .status, .rail .foot { display: none; }
+    .rail .status, .rail .foot { display: none; }
+    .railcompass { padding: 4px 8px; gap: 8px; }
+    .railcompass #rc-dial { width: 38px; height: 38px; }
+    .rc-read { display: flex; gap: 0.8em; line-height: 1.2; align-items: center; font-size: 9.5px; }
+    .rail .idx { display: flex; gap: 1.1rem; width: 100%; order: 3; }
+    .idx a { border-bottom: none; padding: 2px 0; }
+    .idx a:hover { padding-left: 0; opacity: 0.7; }
     .theme-dots { margin-top: 0; margin-left: auto; }
     .pane { margin-left: 0; padding: 1.5rem 1.25rem 2.5rem; }
+  }
+  @media (max-width: 860px) {
     .shelf { grid-template-columns: 1fr; gap: 2rem; }
     .device p { max-width: 40ch; margin-left: auto; margin-right: auto; }
+  }
+  @media (max-width: 620px) {
+    .spec div { grid-template-columns: 1fr; gap: 2px; }
+    .spec dt { opacity: 0.55; }
+    .head { font-size: 1.35rem; }
   }
   /* ===== CONTRAST BLOCK: the familiar consumer-map failure ===== */
   .contrast-wrap { margin: 0 0 2.2rem; }
@@ -523,8 +555,9 @@
 
   <nav class="idx" aria-label="Sections">
     <a href="#tools"><span class="n">01</span>THE TOOLS</a>
-    <a href="#specs"><span class="n">02</span>SPECS</a>
-    <a href="#contact"><span class="n">03</span>CONTACT</a>
+    <a href="#profile"><span class="n">02</span>PROFILE</a>
+    <a href="#specs"><span class="n">03</span>SPECS</a>
+    <a href="#contact"><span class="n">04</span>CONTACT</a>
   </nav>
 
   <div class="theme-dots" role="group" aria-label="Color theme">
@@ -544,8 +577,8 @@
 <!-- ===== PANE ===== -->
 <main class="pane">
   <h2 class="head" id="tools">Field tools that work in the backcountry.</h2>
-  <p class="sub">Offline-first utilities for Android and iOS. Set them up once,
-  then they keep working where the service doesn't. No account, no cloud, no bloat.</p>
+  <p class="sub">Offline-first tools for the field. Set them up once — they keep
+  working where the service doesn't.</p>
 
   <!-- DEVICE SHELF: small screens, related text below each -->
   <!-- CONTRAST: what a consumer map app does past the last tower -->
@@ -553,9 +586,7 @@
     <div class="contrast-lead">
       <span class="tag">// WHEN THE SIGNAL DROPS</span>
       <p>Has one accidental swipe erased your map, left you hunting for signal?
-      Left you as a blue dot in a sea of empty space? A ridge, a canyon, dense
-      forest — anything can put you out of sight of a tower, and a map app that
-      leans on a live connection goes blank with it.</p>
+      Left you as a blue dot in a sea of empty space?</p>
     </div>
     <div class="contrast-row">
       <div class="deadphone" aria-label="Generic consumer map, offline">
@@ -580,9 +611,8 @@
       </div>
 
       <div class="contrast-answer">
-        <p><b>These tools work offline.</b> The map, your position, and your data all
-        live on the device — so the moment the towers drop is the moment they
-        matter most, and nothing changes.</p>
+        <p><b>These tools work offline.</b> Map, position, records — all on the
+        device. When the bars vanish, nothing changes.</p>
         <p class="contrast-cap">↓ THE SAME MOMENT, OUR WAY ↓</p>
       </div>
     </div>
@@ -625,9 +655,9 @@
         </div>
       </div>
       <h3>Navigation</h3>
-      <p>Your maps rendered fast, with zero data dependency. Free access to U.S. Government maps when in service.</p>
+      <p>Your maps, rendered fast &mdash; free U.S. Government topos built in.</p>
       <div class="facts">
-        <span>GEOPDF</span><span>GPX / GEOJSON / PNEZD</span><span>MAP OVERLAYS</span><span>LiDAR DATA</span>
+        <span>GEOPDF</span><span>GPX / GEOJSON / PNEZD</span><span>LiDAR DATA</span><span>NO PLAY SERVICES</span>
       </div>
     </div>
 
@@ -684,7 +714,7 @@
         <div class="confirm">SAVED ✓</div>
       </div>
       <h3>Photo + Telemetry</h3>
-      <p>Location on every frame — burned into the pixels and written to EXIF. Or save pictures with no location information and zero embedded EXIF data.</p>
+      <p>Location on every frame &mdash; or none at all.</p>
       <div class="facts">
         <span>BURN-IN + EXIF GPS</span><span>NO-LOCATION COPY</span>
       </div>
@@ -759,7 +789,7 @@
         <div class="toast">WAYPOINT SAVED</div>
       </div>
       <h3>Spatial Logger</h3>
-      <p>Points and lines, captured simply. Exports drop straight into enterprise GIS and engineering applications.</p>
+      <p>Points and lines, captured simply.</p>
       <div class="facts">
         <span>GPX / GEOJSON / PNEZD</span><span>WAYPOINTS + TRACKS</span>
       </div>
@@ -767,14 +797,11 @@
   </section>
 
   <!-- PROFILE: landscape elevation view -->
-  <section class="profile-wrap" aria-label="Elevation profile view">
+  <section class="profile-wrap" id="profile" aria-label="Elevation profile view">
     <div class="profile-lead">
       <span class="tag">// SEE THE CLIMB BEFORE YOU WALK IT</span>
-      <p>The point of the profile is knowing where you are on the climb. Your
-      live position rides the line, named landmarks float above it, and the
-      readout tells you how far above or below the planned ground you actually
-      stand. One-way, loop, or out-and-back — and loops wrap continuously, so you
-      can pan past the start and keep going.</p>
+      <p>Your dot rides the line. Landmarks float above it. Loops wrap &mdash;
+      pan past the start and keep going.</p>
     </div>
 
     <div class="land-device">
@@ -978,11 +1005,124 @@
 
       <div class="land-caption">
         <h3>Elevation Profile <span class="beta">PREVIEW</span></h3>
-        <p>Ground elevation comes from lidar, never from consumer GPS, so the
-        line is the terrain and not your receiver's guesswork. Fetch elevation
-        and landmarks at home over wi-fi; the whole profile then works offline.</p>
+        <p>Fetched once at home, then the whole profile works offline.</p>
         <div class="facts">
           <span>YOUR DOT RIDES THE LINE</span><span>NAMED PEAKS, PASSES &amp; CROSSINGS</span><span>ONE-WAY / LOOP / OUT-BACK</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="land-device">
+      <div class="land-screen" aria-label="Canyon descent profile with drop inventory">
+        <svg viewBox="0 0 380 150" aria-hidden="true">
+
+          <!-- FIXED: distance ticks + segmented scale bar -->
+          <line x1="47.5" y1="0" x2="47.5" y2="132" stroke="var(--primary)" stroke-opacity="0.09" stroke-width="0.5"/>
+          <line x1="95.0" y1="0" x2="95.0" y2="132" stroke="var(--primary)" stroke-opacity="0.09" stroke-width="0.5"/>
+          <line x1="142.5" y1="0" x2="142.5" y2="132" stroke="var(--primary)" stroke-opacity="0.09" stroke-width="0.5"/>
+          <line x1="190.0" y1="0" x2="190.0" y2="132" stroke="var(--primary)" stroke-opacity="0.09" stroke-width="0.5"/>
+          <line x1="237.5" y1="0" x2="237.5" y2="132" stroke="var(--primary)" stroke-opacity="0.09" stroke-width="0.5"/>
+          <line x1="285.0" y1="0" x2="285.0" y2="132" stroke="var(--primary)" stroke-opacity="0.09" stroke-width="0.5"/>
+          <line x1="332.5" y1="0" x2="332.5" y2="132" stroke="var(--primary)" stroke-opacity="0.09" stroke-width="0.5"/>
+          <rect x="0.0" y="140" width="47.5" height="3.4" fill="var(--primary)"/>
+          <rect x="47.5" y="140" width="47.5" height="3.4" fill="none" stroke="var(--primary)" stroke-width="0.7"/>
+          <rect x="95.0" y="140" width="47.5" height="3.4" fill="var(--primary)"/>
+          <rect x="142.5" y="140" width="47.5" height="3.4" fill="none" stroke="var(--primary)" stroke-width="0.7"/>
+          <rect x="190.0" y="140" width="47.5" height="3.4" fill="var(--primary)"/>
+          <rect x="237.5" y="140" width="47.5" height="3.4" fill="none" stroke="var(--primary)" stroke-width="0.7"/>
+          <rect x="285.0" y="140" width="47.5" height="3.4" fill="var(--primary)"/>
+          <rect x="332.5" y="140" width="47.5" height="3.4" fill="none" stroke="var(--primary)" stroke-width="0.7"/>
+          <text class="scaletext" x="296" y="136" font-size="4.6" fill="var(--primary)" fill-opacity="0.6">0.2 MI per block</text>
+
+          <!-- FIXED: elevation grid -->
+          <line class="gridline" x1="0" y1="105.0" x2="380" y2="105.0" stroke-opacity="0.22" stroke-width="0.6"/>
+          <text class="glabel" x="3" y="103.5" font-size="5" fill="var(--primary)" fill-opacity="0.5">4,600&#8242;</text>
+          <line class="gridline" x1="0" y1="82.5" x2="380" y2="82.5" stroke-opacity="0.1" stroke-width="0.5"/>
+          <line class="gridline" x1="0" y1="60.0" x2="380" y2="60.0" stroke-opacity="0.22" stroke-width="0.6"/>
+          <text class="glabel" x="3" y="58.5" font-size="5" fill="var(--primary)" fill-opacity="0.5">5,000&#8242;</text>
+          <line class="gridline" x1="0" y1="37.5" x2="380" y2="37.5" stroke-opacity="0.1" stroke-width="0.5"/>
+
+          <polyline class="trace" points="6.0,30.0 10.4,30.2 14.8,30.2 19.2,30.6 23.6,30.6 27.9,30.9 32.3,31.1 36.7,31.1 41.1,31.4 45.5,31.3 49.9,31.6 49.9,31.6 51.9,38.9 55.4,41.8 60.1,41.8 64.9,41.9 69.6,42.1 74.4,42.6 79.2,42.7 83.9,42.8 83.9,42.8 85.5,48.2 88.3,50.2 92.7,50.6 97.1,51.1 101.5,51.5 105.9,51.7 110.3,52.2 110.3,52.2 112.6,68.3 116.8,74.5 121.6,74.5 126.3,74.7 131.0,74.7 135.6,74.7 140.3,74.7 145.0,74.7 149.8,74.8 154.6,74.9 159.4,75.4 164.2,75.9 169.1,76.2 173.9,76.5 173.9,76.5 175.9,82.5 179.4,84.9 184.1,85.0 188.9,85.1 193.7,85.2 198.4,85.8 203.2,86.1 207.9,86.3 207.9,86.3 209.9,95.7 213.4,99.3 218.1,99.8 222.7,100.1 227.5,100.2 232.1,100.8 236.8,101.3 241.4,101.5 246.1,101.9 250.7,102.2 250.7,102.2 252.3,106.9 255.1,108.7 259.8,109.2 264.5,109.6 269.3,109.8 273.9,110.4 278.6,110.4 283.3,110.5 288.0,111.0 288.0,111.0 290.0,119.1 293.5,122.1 298.1,122.2 302.7,122.6 307.2,122.6 311.8,123.0 316.5,123.6 321.1,124.0 325.7,124.5 330.3,124.7 334.8,125.2 339.4,125.6 344.0,126.0"/>
+
+          <!-- drop markers -->
+          <line class="dropbar" x1="46.5" y1="31.6" x2="46.5" y2="41.8"/>
+          <line class="droptick" x1="44.4" y1="31.6" x2="48.6" y2="31.6"/>
+          <line class="droptick" x1="44.4" y1="41.8" x2="48.6" y2="41.8"/>
+          <text class="droplabel" x="42.9" y="38.3" font-size="4.6" text-anchor="end" fill="var(--primary)">~34 FT EST</text>
+          <line class="dropbar" x1="80.5" y1="42.8" x2="80.5" y2="50.2"/>
+          <line class="droptick" x1="78.4" y1="42.8" x2="82.6" y2="42.8"/>
+          <line class="droptick" x1="78.4" y1="50.2" x2="82.6" y2="50.2"/>
+          <line class="dropbar" x1="106.9" y1="52.2" x2="106.9" y2="74.5"/>
+          <line class="droptick" x1="104.8" y1="52.2" x2="109.0" y2="52.2"/>
+          <line class="droptick" x1="104.8" y1="74.5" x2="109.0" y2="74.5"/>
+          <text class="droplabel" x="103.3" y="65.0" font-size="4.6" text-anchor="end" fill="var(--primary)">~85 FT EST</text>
+          <line class="dropbar" x1="170.5" y1="76.5" x2="170.5" y2="84.9"/>
+          <line class="droptick" x1="168.4" y1="76.5" x2="172.6" y2="76.5"/>
+          <line class="droptick" x1="168.4" y1="84.9" x2="172.6" y2="84.9"/>
+          <line class="dropbar" x1="204.5" y1="86.3" x2="204.5" y2="99.3"/>
+          <line class="droptick" x1="202.4" y1="86.3" x2="206.6" y2="86.3"/>
+          <line class="droptick" x1="202.4" y1="99.3" x2="206.6" y2="99.3"/>
+          <text class="droplabel" x="200.9" y="94.4" font-size="4.6" text-anchor="end" fill="var(--primary)">~46 FT EST</text>
+          <line class="dropbar" x1="247.3" y1="102.2" x2="247.3" y2="108.7"/>
+          <line class="droptick" x1="245.2" y1="102.2" x2="249.4" y2="102.2"/>
+          <line class="droptick" x1="245.2" y1="108.7" x2="249.4" y2="108.7"/>
+          <line class="dropbar" x1="284.6" y1="111.0" x2="284.6" y2="122.1"/>
+          <line class="droptick" x1="282.5" y1="111.0" x2="286.7" y2="111.0"/>
+          <line class="droptick" x1="282.5" y1="122.1" x2="286.7" y2="122.1"/>
+          <text class="droplabel" x="281.0" y="118.1" font-size="4.6" text-anchor="end" fill="var(--primary)">~40 FT EST</text>
+
+          <!-- user note -->
+          <line class="wpline" x1="110.3" y1="52.2" x2="118.0" y2="44.0"/>
+          <circle cx="110.3" cy="52.2" r="1.3" fill="var(--primary)"/>
+          <rect class="wpchip" x="118.0" y="38.4" width="52" height="7.4"/>
+          <text class="wptext" x="121.0" y="43.6" font-size="4.4" fill="var(--primary)">R4 &#183; POOL BELOW</text>
+
+          <rect x="126" y="4" width="128" height="21" fill="var(--panel)" fill-opacity="0.82"/>
+          <text class="readout" x="190" y="12" font-size="5.4" text-anchor="middle" fill="var(--primary)">1.4 MI&#160;&#160;[-]1,180&#8242;&#160;&#160;9 DROPS</text>
+          <text class="readout" x="190" y="21" font-size="4.8" text-anchor="middle" fill="var(--primary)" fill-opacity="0.7">NEXT DROP ~85 FT EST IN 140 M</text>
+
+          <circle class="livehalo" r="5.4" cx="0" cy="0">
+            <animate attributeName="cx" dur="46s" repeatCount="indefinite" values="6.0;10.4;14.8;19.2;23.6;27.9;32.3;36.7;41.1;45.5;49.9;49.9;51.9;55.4;60.1;64.9;69.6;74.4;79.2;83.9;83.9;85.5;88.3;92.7;97.1;101.5;105.9;110.3;110.3;112.6;116.8;121.6;126.3;131.0;135.6;140.3;145.0;149.8;154.6;159.4;164.2;169.1;173.9;173.9;175.9;179.4;184.1;188.9;193.7;198.4;203.2;207.9;207.9;209.9;213.4;218.1;222.7;227.5;232.1;236.8;241.4;246.1;250.7;250.7;252.3;255.1;259.8;264.5;269.3;273.9;278.6;283.3;288.0;288.0;290.0;293.5;298.1;302.7;307.2;311.8;316.5;321.1;325.7;330.3;334.8;339.4;344.0"/>
+            <animate attributeName="cy" dur="46s" repeatCount="indefinite" values="30.0;30.2;30.2;30.6;30.6;30.9;31.1;31.1;31.4;31.3;31.6;31.6;38.9;41.8;41.8;41.9;42.1;42.6;42.7;42.8;42.8;48.2;50.2;50.6;51.1;51.5;51.7;52.2;52.2;68.3;74.5;74.5;74.7;74.7;74.7;74.7;74.7;74.8;74.9;75.4;75.9;76.2;76.5;76.5;82.5;84.9;85.0;85.1;85.2;85.8;86.1;86.3;86.3;95.7;99.3;99.8;100.1;100.2;100.8;101.3;101.5;101.9;102.2;102.2;106.9;108.7;109.2;109.6;109.8;110.4;110.4;110.5;111.0;111.0;119.1;122.1;122.2;122.6;122.6;123.0;123.6;124.0;124.5;124.7;125.2;125.6;126.0"/>
+          </circle>
+          <circle class="livedot" r="2.8" cx="0" cy="0">
+            <animate attributeName="cx" dur="46s" repeatCount="indefinite" values="6.0;10.4;14.8;19.2;23.6;27.9;32.3;36.7;41.1;45.5;49.9;49.9;51.9;55.4;60.1;64.9;69.6;74.4;79.2;83.9;83.9;85.5;88.3;92.7;97.1;101.5;105.9;110.3;110.3;112.6;116.8;121.6;126.3;131.0;135.6;140.3;145.0;149.8;154.6;159.4;164.2;169.1;173.9;173.9;175.9;179.4;184.1;188.9;193.7;198.4;203.2;207.9;207.9;209.9;213.4;218.1;222.7;227.5;232.1;236.8;241.4;246.1;250.7;250.7;252.3;255.1;259.8;264.5;269.3;273.9;278.6;283.3;288.0;288.0;290.0;293.5;298.1;302.7;307.2;311.8;316.5;321.1;325.7;330.3;334.8;339.4;344.0"/>
+            <animate attributeName="cy" dur="46s" repeatCount="indefinite" values="30.0;30.2;30.2;30.6;30.6;30.9;31.1;31.1;31.4;31.3;31.6;31.6;38.9;41.8;41.8;41.9;42.1;42.6;42.7;42.8;42.8;48.2;50.2;50.6;51.1;51.5;51.7;52.2;52.2;68.3;74.5;74.5;74.7;74.7;74.7;74.7;74.7;74.8;74.9;75.4;75.9;76.2;76.5;76.5;82.5;84.9;85.0;85.1;85.2;85.8;86.1;86.3;86.3;95.7;99.3;99.8;100.1;100.2;100.8;101.3;101.5;101.9;102.2;102.2;106.9;108.7;109.2;109.6;109.8;110.4;110.4;110.5;111.0;111.0;119.1;122.1;122.2;122.6;122.6;123.0;123.6;124.0;124.5;124.7;125.2;125.6;126.0"/>
+          </circle>
+
+          <g class="btnstack">
+            <rect x="352" y="6" width="22" height="14" fill="none" stroke="var(--primary)" stroke-opacity="0.5"/>
+            <g stroke="var(--primary)" stroke-width="0.8" fill="none">
+              <path d="M357 16.5 L361 10.5 L366 16.5 L370 10.5"/>
+              <path d="M361 10.5 L361 16.5 M366 10.5 L366 16.5" stroke-opacity="0.6"/>
+            </g>
+            <rect x="352" y="23" width="22" height="14" fill="var(--primary)"/>
+            <g fill="var(--bg)"><rect x="360.5" y="26.5" width="1.8" height="7"/><rect x="364" y="26.5" width="1.8" height="7"/></g>
+            <rect x="352" y="40" width="22" height="14" fill="none" stroke="var(--primary)" stroke-opacity="0.5"/>
+            <g stroke="var(--primary)" stroke-width="0.8" fill="none">
+              <path d="M357.5 45 L367 45 M365 43 L367 45 L365 47"/>
+              <path d="M368.5 49.5 L359 49.5 M361 47.5 L359 49.5 L361 51.5"/>
+            </g>
+            <rect x="352" y="57" width="22" height="14" fill="var(--primary)"/>
+            <g stroke="var(--bg)" stroke-width="0.9" fill="none">
+              <circle cx="363" cy="64" r="4"/><path d="M366.6 62.6 L367.6 60.2 L365.2 61"/>
+            </g>
+            <rect x="352" y="74" width="22" height="14" fill="none" stroke="var(--primary)" stroke-opacity="0.5"/>
+            <g stroke="var(--primary)" stroke-width="0.8" fill="none">
+              <path d="M356.5 84 L360 80 L362 83.5 L365 76.5 L368 84" stroke-opacity="0.9"/>
+              <path d="M355.5 85.8 L369.5 85.8" stroke-opacity="0.45"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="land-caption">
+        <h3>Canyon Mode <span class="beta">IN DEVELOPMENT</span></h3>
+        <p>The same profile, built for descents &mdash; every drop marked with an
+        estimated height, the next one called out ahead.</p>
+        <div class="estnote">HEIGHTS ARE ESTIMATES &mdash; VERIFY AT THE LIP</div>
+        <div class="facts">
+          <span>DROP HEIGHTS</span><span>NEXT DROP AHEAD</span><span>YOUR NOTES ON THE LINE</span><span>GPX IN / OUT</span>
         </div>
       </div>
     </div>
@@ -992,20 +1132,22 @@
   <section class="sec" id="specs">
     <div class="kicker">// EVERY TOOL, EVERY TIME</div>
     <dl class="spec">
-      <div><dt>IN THE FIELD</dt><dd>Runs with no cellular service. Load your maps before you go; from then on the app runs entirely from the device.</dd></div>
-      <div><dt>CONNECTION</dt><dd>Nothing streams while you work. No tiles fetched, no sync, no signal to lose.</dd></div>
-      <div><dt>WHAT YOU COLLECT</dt><dd>Your records stay on the device. You decide what to export, when, and how to move it off.</dd></div>
-      <div><dt>EXPORT FORMATS</dt><dd>GIS- and engineering-ready: GPX and GeoJSON in and out, PNEZD (CSV) point export. Opens in enterprise GIS and engineering applications, and in popular online geospatial tools.</dd></div>
-      <div><dt>PRIVACY</dt><dd>Nothing is uploaded, ever. Save pictures with no location information and zero embedded EXIF data when a site must stay private.</dd></div>
-      <div><dt>BUY ONCE</dt><dd>Our apps are full service as sold. No hidden fees, no subscriptions, no plans that change and limit what you already have, no features tied to a data plan. We don't collect your data, and we build with all of our security in mind &mdash; we are users too.</dd></div>
-      <div><dt>BUILD</dt><dd>Small install. No ads, no trackers.</dd></div>
-      <div><dt>FIELD UX</dt><dd>Big-button options, and high-contrast options for bright glacier crossings, low-light travel, and other adverse conditions.</dd></div>
+      <div><dt>IN THE FIELD</dt><dd>Load maps at home. Run with zero service &mdash; nothing streams, nothing syncs.</dd></div>
+      <div><dt>YOUR RECORDS</dt><dd>Stay on the device. You choose what to export, and when.</dd></div>
+      <div><dt>FORMATS</dt><dd>GPX + GeoJSON in and out; PNEZD (CSV) points. Ready for enterprise GIS and engineering applications.</dd></div>
+      <div><dt>PRIVACY</dt><dd>Nothing is uploaded, ever. No ads, no trackers. Photos can carry no location at all.</dd></div>
+      <div><dt>BUY ONCE</dt><dd>Full service as sold. No subscriptions, no hidden fees, no data collected &mdash; we are users too.</dd></div>
+      <div><dt>FIELD UX</dt><dd>Big buttons, high contrast &mdash; sun, rain, dark, gloves.</dd></div>
     </dl>
   </section>
 
   <!-- CONTACT -->
   <section class="contact" id="contact">
-    <p>I’ve worn a lot of hats out there—from biological field tech and surveyor to wildfire lookout, have worked in habitat conservation, environmental education and green space and trail maintenance. I’m also a backcountry traveler with over thousands of miles spent hiking, paddling, climbing, working and living off the grid. I’ve experienced what makes field essential tools work well and what just gets in the way. Building on those lessons, my primary goal is developing straightforward, offline-capable tools designed for the practical realities of navigating and collecting data in the wild. When the tools work in the backcountry, we know they’ll easily work in side- and front-country contexts too.</p>
+    <p>I’ve worn a lot of hats out there — biological field tech, surveyor,
+    wildfire lookout, habitat conservation, environmental education, trail work —
+    plus thousands of backcountry miles hiking, paddling, climbing, and living
+    off the grid. I’ve seen what makes a field tool work and what just gets in
+    the way. These apps are built from those lessons.</p>
     <p class="pricing">Honest pricing for nonprofits and local government.</p>
     <a class="cta" href="mailto:jj@ulgeospatial.com">EMAIL JJ AT ULGEOSPATIAL</a>
   </section>
