@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Privacy Policy | Ultralight Geospatial</title>
 
-<meta name="robots" content="index, follow" />
-<meta name="robots" content="noai, noimageai" />
+<meta name="robots" content="index, follow, noai, noimageai" />
 <meta name="description" content="Privacy policy for Ultralight Geospatial LLC apps and website. Your records stay on your device. No accounts, no ads, no trackers — in every version, free or paid." />
 <meta name="author" content="Ultralight Geospatial LLC" />
 
@@ -71,7 +70,7 @@
   <div class="crumb"><a href="index.html">&larr; ULTRALIGHT GEOSPATIAL</a></div>
 
   <h1>Privacy Policy</h1>
-  <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE <!-- SET DATE -->[MONTH DD, 2026]</div>
+  <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE [[SET-AT-DEPLOY]]</div>
 
   <p>Ultralight Geospatial LLC ("ULGS," "we," "us") builds offline-first field tools.
   This page describes what our mobile apps and this website do with information, and the
@@ -176,6 +175,10 @@
   is shown to you in full before anything is sent. Sending is always your action, by
   email, and never automatic. Anything you type into the optional note is included as you
   wrote it, so describe the problem in whatever detail you're comfortable sharing.</p>
+  <p>When we diagnose a report, the technical contents describe our own code, and we
+  analyze them with our development tools. Your email address and anything you wrote in
+  the note are yours: we separate them from the technical contents before analysis, and
+  we never feed them into any tool or service that is permitted to train on them.</p>
 
   <h3>Permissions</h3>
   <p>Each app requests only the permissions its own features require, drawn from this set:
@@ -201,7 +204,7 @@
     <div><dt>ULGS CLOUD</dt><dd>None. Nothing syncs to us, nothing is stored by us. On-demand fetches from public services are described above.</dd></div>
     <div><dt>ADS &amp; TRACKERS</dt><dd>None, in any version, free or paid. No advertising, analytics, or crash-reporting SDKs.</dd></div>
     <div><dt>SELLING DATA</dt><dd>Never. We hold no user data to sell.</dd></div>
-    <div><dt>AI TRAINING</dt><dd>Your data is never used to train machine-learning models.</dd></div>
+    <div><dt>AI TRAINING</dt><dd>Never by us, never through us. We do not train machine-learning models on your data, and we do not provide, sell, or license it to anyone to train theirs.</dd></div>
   </dl>
 
   <div class="kicker">// 02</div>
@@ -216,7 +219,8 @@
     requests a file from Google's servers; Google's privacy policy governs that request.</li>
     <li><b>Email.</b> If you write to an @ulgeospatial.com address, we receive your message
     and address through Google Workspace and retain correspondence as long as needed to
-    respond.</li>
+    respond. Beyond the mail platform that receives it, we never feed your correspondence
+    into any tool or service that is permitted to train on it.</li>
   </ul>
 
   <div class="kicker">// 03</div>
@@ -267,38 +271,5 @@
   </footer>
 
 </div>
-<!--
-PRE-PUBLICATION GATES — resolve, then delete this comment block.
-
-1. D1/D2 DEVICE VERIFICATION (Cam) — CLOSED, PASS. Verified with control on two handsets,
-   two firmware builds (privacy-audit branch, commits incl. 30b3a07). The Photos paragraph
-   now states the verified disjoint property. No unverified claims remain in this document.
-
-2. NAV A1 FORK. Section 01's route-coordinates sentence is written for CURRENT behavior
-   (elevation enrichment and profile-open fetch happen automatically). If the opt-in
-   alternative ships instead (decisions §1), strengthen the sentence to: "sampling
-   elevation along a route sends that route's coordinates — and in our apps this happens
-   only when you explicitly request it."
-
-3. B3 / OEM CAMERA CODE. Deliberately not disclosed (platform-supplied, network-incapable,
-   not an SDK we package). Decision record: privacy-decisions-5daf042.md. Reverse only if
-   JJ overrides.
-
-4. D2D DECISION. Current text hedges with "your device's own backup and migration
-   settings," which is true under either outcome. No text change needed when decided —
-   but decide before ship so the three apps' extraction rules match the choice.
-
-5. EFFECTIVE DATE in the header.
-
-6. DATA SAFETY ALIGNMENT. Forms derive from this page: Cam — no data collected (contacts
-   no hosts). Nav/Profile — Location: declared, "processed ephemerally" checked (Google
-   will not show it as collected publicly). Fill the forms FROM this document.
-
-7. OPTIONAL: self-host the two JetBrains Mono woff2 files and delete the Fonts bullet.
-
-8. The "we do not restrict your ability to export your own data in any version" sentence
-   is a product commitment — free-tier feature planning must honor it forever. Confirm
-   before publishing; it's also your best procurement sentence.
--->
 </body>
 </html>
