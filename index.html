@@ -8,14 +8,15 @@
 <!-- Crawler control: allow normal search indexing, opt OUT of AI training.
      Honor-system only (well-behaved bots comply; determined scrapers won't).
      robots.txt carries the full per-crawler list. -->
-<meta name="robots" content="index, follow" />
+<meta name="robots" content="index, follow, noai, noimageai" />
 <meta name="googlebot" content="index, follow" />
 <meta name="google" content="notranslate" />
-<!-- Opt out of AI training corpora (page-level signal, complements robots.txt) -->
-<meta name="robots" content="noai, noimageai" />
+<!-- AI-training opt-out combined into the robots tag above (page-level signal,
+     complements robots.txt). Two meta tags with the same name parse inconsistently
+     across crawlers; one combined tag is unambiguous. -->
 
 <!-- Basic SEO / share preview -->
-<meta name="description" content="Rugged, offline-first field data tools for Android and iOS. GeoPDF navigation, photo telemetry, spatial data logging, and lidar elevation profiles for hiking and canyoneering — no account, no cloud, no subscription." />
+<meta name="description" content="Rugged, offline-first field data tools for Android. GeoPDF navigation, photo telemetry, spatial data logging, and lidar elevation profiles for hiking and canyoneering — no account, no cloud, no bloat." />
 <meta name="author" content="Ultralight Geospatial LLC" />
 <meta property="og:title" content="Ultralight Geospatial | Field Tools" />
 <meta property="og:description" content="Offline-first field data tools. GeoPDF navigation, photo telemetry, spatial logging, lidar elevation profiles. No account, no cloud, no bloat." />
@@ -613,7 +614,8 @@
 
       <div class="contrast-answer">
         <p><b>These tools work offline.</b> Map, position, records — all on the
-        device. When the bars vanish, nothing changes.</p>
+        device, loaded before you leave. When the bars vanish, everything you
+        packed keeps working.</p>
         <p class="contrast-cap">↓ THE SAME MOMENT, OUR WAY ↓</p>
       </div>
     </div>
@@ -723,7 +725,7 @@
 
     <div class="device">
       <div class="screen scr-log">
-        <div class="sbar"><span>SEARCHING\u2026</span><span class="right"><span class="sig none" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="clock-3">9:32 AM</span></span></div>
+        <div class="sbar"><span>SEARCHING&hellip;</span><span class="right"><span class="sig none" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="clock-3">9:32 AM</span></span></div>
         <div class="ed logpage on">
           <div class="hdr">
             <div>
@@ -1049,28 +1051,28 @@
           <line class="dropbar" x1="46.5" y1="31.6" x2="46.5" y2="41.8"/>
           <line class="droptick" x1="44.4" y1="31.6" x2="48.6" y2="31.6"/>
           <line class="droptick" x1="44.4" y1="41.8" x2="48.6" y2="41.8"/>
-          <text class="droplabel" x="42.9" y="38.3" font-size="4.6" text-anchor="end" fill="var(--primary)">~34 FT EST</text>
+          <text class="droplabel" x="42.9" y="38.3" font-size="4.6" text-anchor="end" fill="var(--primary)">~34&#8242;</text>
           <line class="dropbar" x1="80.5" y1="42.8" x2="80.5" y2="50.2"/>
           <line class="droptick" x1="78.4" y1="42.8" x2="82.6" y2="42.8"/>
           <line class="droptick" x1="78.4" y1="50.2" x2="82.6" y2="50.2"/>
           <line class="dropbar" x1="106.9" y1="52.2" x2="106.9" y2="74.5"/>
           <line class="droptick" x1="104.8" y1="52.2" x2="109.0" y2="52.2"/>
           <line class="droptick" x1="104.8" y1="74.5" x2="109.0" y2="74.5"/>
-          <text class="droplabel" x="103.3" y="65.0" font-size="4.6" text-anchor="end" fill="var(--primary)">~85 FT EST</text>
+          <text class="droplabel" x="103.3" y="65.0" font-size="4.6" text-anchor="end" fill="var(--primary)">~85&#8242;</text>
           <line class="dropbar" x1="170.5" y1="76.5" x2="170.5" y2="84.9"/>
           <line class="droptick" x1="168.4" y1="76.5" x2="172.6" y2="76.5"/>
           <line class="droptick" x1="168.4" y1="84.9" x2="172.6" y2="84.9"/>
           <line class="dropbar" x1="204.5" y1="86.3" x2="204.5" y2="99.3"/>
           <line class="droptick" x1="202.4" y1="86.3" x2="206.6" y2="86.3"/>
           <line class="droptick" x1="202.4" y1="99.3" x2="206.6" y2="99.3"/>
-          <text class="droplabel" x="200.9" y="94.4" font-size="4.6" text-anchor="end" fill="var(--primary)">~46 FT EST</text>
+          <text class="droplabel" x="200.9" y="94.4" font-size="4.6" text-anchor="end" fill="var(--primary)">~46&#8242;</text>
           <line class="dropbar" x1="247.3" y1="102.2" x2="247.3" y2="108.7"/>
           <line class="droptick" x1="245.2" y1="102.2" x2="249.4" y2="102.2"/>
           <line class="droptick" x1="245.2" y1="108.7" x2="249.4" y2="108.7"/>
           <line class="dropbar" x1="284.6" y1="111.0" x2="284.6" y2="122.1"/>
           <line class="droptick" x1="282.5" y1="111.0" x2="286.7" y2="111.0"/>
           <line class="droptick" x1="282.5" y1="122.1" x2="286.7" y2="122.1"/>
-          <text class="droplabel" x="281.0" y="118.1" font-size="4.6" text-anchor="end" fill="var(--primary)">~40 FT EST</text>
+          <text class="droplabel" x="281.0" y="118.1" font-size="4.6" text-anchor="end" fill="var(--primary)">~40&#8242;</text>
 
           <!-- user note -->
           <line class="wpline" x1="110.3" y1="52.2" x2="118.0" y2="44.0"/>
@@ -1080,7 +1082,7 @@
 
           <rect x="126" y="4" width="128" height="21" fill="var(--panel)" fill-opacity="0.82"/>
           <text class="readout" x="190" y="12" font-size="5.4" text-anchor="middle" fill="var(--primary)">1.4 MI&#160;&#160;[-]1,180&#8242;&#160;&#160;9 DROPS</text>
-          <text class="readout" x="190" y="21" font-size="4.8" text-anchor="middle" fill="var(--primary)" fill-opacity="0.7">NEXT DROP ~85 FT EST IN 140 M</text>
+          <text class="readout" x="190" y="21" font-size="4.8" text-anchor="middle" fill="var(--primary)" fill-opacity="0.7">NEXT DROP ~85&#8242; IN 140 M</text>
 
           <circle class="livehalo" r="5.4" cx="0" cy="0">
             <animate attributeName="cx" dur="46s" repeatCount="indefinite" values="6.0;10.4;14.8;19.2;23.6;27.9;32.3;36.7;41.1;45.5;49.9;49.9;51.9;55.4;60.1;64.9;69.6;74.4;79.2;83.9;83.9;85.5;88.3;92.7;97.1;101.5;105.9;110.3;110.3;112.6;116.8;121.6;126.3;131.0;135.6;140.3;145.0;149.8;154.6;159.4;164.2;169.1;173.9;173.9;175.9;179.4;184.1;188.9;193.7;198.4;203.2;207.9;207.9;209.9;213.4;218.1;222.7;227.5;232.1;236.8;241.4;246.1;250.7;250.7;252.3;255.1;259.8;264.5;269.3;273.9;278.6;283.3;288.0;288.0;290.0;293.5;298.1;302.7;307.2;311.8;316.5;321.1;325.7;330.3;334.8;339.4;344.0"/>
@@ -1119,11 +1121,12 @@
 
       <div class="land-caption">
         <h3>Canyon Mode <span class="beta">IN DEVELOPMENT</span></h3>
-        <p>The same profile, built for descents &mdash; every drop marked with an
-        estimated height, the next one called out ahead.</p>
+        <p>The descent as an elevation profile &mdash; read the canyon's shape
+        before you drop in. Drops appear as steps on the line, annotated with
+        estimates. What that means at the anchor is your call, not the app's.</p>
         <div class="estnote">HEIGHTS ARE ESTIMATES &mdash; VERIFY AT THE LIP</div>
         <div class="facts">
-          <span>DROP HEIGHTS</span><span>NEXT DROP AHEAD</span><span>YOUR NOTES ON THE LINE</span><span>GPX IN / OUT</span>
+          <span>THE DESCENT AS A PROFILE</span><span>DROPS ANNOTATED &mdash; EST</span><span>YOUR NOTES ON THE LINE</span><span>GPX IN / OUT</span>
         </div>
       </div>
     </div>
@@ -1137,24 +1140,25 @@
       <div><dt>YOUR RECORDS</dt><dd>Stay on the device. You choose what to export, and when.</dd></div>
       <div><dt>FORMATS</dt><dd>GPX + GeoJSON in and out; PNEZD (CSV) points. Ready for enterprise GIS and engineering applications.</dd></div>
       <div><dt>PRIVACY</dt><dd>No ads, no trackers, no accounts &mdash; in every version. Your records stay on your device. <a href="privacy.html">FULL POLICY</a></dd></div>
-      <div><dt>BUY ONCE</dt><dd>Full service as sold. No subscriptions, no hidden fees, no data collected &mdash; we are users too.</dd></div>
+      <div><dt>BUY ONCE</dt><dd>Full service as sold. No subscriptions, no hidden fees &mdash; your records stay on your device.</dd></div>
       <div><dt>FIELD UX</dt><dd>Big buttons, high contrast &mdash; sun, rain, dark, gloves.</dd></div>
     </dl>
   </section>
 
   <!-- CONTACT -->
   <section class="contact" id="contact">
-    <p>I’ve worn a lot of hats out there — biological field technician, surveyor
-    maintaining Public Land Survey System monumentation, wildfire lookout living
-    on top of a mountain. I’ve worked on habitat restoration and conservation
-    projects, as an environmental educator, and as a trail worker. I have a
-    background in Systems Science and GIS, and I’ve traveled thousands of
-    backcountry miles backpacking, paddling, climbing mountains, rappelling down
-    canyons — working, living, and playing off the grid. I’ve seen what makes
-    field tools valuable and what just gets in the way. These apps are built
-    from those lessons.</p>
+    <p>I’ve worn many hats — a biological field technician working on Endangered
+    Species Act surveys, a surveyor maintaining Public Land Survey System
+    monumentation, and a wildfire lookout living on top of a mountain between
+    smoke and lightning. I’ve contributed to habitat restoration projects,
+    served as an environmental educator, and swung tools as a trail worker. I
+    have a background in Systems Science and GIS, and I’ve traveled hundreds of
+    backcountry miles backpacking, paddling, climbing mountains, and rappelling
+    down canyons — working, living, and playing off the grid. I know firsthand
+    what makes field tools valuable and what just gets in the way. These apps
+    are built from those lessons.</p>
     <p class="pricing">Honest pricing for nonprofits and local government.</p>
-    <a class="cta" href="mailto:info@ulgeospatial.com">EMAIL Info AT ULGEOSPATIAL</a>
+    <a class="cta" href="mailto:support@ulgeospatial.com">EMAIL Support AT ULGEOSPATIAL</a>
   </section>
 
   <footer>
