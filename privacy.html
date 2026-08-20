@@ -70,7 +70,7 @@
   <div class="crumb"><a href="index.html">&larr; ULTRALIGHT GEOSPATIAL</a></div>
 
   <h1>Privacy Policy</h1>
-  <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE AUGUST 17, 2026</div>
+  <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE [[SET-AT-DEPLOY]]</div>
 
   <p>Ultralight Geospatial LLC ("ULGS," "we," "us") builds offline-first field tools.
   This page describes what our mobile apps and this website do with information, and the
@@ -93,9 +93,11 @@
   <h3>Location</h3>
   <p>Recording your device's GPS position &mdash; points, tracks, photo positions, elevation
   profiles &mdash; is what these tools are for. Location is used only while you are actively
-  using an app to record or navigate, or while a recording you started is running. A
-  recording you start <b>continues while your screen is off or locked</b>, shown by a
-  visible ongoing notification; stopping the recording ends it. Position data is stored
+  using an app to record or navigate, or while a recording you started is running. In our
+  navigation app, a recording you start <b>continues while your screen is off or
+  locked</b>, shown by a visible ongoing notification; stopping the recording ends it. Our
+  elevation-profile app has no background recording at all: it works only while it is open
+  on screen. Position data is stored
   locally in the app's private storage.</p>
 
   <p><b>Position fixes and Google's network location.</b> On standard Android, if an app is
@@ -137,17 +139,23 @@
   <h3>Online map &amp; elevation services</h3>
   <p>Some of our apps can fetch public map and terrain data over the network. When they
   do, the request goes directly from your device to the public service, under that
-  service's own privacy policy. We are not in the middle and receive nothing. The services
+  service's own privacy policy. We are not in the middle and receive nothing. One of our
+  apps opts out entirely: <b>our camera app declares no INTERNET permission and cannot
+  contact any service</b> &mdash; a structural property of the app, not a setting. The services
   our apps contact, by name:</p>
   <ul>
     <li><b>USGS 3DEP</b> (elevation.nationalmap.gov) &mdash; elevation samples and terrain
-    imagery</li>
-    <li><b>Esri public ArcGIS services</b> &mdash; hillshade and slope imagery</li>
-    <li><b>Oregon DOGAMI</b> and <b>Washington DNR</b> &mdash; state lidar and terrain
-    layers</li>
-    <li><b>OpenStreetMap Overpass</b> &mdash; map feature data</li>
-    <li><b>USGS / USFS</b> (including prd-tnm.s3.amazonaws.com, the USGS National Map
-    download host) &mdash; downloadable map sheets</li>
+    imagery. Used by our navigation app &mdash; and it is the <b>only</b> service our
+    elevation-profile app contacts: two request paths to this one host, nothing else,
+    and both refuse cross-host redirects, so the app cannot be steered to another
+    server.</li>
+    <li><b>Oregon DOGAMI</b> (gis.dogami.oregon.gov) and <b>Washington DNR</b>
+    (gis.dnr.wa.gov) &mdash; state lidar and terrain layers (navigation app)</li>
+    <li><b>OpenStreetMap Overpass</b> (overpass-api.de) &mdash; map feature data
+    (navigation app)</li>
+    <li><b>USGS / USFS</b> &mdash; downloadable map sheets (navigation app): the map-sheet
+    catalog at tnmaccess.nationalmap.gov, with downloads from data.fs.usda.gov and
+    prd-tnm.s3.amazonaws.com, the USGS National Map download host</li>
   </ul>
   <p>Be aware of what these requests contain: fetching a map sheet or terrain layer sends
   the <b>area</b> you are asking about; sampling elevation along a route you have drawn
@@ -182,16 +190,20 @@
   we never feed them into any tool or service that is permitted to train on them.</p>
 
   <h3>Permissions</h3>
-  <p>Each app requests only the permissions its own features require, drawn from this set:
-  <b>Location</b> (recording and navigation), <b>Camera</b> (photo capture),
-  <b>Storage/media</b> (importing maps, exporting your data), and <b>Notifications</b>
-  (recording status). No app requests all of them &mdash; a camera tool has no need of
-  track notifications, and a profile tool has no need of your camera. Decline or revoke
-  any permission in your device settings; the corresponding feature stops and the rest of
-  the app carries on.</p>
+  <p>Each app requests only what its own features require. From the apps' merged
+  manifests: our camera app requests <b>Camera</b> and <b>Location</b>; our navigation
+  app requests <b>Location</b> and <b>Notifications</b> (the ongoing recording status
+  described above); our elevation-profile app requests <b>Location</b> only. <b>No app
+  requests a storage or media permission</b>: file import and export go through the
+  system file picker, which grants access to exactly the files you choose, and the
+  camera app writes photos to your gallery through the platform's media store &mdash;
+  it can reach the photos it created, not the rest of your gallery. Network access is
+  described in the services section above, and our camera app has none. Decline or
+  revoke any permission in your device settings; the corresponding feature stops and
+  the rest of the app carries on.</p>
 
   <h3>Purchases, free versions, and paid versions</h3>
-  <p>Paid licenses and upgrades are processed by Google Play or the Apple App Store. We
+  <p>Paid licenses and upgrades are processed by Google Play. We
   receive transaction records (what was purchased, when, in what country) but never your
   payment card details.</p>
   <p>Where we offer a free or limited version of an app, <b>this same policy applies
