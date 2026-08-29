@@ -6,7 +6,7 @@
 <title>Privacy Policy | Ultralight Geospatial</title>
 
 <meta name="robots" content="index, follow, noai, noimageai" />
-<meta name="description" content="Privacy policy for Ultralight Geospatial LLC apps and website. Your records stay on your device. No accounts, no ads, no trackers — in every version, free or paid." />
+<meta name="description" content="Privacy policy for Ultralight Geospatial LLC apps and website. Your records are stored on your device, never with us. No accounts, no ads, no trackers — in every version, free or paid." />
 <meta name="author" content="Ultralight Geospatial LLC" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -70,7 +70,7 @@
   <div class="crumb"><a href="index.html">&larr; ULTRALIGHT GEOSPATIAL</a></div>
 
   <h1>Privacy Policy</h1>
-  <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE AUGUST 24, 2026</div>
+  <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE <!-- BUMP ON DEPLOY -->[[SET-AT-DEPLOY]]</div>
 
   <p>Ultralight Geospatial LLC ("ULGS," "we," "us") builds offline-first field tools.
   This page describes what our mobile apps and this website do with information, and the
@@ -79,7 +79,7 @@
 
   <div class="callout"><b>THE SHORT VERSION:</b> We operate no servers &mdash; nothing you
   record is collected or stored by us. No accounts. No ads, no trackers. Your records
-  stay on your device. Location on your photos is your choice. The full policy below
+  are stored on your device, never with us. Location on your photos is your choice. The full policy below
   explains each of these.</div>
 
   <div class="kicker">// 01</div>
@@ -90,16 +90,21 @@
   is ever governed by a separate policy instead, it will be named here, and that app's
   store listing will link to its own policy &mdash; the policy linked from an app's store
   listing is always the one that governs that app. As of the effective date above, no
-  such app exists: this page is the complete privacy policy for every ULGS app. Apps are
-  currently distributed in the United States (testing phase).</p>
+  such app exists: this page is the complete privacy policy for every ULGS app. Our current apps are
+  <b>ULGS Nav</b> (navigation), <b>R What?</b> (canyon elevation profiles), and
+  <b>TelCam</b> (field camera); where behavior differs by app, this page names the app.
+  Apps are currently distributed in the United States (testing phase).</p>
 
   <h3>Location</h3>
   <p>Recording your device's GPS position &mdash; points, tracks, photo positions, elevation
   profiles &mdash; is what these tools are for. Location is used only while you are actively
-  using an app to record or navigate, or while a recording you started is running. In our
-  navigation app, a recording you start <b>continues while your screen is off or
-  locked</b>, shown by a visible ongoing notification; stopping the recording ends it. Our
-  elevation-profile app has no background recording at all: it works only while it is open
+  using an app to record or navigate, or while a recording you started is running. In
+  ULGS Nav, a recording you start <b>continues while your screen is off or
+  locked</b>, shown by a visible ongoing notification; stopping the recording ends it.
+  The same service also runs, under a different notification, while the app is simply
+  open showing your position &mdash; stopping a recording ends the recording; leaving
+  the app is what ends location delivery. R What?
+  has no background recording at all: it works only while it is open
   on screen. Position data is stored
   locally in the app's private storage.</p>
 
@@ -113,16 +118,19 @@
   own configuration.</p>
 
   <h3>Your records</h3>
-  <p>Waypoints, tracks, logs, routes, notes, and photos you create stay on your device. We
-  cannot see, access, retrieve, or delete them. What happens to them if you uninstall an
+  <p>Waypoints, tracks, logs, routes, notes, and photos you create are stored on your
+  device, never with us. We
+  cannot see, access, retrieve, or delete them. Where a feature sends route geometry to
+  a public service, the services section above says so, plainly. What happens to your
+  records if you uninstall an
   app depends on where that app keeps them:</p>
   <ul>
     <li><b>Tracks, routes, logs, and settings</b> (all apps): removed when you uninstall
     the app. Records you have not exported are gone with it.</li>
-    <li><b>Files you exported</b> (all apps): yours, saved to your device's shared storage
+    <li><b>Files you exported, and map sheets you downloaded</b> (downloads are ULGS Nav's): yours, saved to your device's shared storage
     (such as Downloads), and they remain after uninstall &mdash; the app no longer owns
     them; you do.</li>
-    <li><b>Photos</b> (camera app): saved to your device's photo gallery, and they remain
+    <li><b>Photos</b> (TelCam): saved to your device's photo gallery, and they remain
     after uninstall like any other photos. Manage or delete them in your gallery.</li>
   </ul>
   <p>Device backup and phone-to-phone transfer are governed by your device's own backup
@@ -141,38 +149,56 @@
 
   <h3>Online map &amp; elevation services</h3>
   <p>Some of our apps can fetch public map and terrain data over the network. When they
-  do, the request goes directly from your device to the public service, under that
-  service's own privacy policy. We are not in the middle and receive nothing. One of our
-  apps opts out entirely: <b>our camera app declares no INTERNET permission and cannot
+  do, the request goes from your device to the public service, under that
+  service's own privacy policy &mdash; no ULGS system is anywhere in the path, and we
+  receive nothing. Like many large services, some are delivered through a
+  content-delivery network: requests to USGS 3DEP travel via Amazon CloudFront, whose
+  edge servers carry that traffic under Amazon's own policies. One of our
+  apps opts out entirely: <b>TelCam declares no INTERNET permission and cannot
   contact any service</b> &mdash; a structural property of the app, not a setting. The services
   our apps contact, by name:</p>
   <ul>
     <li><b>USGS 3DEP</b> (elevation.nationalmap.gov) &mdash; elevation samples and terrain
-    imagery. Used by our navigation app &mdash; and it is the <b>only</b> service our
-    elevation-profile app contacts: two request paths to this one host, nothing else,
+    imagery. Used by ULGS Nav &mdash; and it is the <b>only</b> service R What? contacts: two request paths to this one host, nothing else,
     and both refuse cross-host redirects, so the app cannot be steered to another
     server.</li>
     <li><b>Oregon DOGAMI</b> (gis.dogami.oregon.gov) and <b>Washington DNR</b>
-    (gis.dnr.wa.gov) &mdash; state lidar and terrain layers (navigation app)</li>
+    (gis.dnr.wa.gov) &mdash; state lidar and terrain layers (ULGS Nav)</li>
     <li><b>OpenStreetMap Overpass</b> (overpass-api.de) &mdash; map feature data
-    (navigation app)</li>
-    <li><b>USGS / USFS</b> &mdash; downloadable map sheets (navigation app): the map-sheet
-    catalog at tnmaccess.nationalmap.gov, with downloads from data.fs.usda.gov and
-    prd-tnm.s3.amazonaws.com, the USGS National Map download host</li>
+    (ULGS Nav)</li>
+    <li><b>USGS / USFS</b> &mdash; downloadable map sheets (ULGS Nav): the map-sheet
+    catalog at tnmaccess.nationalmap.gov. The download itself <b>follows the link the
+    catalog's reply supplies</b> &mdash; data.fs.usda.gov for USFS sheets, and currently
+    prd-tnm.s3.amazonaws.com (Amazon infrastructure) for USGS sheets &mdash; so the
+    download host is chosen by the federal service, not fixed by our code</li>
   </ul>
-  <p>Be aware of what these requests contain: fetching a map sheet or terrain layer sends
-  the <b>area</b> you are asking about; sampling elevation along a route you have drawn
-  sends <b>that route's coordinates</b>. Nothing about you &mdash; no name, account, or
-  identifier we control &mdash; accompanies these requests, and we store nothing; but the
-  request itself necessarily tells that service where you are looking or the line you are
-  tracing, and their servers keep ordinary logs. Fetched data is cached in the app's
-  private storage (bounded, clearable in the app, removed on uninstall) so areas you have
-  loaded keep working offline. If you prefer that no request leave your device in the
-  field, load your maps and terrain at home and work from the cache &mdash; the apps are
-  built for exactly that.</p>
+  <p>Be aware of what these requests contain. Fetching a map sheet or terrain layer
+  sends the <b>area</b> you are asking about &mdash; the loaded sheet's own published
+  extent, not where on it you are looking. Sampling elevation along a route sends
+  <b>coordinates that trace that route</b>: in ULGS Nav, enriching a track's
+  elevations sends the track itself, and opening a saved route's elevation profile
+  <b>automatically</b> sends about a hundred points of that route to the OpenStreetMap
+  Overpass service to name nearby landmarks &mdash; once per route, with no button
+  pressed; in R What?, opening or importing a track
+  <b>automatically</b> sends the derived sampling corridor around your line, which can
+  run to thousands of points. One map-search mode in ULGS Nav can send
+  <b>your current GPS position</b> as the search center &mdash; the only request in any
+  of our apps that carries your live position. Nothing about you &mdash; no name,
+  account, or identifier we control &mdash; accompanies these requests, and we store
+  nothing; but each request necessarily tells that service the line you are tracing or
+  the area you loaded, and their servers keep ordinary logs. In R What?, your live GPS position is <b>never stored and never transmitted</b> &mdash; held
+  in memory to draw your dot while the app is open, it goes nowhere else.</p>
+  <p>Fetched data is cached in the app's private storage (clearable in the app, removed
+  with the app at uninstall) so areas you have loaded keep working offline. A cache is
+  also, by its nature, a record: its files are named for the areas you fetched, and
+  clearing the cache is how you clear that record. If you prefer that no request leave
+  your device in the field, load your maps and terrain at home and work from the
+  cache &mdash; the apps are built for exactly that, with the one exception above: the
+  first time you open a route's profile, the landmark fetch fires if that route has none
+  stored.</p>
 
   <h3>Photos</h3>
-  <p>In our camera app, location embedding is under your control, and photos can carry no
+  <p>In TelCam, location embedding is under your control, and photos can carry no
   location at all. Beyond that, the two copies the app can produce are deliberately
   separate in what they carry: the located copy contains position data and no camera
   metadata; the No Mark copy contains the camera's ordinary technical
@@ -182,28 +208,39 @@
   any per-device identifier.</p>
 
   <h3>Crash reports</h3>
-  <p>If an app offers to send a crash report, the report is a file written on your device.
-  It contains technical state &mdash; not your records or location history &mdash; and it
-  is shown to you in full before anything is sent. Sending is always your action, by
-  email, and never automatic. Anything you type into the optional note is included as you
-  wrote it, so describe the problem in whatever detail you're comfortable sharing.</p>
+  <p>If an app offers a crash report, the report is a file written on your device. It
+  contains technical state &mdash; not your records or location history &mdash; and it is
+  shown to you in full. <b>Nothing sends automatically, in any app.</b> In TelCam, sending is
+  your action, by an email you compose; in ULGS Nav, the
+  report is saved to your Downloads by your action in the app, and sharing it &mdash; by
+  any means, or not at all &mdash; is entirely up to you. Anything you type into an
+  optional note is included as you wrote it, so describe the problem in whatever detail
+  you're comfortable sharing.</p>
   <p>When we diagnose a report, the technical contents describe our own code, and we
   analyze them with our development tools. Your email address and anything you wrote in
   the note are yours: we separate them from the technical contents before analysis, and
   we never feed them into any tool or service that is permitted to train on them.</p>
 
   <h3>Permissions</h3>
-  <p>Each app requests only what its own features require. From the apps' merged
-  manifests: our camera app requests <b>Camera</b> and <b>Location</b>; our navigation
-  app requests <b>Location</b> and <b>Notifications</b> (the ongoing recording status
-  described above); our elevation-profile app requests <b>Location</b> only. <b>No app
-  requests a storage or media permission</b>: file import and export go through the
-  system file picker, which grants access to exactly the files you choose, and the
-  camera app writes photos to your gallery through the platform's media store &mdash;
-  it can reach the photos it created, not the rest of your gallery. Network access is
-  described in the services section above, and our camera app has none. Decline or
-  revoke any permission in your device settings; the corresponding feature stops and
-  the rest of the app carries on.</p>
+  <p>Each app requests only what its own features require, read from the apps' merged
+  manifests. TelCam declares <b>Camera</b> and <b>Location</b>. R What? declares <b>Location</b>
+  only. ULGS Nav declares
+  seven: <b>fine and coarse location</b> (positioning; coarse is the required
+  network-provider companion), <b>internet</b> (the map and terrain fetches above),
+  <b>foreground service</b> and its <b>location type</b> (recording that continues with
+  the screen off), <b>notifications</b> (the ongoing recording status), and <b>wake
+  lock</b> (keeps a recording alive while the screen is off) &mdash; seven that we
+  declare, plus one entry AndroidX defines for its own internal receivers, which grants
+  nothing to anyone and is not something we request. <b>No app requests a storage or
+  media permission.</b> File <b>import</b> opens the system picker, which grants access
+  to exactly the files you choose. File <b>export</b> writes to your shared Downloads
+  with no system prompt: the file lands where other software can read it and remains
+  after uninstall &mdash; exporting is the act that makes it shared. TelCam
+  writes photos to your gallery through the platform's media store &mdash; it can reach
+  the photos it created, not the rest of your gallery. Network access is described in
+  the services section above, and TelCam has none. Decline or revoke any
+  runtime permission in your device settings; the corresponding feature stops and the
+  rest of the app carries on.</p>
 
   <h3>Purchases, free versions, and paid versions</h3>
   <p>Paid licenses and upgrades are processed by Google Play. We
@@ -272,7 +309,9 @@
   organization's, and this policy does not alter them. Note for review teams: the network
   behavior described in Section 01 &mdash; named public services, request contents, and
   the offline cache workflow &mdash; is the complete inventory of the services our apps
-  contact. If your agency needs data-handling documentation for procurement review, write to
+  are built to contact; map-sheet downloads additionally follow the download link the
+  federal catalog's reply supplies (currently Amazon-hosted). If your agency needs
+  data-handling documentation for procurement review, write to
   <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a>.</p>
 
   <div class="kicker">// 07</div>
