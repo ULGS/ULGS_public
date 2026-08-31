@@ -129,12 +129,28 @@
     the app. Records you have not exported are gone with it.</li>
     <li><b>Files you exported, and map sheets you downloaded</b> (downloads are ULGS Nav's): yours, saved to your device's shared storage
     (such as Downloads), and they remain after uninstall &mdash; the app no longer owns
-    them; you do.</li>
+    them; you do. They contain what you put in them &mdash; and, in ULGS Nav, when: a waypoint note
+    is included as you wrote it, and exported points carry the time you created
+    them.</li>
     <li><b>Photos</b> (TelCam): saved to your device's photo gallery, and they remain
     after uninstall like any other photos. Manage or delete them in your gallery.</li>
+    <li><b>Crash reports you chose to save to Downloads</b> (TelCam, ULGS Nav): remain
+    after uninstall like any file in Downloads; the app's own private copies go with the
+    app.</li>
+    <li><b>Imported boundary files</b> (TelCam): kept in the app's private storage and
+    removed when you uninstall.</li>
   </ul>
-  <p>Device backup and phone-to-phone transfer are governed by your device's own backup
-  and migration settings.</p>
+  <p>TelCam can import a boundary file supplied to you by email. Before the file is read,
+  the app checks it against a key built into the app itself; a file that fails the check
+  is refused. Nothing about the import touches a network. Imported boundaries are drawn on
+  your photos only when you choose.</p>
+  <p>Backup differs by app. TelCam closes both channels: nothing of its own goes to a
+  Google-account cloud backup or to a phone-to-phone transfer, regardless of your
+  settings &mdash; your photographs live in your gallery, outside the app. R What?
+  excludes all of its data from Google cloud backup but includes it in phone-to-phone
+  migration, so a handset upgrade does not destroy unexported tracks. In ULGS Nav, device
+  backup and phone-to-phone transfer follow your device's own backup and migration
+  settings.</p>
 
   <h3>Platforms, today and later</h3>
   <p>Our apps currently run on Android phones and tablets, and this policy describes that
@@ -179,8 +195,9 @@
   elevations sends the track itself, and opening a saved route's elevation profile
   <b>automatically</b> sends about a hundred points of that route to the OpenStreetMap
   Overpass service to name nearby landmarks &mdash; once per route, with no button
-  pressed; in R What?, opening or importing a track
-  <b>automatically</b> sends the derived sampling corridor around your line, which can
+  pressed; in R What?, <b>every time</b> you open or import a track &mdash; whether or
+  not it already has elevations &mdash; the app <b>automatically</b> sends the derived
+  sampling corridor around your line, which can
   run to thousands of points. One map-search mode in ULGS Nav can send
   <b>your current GPS position</b> as the search center &mdash; the only request in any
   of our apps that carries your live position. Nothing about you &mdash; no name,
@@ -200,8 +217,9 @@
   <h3>Photos</h3>
   <p>In TelCam, location embedding is under your control, and photos can carry no
   location at all. Beyond that, the two copies the app can produce are deliberately
-  separate in what they carry: the located copy contains position data and no camera
-  metadata; the No Mark copy contains the camera's ordinary technical
+  separate in what they carry: the located copy contains position data, the file's basic image and
+  timestamp fields, and a TelCam version stamp &mdash; the app's own provenance mark &mdash;
+  and no description of your device; the No Mark copy contains the camera's ordinary technical
   metadata &mdash; for example make, model, firmware version, and exposure settings &mdash; and
   no location data. <b>No file the app produces contains
   both a position and a device description.</b> Neither copy contains serial numbers or
@@ -213,7 +231,8 @@
   shown to you in full. <b>Nothing sends automatically, in any app.</b> In TelCam, sending is
   your action, by an email you compose; in ULGS Nav, the
   report is saved to your Downloads by your action in the app, and sharing it &mdash; by
-  any means, or not at all &mdash; is entirely up to you. Anything you type into an
+  any means, or not at all &mdash; is entirely up to you. R What? has no crash-report
+  mechanism at all. Anything you type into an
   optional note is included as you wrote it, so describe the problem in whatever detail
   you're comfortable sharing.</p>
   <p>When we diagnose a report, the technical contents describe our own code, and we
@@ -229,7 +248,7 @@
   network-provider companion), <b>internet</b> (the map and terrain fetches above),
   <b>foreground service</b> and its <b>location type</b> (recording that continues with
   the screen off), <b>notifications</b> (the ongoing recording status), and <b>wake
-  lock</b> (keeps a recording alive while the screen is off) &mdash; seven that we
+  lock</b> &mdash; seven that we
   declare, plus one entry AndroidX defines for its own internal receivers, which grants
   nothing to anyone and is not something we request. <b>No app requests a storage or
   media permission.</b> File <b>import</b> opens the system picker, which grants access
@@ -277,6 +296,24 @@
   </ul>
 
   <div class="kicker">// 03</div>
+  <h2>Retention and deletion</h2>
+  <p>We hold no records of yours to retain or delete: no account, no server, no copy of
+  anything you create. What we do hold is limited to two things. <b>Google Play
+  transaction records</b> (what was purchased, when, in what country) are kept by Google
+  under its own terms and visible to us as the seller. <b>Email you send us</b> is kept
+  only as long as needed to answer you, and deleted on request &mdash; write to
+  <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a>. Everything else
+  lives on your device, and the list above says exactly what uninstall removes and what
+  remains for you to manage.</p>
+
+  <h2>This website</h2>
+  <p>ulgeospatial.com is hosted on Squarespace, whose platform cookies and ordinary
+  server logs are governed by Squarespace's own privacy policy. This page loads one font
+  family from Google Fonts, which means your browser requests the font file from Google's
+  servers, and Google sees your IP address as it would for any resource it hosts. We add
+  no analytics, advertising, or trackers of our own. <b>Do Not Track:</b> we run no
+  tracking for a Do Not Track signal to switch off, in this site or in any of our apps.</p>
+
   <h2>Children</h2>
   <p>Our apps and site are professional field tools intended for adults. They are not
   directed at children under 13, and we do not knowingly collect personal information from
