@@ -1,367 +1,152 @@
-<!doctype html>
-<html lang="en" class="cw-black">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Privacy Policy | Ultralight Geospatial</title>
+# ORDER CK — trailing content is rejected, and two decisions get recorded
 
-<meta name="robots" content="index, follow, noai, noimageai" />
-<meta name="description" content="Privacy policy for Ultralight Geospatial LLC apps and website. Your records are stored on your device, never with us. No accounts, no ads, no trackers — in every version, free or paid." />
-<meta name="author" content="Ultralight Geospatial LLC" />
+**Letter:** CK. Confirm free across branches, `docs/verification/order-c*`, and the board before
+starting. CI was skipped in ORDER CJ (ambiguous against continuous-integration references); CJ
+is the most recent.
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet" />
-<style>
-  :root { --font-mono: "JetBrains Mono", ui-monospace, monospace;
-          --destructive: #ff5555; --warning: #ffcc00; }
-  .cw-white { --primary: #141414; --secondary: rgba(20,20,20,0.6);    --bg: #f5f4f0; --panel: #fdfdfc; }
-  .cw-black { --primary: #e8e8e8; --secondary: rgba(232,232,232,0.6); --bg: #000000; --panel: #0b0b0b; }
+**Branch:** `order-ck-trailing-content` from `master` (`cf5e53c`).
 
-  * { box-sizing: border-box; border-radius: 0 !important; }
-  body {
-    margin: 0; background: var(--bg); color: var(--primary);
-    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
-    font-size: 15px; line-height: 1.6;
-  }
-  a { color: var(--primary); text-decoration: none; border-bottom: 1px solid var(--primary); }
-  a:hover { background: var(--primary); color: var(--bg); }
-  .dim { opacity: 0.48; }
+**Scope: one parser change, one migration check, three board rows, one decision-record
+amendment.** Small. Do not enlarge it.
 
-  .wrap { max-width: 760px; margin: 0 auto; padding: 2.2rem 1.4rem 3rem; }
+---
 
-  .crumb { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; margin-bottom: 2rem; }
-  h1 { font-size: 1.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;
-       margin: 0 0 0.3rem; }
-  .meta { font-size: 11.5px; opacity: 0.6; letter-spacing: 0.06em; margin-bottom: 2rem; }
+## Task 1 — reject trailing content after the closed array
 
-  .kicker { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; opacity: 0.48;
-            margin: 2.6rem 0 0.5rem; }
-  h2 { font-size: 1.02rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
-       margin: 0 0 0.8rem; }
-  h3 { font-size: 0.9rem; font-weight: 800; letter-spacing: 0.03em; margin: 1.4rem 0 0.4rem; }
-  p { margin: 0 0 0.9rem; max-width: 68ch; }
-  ul { margin: 0 0 0.9rem; padding-left: 1.2rem; max-width: 68ch; }
-  li { margin-bottom: 0.35rem; }
-  b { font-weight: 800; }
+**CAM-298**, found by ORDER CD's own test and left unfixed there by scope. Owner decision:
+**reject.**
 
-  .callout { border: 2px solid var(--primary); background: var(--panel);
-             padding: 1rem 1.2rem; margin: 1.4rem 0; font-weight: 700; max-width: 68ch; }
+A payload of the form `[<valid shapes>]}{` currently returns its shapes and throws nothing. The
+streaming branch calls `beginArray()`, reads to the closing bracket, and never calls
+`endArray()`; `close()` does not validate. Anything after the array's close is silently ignored.
 
-  dl.spec { font-size: 12.5px; border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
-            max-width: 640px; margin: 0 0 0.9rem; }
-  dl.spec div { display: grid; grid-template-columns: 150px 1fr; gap: 10px; padding: 6px 0;
-                border-bottom: 1px solid color-mix(in srgb, var(--primary) 25%, transparent); }
-  dl.spec dt { opacity: 0.48; margin: 0; }
-  dl.spec dd { margin: 0; font-weight: 700; }
+**Why reject rather than accept.** This is not an attack surface — the Ed25519 signature covers
+the whole payload, so an attacker cannot append anything and have it verify. The only route to
+trailing content in a verified file is **ULGS signing one**: a prep-tool defect, a truncated
+write before signing, a concatenation mistake in a script. The argument for accepting it is that
+the signature bounds the risk, which is the argument that we would not make that mistake.
 
-  footer { margin-top: 3rem; padding-top: 1rem;
-           border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); font-size: 11.5px; }
-  footer p { margin: 2px 0; }
+ORDER CD's finding was that **a partial result is indistinguishable from a complete one at every
+layer above it.** Trailing content is the same shape from the other end: a payload that is
+half-written and signed draws its first half as though whole. The parser should say so.
 
-  @media (max-width: 560px) {
-    dl.spec div { grid-template-columns: 1fr; gap: 2px; }
-  }
-</style>
-</head>
-<body>
-<div class="wrap">
+**The change:** after the array closes, call `endArray()` and confirm the stream holds nothing
+further. On failure the existing catch returns `emptyList()` — CD's behaviour, unchanged — and
+the boundary surfaces as unavailable rather than drawing partial geometry.
 
-  <div class="crumb"><a href="index.html">&larr; ULTRALIGHT GEOSPATIAL</a></div>
+**The test must fail before the fix.** Report the failing output verbatim. Two cases and a
+control:
 
-  <h1>Privacy Policy</h1>
-  <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE <!-- BUMP ON DEPLOY -->[[SET-AT-DEPLOY]]</div>
+- `[<one valid shape>]}{` → currently 1 shape, required 0
+- `[<one valid shape>] <garbage>` → same
+- **Control:** `[<one valid shape>]` with nothing after it → must still return **1**, or the fix
+  has merely made the parser return nothing.
 
-  <p>Ultralight Geospatial LLC ("ULGS," "we," "us") builds offline-first field tools.
-  This page describes what our mobile apps and this website do with information, and the
-  choices you have. It applies to every version of every app we publish &mdash; free,
-  limited, and paid alike.</p>
+`BoundaryStreamParseTest` is the home — androidTest, for the reason ORDER BZ §9 records.
 
-  <div class="callout"><b>THE SHORT VERSION:</b> We operate no servers &mdash; nothing you
-  record is collected or stored by us. No accounts. No ads, no trackers. Your records
-  are stored on your device, never with us. Location on your photos is your choice. The full policy below
-  explains each of these.</div>
+---
 
-  <div class="kicker">// 01</div>
-  <h2>Our Apps</h2>
+## Task 2 — check the change against files that already exist
 
-  <p>This section applies to <b>every mobile application published by Ultralight
-  Geospatial LLC</b>. Where apps differ, the difference is stated here by name. If an app
-  is ever governed by a separate policy instead, it will be named here, and that app's
-  store listing will link to its own policy &mdash; the policy linked from an app's store
-  listing is always the one that governs that app. As of the effective date above, no
-  such app exists: this page is the complete privacy policy for every ULGS app. Our current apps are
-  <b>ULGS Nav</b> (navigation), <b>R What?</b> (canyon elevation profiles), and
-  <b>TelCam</b> (field camera); where behavior differs by app, this page names the app.
-  Apps are currently distributed in the United States (testing phase).</p>
+**A stricter parser meets files signed under the looser one.** Before reporting Task 1 complete,
+verify that every `.telcam` container already produced still parses.
 
-  <h3>Location</h3>
-  <p>Recording your device's GPS position &mdash; points, tracks, photo positions, elevation
-  profiles &mdash; is what these tools are for. Location is used only while you are actively
-  using an app to record or navigate, or while a recording you started is running. In
-  ULGS Nav, a recording you start <b>continues while your screen is off or
-  locked</b>, shown by a visible ongoing notification; stopping the recording ends it.
-  The same service also runs, under a different notification, while the app is simply
-  open showing your position &mdash; stopping a recording ends the recording; leaving
-  the app is what ends location delivery. R What?
-  has no background recording at all: it works only while it is open
-  on screen. Position data is stored
-  locally in the app's private storage.</p>
+- The golden fixture at `app/src/androidTest/assets/fixtures/golden-20260830.telcam` — it exists
+  precisely to catch format drift and **must still verify and still parse**.
+- The negative fixtures must still be rejected, and for the same reasons as before, not newly
+  for this one.
+- Any container in the repo or produced by `tools/ulgs_prep.py` and `tools/bz_fixtures.py`.
 
-  <p><b>Position fixes and Google's network location.</b> On standard Android, if an app is
-  allowed to use network-based location, the operating system may resolve your position
-  through Google's network location service &mdash; meaning nearby cell and Wi-Fi
-  information leaves your device to Google, by the platform, not by our code. Where our
-  apps offer a GPS-only mode, choosing it means the app requests satellite positioning
-  only; where network location is used at all, it is as a fallback when GPS has no fix.
-  On de-Googled Android systems this platform service behaves according to that system's
-  own configuration.</p>
+**If anything that used to pass now fails, stop and report it.** That would mean ULGS tooling
+has been emitting trailing content, which is a finding about the prep pipeline and not a reason
+to soften the parser.
 
-  <h3>Your records</h3>
-  <p>Waypoints, tracks, logs, routes, notes, and photos you create are stored on your
-  device, never with us. We
-  cannot see, access, retrieve, or delete them. Where a feature sends route geometry to
-  a public service, the services section above says so, plainly. What happens to your
-  records if you uninstall an
-  app depends on where that app keeps them:</p>
-  <ul>
-    <li><b>Tracks, routes, logs, and settings</b> (all apps): removed when you uninstall
-    the app. Records you have not exported are gone with it.</li>
-    <li><b>Files you exported, and map sheets you downloaded</b> (downloads are ULGS Nav's): yours, saved to your device's shared storage
-    (such as Downloads), and they remain after uninstall &mdash; the app no longer owns
-    them; you do. They contain what you put in them &mdash; and, in ULGS Nav, when: a waypoint note
-    is included as you wrote it, and exported points carry the time you created
-    them.</li>
-    <li><b>Photos</b> (TelCam): saved to your device's photo gallery, and they remain
-    after uninstall like any other photos. Manage or delete them in your gallery.</li>
-    <li><b>Crash reports you chose to save to Downloads</b> (TelCam, ULGS Nav): remain
-    after uninstall like any file in Downloads; the app's own private copies go with the
-    app.</li>
-    <li><b>Imported boundary files</b> (TelCam): kept in the app's private storage and
-    removed when you uninstall.</li>
-  </ul>
-  <p>TelCam can import a boundary file supplied to you by email. Before the file is read,
-  the app checks it against a key built into the app itself; a file that fails the check
-  is refused. Nothing about the import touches a network. Imported boundaries are drawn on
-  your photos only when you choose.</p>
-  <p>Backup differs by app. TelCam closes both channels: nothing of its own goes to a
-  Google-account cloud backup or to a phone-to-phone transfer, regardless of your
-  settings &mdash; your photographs live in your gallery, outside the app. R What?
-  excludes all of its data from Google cloud backup but includes it in phone-to-phone
-  migration, so a handset upgrade does not destroy unexported tracks. In ULGS Nav, device
-  backup and phone-to-phone transfer follow your device's own backup and migration
-  settings.</p>
+Expected: no change. `ulgs_prep.py` builds payloads with `json.dumps`, which emits nothing after
+the closing bracket. Expected is not measured.
 
-  <h3>Platforms, today and later</h3>
-  <p>Our apps currently run on Android phones and tablets, and this policy describes that
-  architecture. We are interested in other form factors &mdash; watches, vehicle systems,
-  and sharing between nearby devices. If we ship for them, some involve pathways this
-  policy doesn't yet describe: syncing between a phone and a watch, for example, can pass
-  through the platform's own services, the way network location does today. Our commitment
-  is the same one this whole page rests on: <b>any new data pathway will be described here,
-  by name, before the version that uses it is released</b> &mdash; and the promises that
-  don't depend on architecture (no ULGS servers, no collection or storage by us, no
-  selling, no ads, no accounts) hold on every platform we ever ship for.</p>
+---
 
-  <h3>Online map &amp; elevation services</h3>
-  <p>Some of our apps can fetch public map and terrain data over the network. When they
-  do, the request goes from your device to the public service, under that
-  service's own privacy policy &mdash; no ULGS system is anywhere in the path, and we
-  receive nothing. Like many large services, some are delivered through a
-  content-delivery network: requests to USGS 3DEP travel via Amazon CloudFront, whose
-  edge servers carry that traffic under Amazon's own policies. One of our
-  apps opts out entirely: <b>TelCam declares no INTERNET permission and cannot
-  contact any service</b> &mdash; a structural property of the app, not a setting. The services
-  our apps contact, by name:</p>
-  <ul>
-    <li><b>USGS 3DEP</b> (elevation.nationalmap.gov) &mdash; elevation samples and terrain
-    imagery. Used by ULGS Nav &mdash; and it is the <b>only</b> service R What? contacts: two request paths to this one host, nothing else,
-    and both refuse cross-host redirects, so the app cannot be steered to another
-    server.</li>
-    <li><b>Oregon DOGAMI</b> (gis.dogami.oregon.gov) and <b>Washington DNR</b>
-    (gis.dnr.wa.gov) &mdash; state lidar and terrain layers (ULGS Nav)</li>
-    <li><b>OpenStreetMap Overpass</b> (overpass-api.de) &mdash; map feature data
-    (ULGS Nav)</li>
-    <li><b>USGS / USFS</b> &mdash; downloadable map sheets (ULGS Nav): the map-sheet
-    catalog at tnmaccess.nationalmap.gov. The download itself <b>follows the link the
-    catalog's reply supplies</b> &mdash; data.fs.usda.gov for USFS sheets, and currently
-    prd-tnm.s3.amazonaws.com (Amazon infrastructure) for USGS sheets &mdash; so the
-    download host is chosen by the federal service, not fixed by our code</li>
-  </ul>
-  <p>Be aware of what these requests contain. Fetching a map sheet or terrain layer
-  sends the <b>area</b> you are asking about &mdash; the loaded sheet's own published
-  extent, not where on it you are looking. Sampling elevation along a route sends
-  <b>coordinates that trace that route</b>: in ULGS Nav, enriching a track's
-  elevations sends the track itself, and opening a saved route's elevation profile
-  <b>automatically</b> sends about a hundred points of that route to the OpenStreetMap
-  Overpass service to name nearby landmarks &mdash; once per route, with no button
-  pressed; in R What?, <b>every time</b> you open or import a track &mdash; whether or
-  not it already has elevations &mdash; the app <b>automatically</b> sends the derived
-  sampling corridor around your line, which can
-  run to thousands of points. One map-search mode in ULGS Nav can send
-  <b>your current GPS position</b> as the search center &mdash; the only request in any
-  of our apps that carries your live position. Nothing about you &mdash; no name,
-  account, or identifier we control &mdash; accompanies these requests, and we store
-  nothing; but each request necessarily tells that service the line you are tracing or
-  the area you loaded, and their servers keep ordinary logs. In R What?, your live GPS position is <b>never stored and never transmitted</b> &mdash; held
-  in memory to draw your dot while the app is open, it goes nowhere else.</p>
-  <p>Fetched data is cached in the app's private storage (clearable in the app, removed
-  with the app at uninstall) so areas you have loaded keep working offline. A cache is
-  also, by its nature, a record: its files are named for the areas you fetched, and
-  clearing the cache is how you clear that record. If you prefer that no request leave
-  your device in the field, load your maps and terrain at home and work from the
-  cache &mdash; the apps are built for exactly that, with the one exception above: the
-  first time you open a route's profile, the landmark fetch fires if that route has none
-  stored.</p>
+## Task 3 — three board rows
 
-  <h3>Photos</h3>
-  <p>In TelCam, location embedding is under your control, and photos can carry no
-  location at all. Beyond that, the two copies the app can produce are deliberately
-  separate in what they carry: the located copy contains position data, the file's basic image and
-  timestamp fields, and a TelCam version stamp &mdash; the app's own provenance mark &mdash;
-  and no description of your device; the No Mark copy contains the camera's ordinary technical
-  metadata &mdash; for example make, model, firmware version, and exposure settings &mdash; and
-  no location data. <b>No file the app produces contains
-  both a position and a device description.</b> Neither copy contains serial numbers or
-  any per-device identifier.</p>
+Ids continue from the highest on master — verify rather than trusting this document. The board
+has a union merge driver; **append**.
 
-  <h3>Crash reports</h3>
-  <p>If an app offers a crash report, the report is a file written on your device. It
-  contains technical state &mdash; not your records or location history &mdash; and it is
-  shown to you in full. <b>Nothing sends automatically, in any app.</b> In TelCam, sending is
-  your action, by an email you compose; in ULGS Nav, the
-  report is saved to your Downloads by your action in the app, and sharing it &mdash; by
-  any means, or not at all &mdash; is entirely up to you. R What? has no crash-report
-  mechanism at all. Anything you type into an
-  optional note is included as you wrote it, so describe the problem in whatever detail
-  you're comfortable sharing.</p>
-  <p>When we diagnose a report, the technical contents describe our own code, and we
-  analyze them with our development tools. Your email address and anything you wrote in
-  the note are yours: we separate them from the technical contents before analysis, and
-  we never feed them into any tool or service that is permitted to train on them.</p>
+**1. CAM-298 closed** by Task 1, with the reasoning above and the migration check's result.
 
-  <h3>Permissions</h3>
-  <p>Each app requests only what its own features require, read from the apps' merged
-  manifests. TelCam declares <b>Camera</b> and <b>Location</b>. R What? declares <b>Location</b>
-  only. ULGS Nav declares
-  seven: <b>fine and coarse location</b> (positioning; coarse is the required
-  network-provider companion), <b>internet</b> (the map and terrain fetches above),
-  <b>foreground service</b> and its <b>location type</b> (recording that continues with
-  the screen off), <b>notifications</b> (the ongoing recording status), and <b>wake
-  lock</b> &mdash; seven that we
-  declare, plus one entry AndroidX defines for its own internal receivers, which grants
-  nothing to anyone and is not something we request. <b>No app requests a storage or
-  media permission.</b> File <b>import</b> opens the system picker, which grants access
-  to exactly the files you choose. File <b>export</b> writes to your shared Downloads
-  with no system prompt: the file lands where other software can read it and remains
-  after uninstall &mdash; exporting is the act that makes it shared. TelCam
-  writes photos to your gallery through the platform's media store &mdash; it can reach
-  the photos it created, not the rest of your gallery. Network access is described in
-  the services section above, and TelCam has none. Decline or revoke any
-  runtime permission in your device settings; the corresponding feature stops and the
-  rest of the app carries on.</p>
+**2. CB O1 recorded as a tester-build condition, not a product defect.** Owner's finding, and it
+corrects this thread's earlier framing.
 
-  <h3>Purchases, free versions, and paid versions</h3>
-  <p>Paid licenses and upgrades are processed by Google Play. We
-  receive transaction records (what was purchased, when, in what country) but never your
-  payment card details.</p>
-  <p>Where we offer a free or limited version of an app, <b>this same policy applies
-  without exception</b>: no advertising, no trackers, no accounts, and no additional data
-  practices of any kind. A free version is a smaller tool, not a data funnel. Our apps do
-  not phone home to check licenses, and we do not restrict your ability to export your own
-  data in any version.</p>
+Two chooser entries both reading *Mt. Hood National Forest* — one bundled, one imported —
+appeared during ORDER CB. **The collision requires importing a boundary whose name matches one
+already in the catalogue, which happened because the test file was built from a bundled asset.**
+A customer receives their own council, district or agency boundary, which by definition is not
+one ULGS already ships. The condition is an artifact of testing with a file we ship.
 
-  <dl class="spec">
-    <div><dt>ACCOUNTS</dt><dd>None, in any version. No registration, no login, no user profile.</dd></div>
-    <div><dt>ULGS CLOUD</dt><dd>None. Nothing syncs to us, nothing is stored by us. On-demand fetches from public services are described above.</dd></div>
-    <div><dt>ADS &amp; TRACKERS</dt><dd>None, in any version, free or paid. No advertising, analytics, or crash-reporting SDKs.</dd></div>
-    <div><dt>SELLING DATA</dt><dd>Never. We hold no user data to sell.</dd></div>
-    <div><dt>AI TRAINING</dt><dd>Never by us, never through us. We do not train machine-learning models on your data, and we do not provide, sell, or license it to anyone to train theirs.</dd></div>
-  </dl>
+Record it so a tester hitting it is not read as a product defect, and so the assumption behind
+that reasoning is written down: **if ULGS ever distributes a boundary that duplicates a bundled
+subject, this reopens.**
 
-  <div class="kicker">// 02</div>
-  <h2>This Website</h2>
+**3. The pre-ship default flip is already on the board from ORDER CG.** Do not duplicate it.
+Confirm it is still OPEN and cite it if a row references capture feedback.
 
-  <p>ulgeospatial.com is informational. No accounts, no advertising, no analytics scripts,
-  no cookies set by us.</p>
-  <ul>
-    <li><b>Server logs.</b> Our hosting provider records standard access logs (IP address,
-    browser type, pages requested) to operate and secure the site.</li>
-    <li><b>Fonts.</b> Pages load a typeface from Google Fonts, which means your browser
-    requests a file from Google's servers; Google's privacy policy governs that request.</li>
-    <li><b>Email.</b> If you write to an @ulgeospatial.com address, we receive your message
-    and address through Google Workspace and retain correspondence as long as needed to
-    respond. Beyond the mail platform that receives it, we never feed your correspondence
-    into any tool or service that is permitted to train on it.</li>
-  </ul>
+---
 
-  <div class="kicker">// 03</div>
-  <h2>Retention and deletion</h2>
-  <p>We hold no records of yours to retain or delete: no account, no server, no copy of
-  anything you create. What we do hold is limited to two things. <b>Google Play
-  transaction records</b> (what was purchased, when, in what country) are kept by Google
-  under its own terms and visible to us as the seller. <b>Email you send us</b> is kept
-  only as long as needed to answer you, and deleted on request &mdash; write to
-  <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a>. Everything else
-  lives on your device, and the list above says exactly what uninstall removes and what
-  remains for you to manage.</p>
+## Task 4 — amend the build-identity decision record
 
-  <h2>This website</h2>
-  <p>ulgeospatial.com is hosted on Squarespace, whose platform cookies and ordinary
-  server logs are governed by Squarespace's own privacy policy. This page loads one font
-  family from Google Fonts, which means your browser requests the font file from Google's
-  servers, and Google sees your IP address as it would for any resource it hosts. We add
-  no analytics, advertising, or trackers of our own. <b>Do Not Track:</b> we run no
-  tracking for a Do Not Track signal to switch off, in this site or in any of our apps.</p>
+`docs/verification/BU_clean_original_no_build_identity.md` currently reads as though the
+`PRE-RELEASE` marker in the watermarked copy's EXIF `Software` tag is provisional.
 
-  <h2>Children</h2>
-  <p>Our apps and site are professional field tools intended for adults. They are not
-  directed at children under 13, and we do not knowingly collect personal information from
-  children. If you believe a child has provided us personal information, contact
-  <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a> and we will
-  delete it.</p>
+**Owner decision: the tag is permanent, and its content reflects the build that produced the
+file.**
 
-  <div class="kicker">// 04</div>
-  <h2>Your Rights</h2>
-  <p>Because your records live on your device and not on our servers, you exercise most
-  rights directly: view, export, and delete your data in the app at any time.</p>
-  <p>For what little we do hold &mdash; support email and store transaction records &mdash;
-  you may request access, correction, or deletion at
-  <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a>. Residents of
-  California, the EU/EEA, the UK, and other jurisdictions with privacy statutes may have
-  additional rights under those laws; we honor valid requests regardless of where you
-  live, and we do not discriminate against anyone for exercising a privacy right.</p>
+```
+TelCam 0.9.0 (4) PRE-RELEASE [29b2977a] - Ultralight Geospatial LLC
+```
 
-  <div class="kicker">// 05</div>
-  <h2>Security</h2>
-  <p>Your records sit in app-private storage (or, for photos and exports, your device's
-  own gallery and Downloads), protected by your device's security. Because we do not hold
-  your data, the measures that matter are on your device: use device encryption and a
-  strong screen lock, and follow your organization's device policies where they apply.</p>
+The reasoning, which is stronger than provenance alone and must survive into the record:
 
-  <div class="kicker">// 06</div>
-  <h2>Agency &amp; Organization Customers</h2>
-  <p>Organizations that license our apps may have their own data-handling, retention, and
-  public-records obligations covering data their teams collect. Those obligations are the
-  organization's, and this policy does not alter them. Note for review teams: the network
-  behavior described in Section 01 &mdash; named public services, request contents, and
-  the offline cache workflow &mdash; is the complete inventory of the services our apps
-  are built to contact; map-sheet downloads additionally follow the download link the
-  federal catalog's reply supplies (currently Amazon-hosted). If your agency needs
-  data-handling documentation for procurement review, write to
-  <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a>.</p>
+> A photograph taken on 0.9.0 was taken on 0.9.0. A user may update to a general release or may
+> never update. `PRE-RELEASE` in a file produced by a pre-release build is **accurate**, not
+> stale — and removing it later would be a retroactive misstatement about which build made the
+> artifact. The string is not a placeholder awaiting cleanup. It changes when the build changes,
+> and never otherwise.
 
-  <div class="kicker">// 07</div>
-  <h2>Changes</h2>
-  <p>Updates will be posted to this page with a revised effective date. Material changes
-  will be noted in the affected apps' release notes.</p>
+**Amend in place, additively**, under the record's existing convention — `|| formerly:` on the
+board, an appended section in the document. **Do not rewrite what is there:** that record's
+reasoning about the `_NOMARK` copy is unaffected and correct, and the clean original still
+carries no build identity.
 
-  <footer>
-    <p>ULTRALIGHT GEOSPATIAL LLC &middot; 5441 S MACADAM AVE, STE N &middot; PORTLAND, OR 97239, USA</p>
-    <p><a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a></p>
-    <p class="dim">&copy; 2026 ULTRALIGHT GEOSPATIAL LLC &middot; <a href="index.html">HOME</a></p>
-  </footer>
+**Consequence to state plainly in the record**, because another lane depends on it: the
+watermarked copy carries an **application** identity tag permanently — the app's name, version,
+build and company. Not a device identity, not a user identity; every per-handset tag remains
+absent. There is no future release at which this file stops carrying it.
 
-</div>
-</body>
-</html>
+---
+
+## Report
+
+`docs/verification/order-ck-<sha>.md`. Standalone, short.
+
+Required:
+
+- Task 1's failing output **from before the fix**, verbatim, and the control's result.
+- Task 2's migration check, naming every container tested. **An unchanged result is still a
+  measurement and is reported as one.**
+- `tests=N failures=0` from `app/build/test-results/`, and the instrumented count — it should
+  move by exactly the tests added.
+- `git diff --stat`, confirming the change is confined to the parser, its test, the board, and
+  the one decision record.
+
+**Anything not verified is reported as unverified.**
+
+---
+
+## Not in scope
+
+- **Any change to `ulgs_prep.py` or the prep pipeline.** If Task 2 finds it emits trailing
+  content, that is a finding and its own order.
+- **The `_NOMARK` copy.** It carries no build identity and that is unchanged.
+- **Website or listing copy.** The measurement is this repo's; the wording is the website
+  lane's. Task 4 records the app fact and stops.
+- **Marking imported entries in the chooser.** Task 3 row 2 records why it is not needed for the
+  tester round, and names the condition that would reopen it.
