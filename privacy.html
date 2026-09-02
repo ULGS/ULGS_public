@@ -1,1 +1,380 @@
-//
+<!doctype html>
+<html lang="en" class="cw-black">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Privacy Policy | Ultralight Geospatial</title>
+
+<meta name="robots" content="index, follow, noai, noimageai" />
+<meta name="description" content="Privacy policy for Ultralight Geospatial LLC apps and website: what each app stores, what it sends, and to whom. No accounts, no ads, no trackers — in every version, free or paid." />
+<meta name="author" content="Ultralight Geospatial LLC" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root { --font-mono: "JetBrains Mono", ui-monospace, monospace;
+          --destructive: #ff5555; --warning: #ffcc00; }
+  .cw-white { --primary: #141414; --secondary: rgba(20,20,20,0.6);    --bg: #f5f4f0; --panel: #fdfdfc; }
+  .cw-black { --primary: #e8e8e8; --secondary: rgba(232,232,232,0.6); --bg: #000000; --panel: #0b0b0b; }
+
+  * { box-sizing: border-box; border-radius: 0 !important; }
+  body {
+    margin: 0; background: var(--bg); color: var(--primary);
+    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    font-size: 15px; line-height: 1.6;
+  }
+  a { color: var(--primary); text-decoration: none; border-bottom: 1px solid var(--primary); }
+  a:hover { background: var(--primary); color: var(--bg); }
+  .dim { opacity: 0.48; }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: 2.2rem 1.4rem 3rem; }
+
+  .crumb { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; margin-bottom: 2rem; }
+  h1 { font-size: 1.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;
+       margin: 0 0 0.3rem; }
+  .meta { font-size: 11.5px; opacity: 0.6; letter-spacing: 0.06em; margin-bottom: 2rem; }
+
+  .kicker { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; opacity: 0.48;
+            margin: 2.6rem 0 0.5rem; }
+  h2 { font-size: 1.02rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+       margin: 0 0 0.8rem; }
+  h3 { font-size: 0.9rem; font-weight: 800; letter-spacing: 0.03em; margin: 1.4rem 0 0.4rem; }
+  p { margin: 0 0 0.9rem; max-width: 68ch; }
+  ul { margin: 0 0 0.9rem; padding-left: 1.2rem; max-width: 68ch; }
+  li { margin-bottom: 0.35rem; }
+  b { font-weight: 800; }
+
+  .callout { border: 2px solid var(--primary); background: var(--panel);
+             padding: 1rem 1.2rem; margin: 1.4rem 0; font-weight: 700; max-width: 68ch; }
+
+  dl.spec { font-size: 12.5px; border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
+            max-width: 640px; margin: 0 0 0.9rem; }
+  dl.spec div { display: grid; grid-template-columns: 150px 1fr; gap: 10px; padding: 6px 0;
+                border-bottom: 1px solid color-mix(in srgb, var(--primary) 25%, transparent); }
+  dl.spec dt { opacity: 0.48; margin: 0; }
+  dl.spec dd { margin: 0; font-weight: 700; }
+
+  details.app { border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
+                margin: 0; padding: 0; }
+  details.app:last-of-type { border-bottom: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); }
+  details.app > summary { cursor: pointer; list-style: none; padding: 0.85rem 0;
+                          font-weight: 800; letter-spacing: 0.03em; display: flex; gap: 0.8rem;
+                          align-items: baseline; }
+  details.app > summary::-webkit-details-marker { display: none; }
+  details.app > summary::before { content: "+"; font-weight: 800; opacity: 0.55; width: 1ch; }
+  details.app[open] > summary::before { content: "\2212"; }
+  details.app > summary .note { font-weight: 400; opacity: 0.55; font-size: 12.5px; }
+  details.app .inner { padding: 0.2rem 0 1.1rem 1.8rem; }
+  details.app .inner p:last-child { margin-bottom: 0; }
+
+  @media print {
+    details.app > summary::before { content: ""; }
+    a { border-bottom: none; }
+  }
+
+  footer { margin-top: 3rem; padding-top: 1rem;
+           border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); font-size: 11.5px; }
+  footer p { margin: 2px 0; }
+
+  @media (max-width: 560px) {
+    dl.spec div { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="crumb"><a href="index.html">&larr; ULTRALIGHT GEOSPATIAL</a></div>
+
+  <h1>Privacy Policy</h1>
+  <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE <!-- BUMP ON DEPLOY -->[[SET-AT-DEPLOY]]</div>
+
+  <p>Ultralight Geospatial LLC ("ULGS," "we," "us") is the data controller for this
+  policy. Address and contact are in the footer. This page covers our mobile apps and
+  this website, and applies to every version of every app we publish.</p>
+
+  <p>Our apps are <b>ULGS Nav</b> (navigation), <b>R What?</b> (canyon elevation
+  profiles), and <b>TelCam</b> (field camera) &mdash; Android applications, distributed
+  through Google Play in the United States.</p>
+
+  <div class="kicker">// 01</div>
+  <h2>Our apps</h2>
+  <ul>
+    <li><b>No app asks you to register, sign in, or create a profile</b>; using an app
+    puts no record of you in our hands.</li>
+    <li><b>No ULGS servers.</b> We operate no service any app contacts. Nothing you
+    create is transmitted to us, and no app checks a license with us.</li>
+    <li><b>No third-party advertising, analytics, or crash-reporting SDKs</b> in any
+    version. Where an app has a crash reporter it is our own, it writes to your device,
+    and it sends nothing on its own &mdash; see each app below.</li>
+    <li><b>No sale or sharing of personal information</b>, as those terms are used in
+    California law. We hold no user records to sell.</li>
+    <li><b>We do not use your personal information to train machine-learning models</b>,
+    and we do not sell or license it to anyone for that purpose. Anything you send us
+    &mdash; a crash report, a photograph or file for testing or support, or material for
+    commissioned work &mdash; is used only for what you sent it for.</li>
+    <li><b>Export is not restricted</b> in any version of any app.</li>
+    <li><b>Permissions</b> may be declined or revoked in your device settings; the
+    corresponding feature stops and the rest of the app continues.</li>
+  </ul>
+
+  <p><b>Your device's location.</b> Your device fixes its position either from
+  satellites (GNSS) or from a network-based service that estimates position from nearby
+  cell towers and Wi-Fi. On most Android phones that network service is Google's, part of
+  Google Play services, and using it sends those nearby signals to Google under Google's
+  terms; on a device without Google's services it is whatever the manufacturer or system
+  provides, or nothing at all. Either way it is your device doing the positioning, not our
+  code. Our apps are built to work from satellite positioning alone, and where an app
+  offers a positioning-source control, choosing satellites-only stops the app requesting
+  network positions rather than merely ignoring them &mdash; ULGS Nav has such a
+  control.</p>
+
+  <p><b>Third-party recipients.</b> Where an app fetches public map or terrain data, the
+  request goes from your device to that public service under its own privacy policy; no
+  ULGS system is in the path. Some of those services reach you through third-party
+  infrastructure: content delivery networks that carry the traffic, and storage hosts
+  that serve the files. We neither control nor observe those operators' logs.</p>
+
+  <p><b>AI and machine learning.</b> We use software tools, including AI-assisted
+  analysis, on our own engineering and testing data, on public datasets, and on our own
+  source code. We do not knowingly submit anything you send us to a service that trains
+  on it. What we cannot promise is control of the platforms we run the business on
+  &mdash; email, storage, developer tools &mdash; each of which applies its own terms to
+  what passes through it, including AI features we neither operate nor audit &mdash; our
+  email provider, named in section 04, is one example. We send no more than a task needs and use the settings and account
+  types that restrict such use where they are offered, but this area is changing quickly
+  and we would rather state the limit than imply a guarantee we cannot give.</p>
+
+  <p><b>New data pathways</b> will be described on this page before the app version that
+  uses them is released.</p>
+
+  <div class="kicker">// 02</div>
+  <h2>Each app</h2>
+
+  <p class="dim">Select an app.</p>
+
+  <details class="app" id="ulgs-nav"><summary>ULGS NAV <span class="note">navigation &middot; contacts public map and terrain services</span></summary>
+  <div class="inner">
+  <p><b>Permissions.</b> Location, network access, notifications, and the
+  foreground-service permissions that let a recording continue while the screen is off.
+  One further permission is declared but used by no current feature,
+  and one manifest entry is defined by a Google support library for its own internal use
+  rather than requested by us. No storage or media permission. The exact declaration list
+  for a given release is in the technical inventory described in section 09.</p>
+  <p><b>Network.</b> The app contacts USGS (elevation service and map-sheet catalog),
+  Oregon DOGAMI, Washington DNR, the USDA Forest Service, and the OpenStreetMap Overpass
+  project. Requests carry the map area being loaded or the coordinates of the route being
+  processed; no name, account, or identifier we control accompanies them. Two behaviors
+  are worth stating plainly: opening a saved route's elevation profile <b>automatically</b>
+  sends points from that route to the Overpass service, once per route, without a
+  separate action by you; and one map-search mode sends your current position as the
+  search center. Map-sheet downloads follow a download link supplied by the federal
+  catalog's reply, so the host serving a download is chosen by that service rather than
+  fixed by our code.</p>
+  <p><b>Location.</b> A recording you start continues while the screen is off or locked,
+  shown by an ongoing notification. Stopping the recording ends the recording; leaving
+  the app ends location delivery. A GPS-only mode is available and requests satellite
+  positioning only.</p>
+  <p><b>On your device.</b> Tracks, routes, waypoints, settings, and fetched map and
+  terrain caches are held in app-private storage and removed when you uninstall. Cached
+  files are named for the areas fetched, so the cache is a record of where you loaded
+  data; it can be cleared in the app. Exported files and downloaded map sheets are
+  written to shared storage such as Downloads: they are readable by other software, they
+  remain after uninstall, and exports carry geometry, your labels, and creation times.</p>
+  <p><b>Backup and transfer.</b> Cloud backup is disabled. App data is included in
+  phone-to-phone migration, so moving to a new handset does not destroy unexported
+  records.</p>
+  <p><b>Diagnostics.</b> A crash report is a file written on your device and shown to you
+  in full. Nothing is sent automatically. Saving it to Downloads is your action, and
+  sharing it afterward is entirely yours. Text you type into the optional note is
+  included as written.</p>
+
+  </div></details>
+
+  <details class="app" id="r-what"><summary>R WHAT? <span class="note">canyon elevation profiles &middot; contacts one elevation service</span></summary>
+  <div class="inner">
+  <p><b>Permissions.</b> Location only. No storage or media permission, no background
+  location, and no foreground service.</p>
+  <p><b>Network.</b> The app contacts one service: the USGS 3DEP elevation service. Every
+  time you open or import a track &mdash; whether or not it already has elevations &mdash;
+  the app <b>automatically</b> sends a set of coordinates derived from that line, which
+  may be several thousand points, and stores the returned elevations with the track. No
+  name, account, or identifier we control accompanies the request.</p>
+  <p><b>Location.</b> Your live position is used only while the app is open, to show your
+  position against the profile. It is never stored and never transmitted.</p>
+  <p><b>On your device.</b> Profiles, elevations, and cached terrain are held in
+  app-private storage and removed when you uninstall. Files you export are written to
+  shared storage and remain after uninstall. They contain route geometry and elevations
+  &mdash; no live position and no timestamps &mdash; and any name or description you
+  typed onto a waypoint, as you wrote it.</p>
+  <p><b>Backup and transfer.</b> Cloud backup is disabled. App data is included in
+  phone-to-phone migration.</p>
+  <p><b>Diagnostics.</b> The app has no crash-reporting mechanism.</p>
+
+  </div></details>
+
+  <details class="app" id="telcam"><summary>TELCAM <span class="note">field camera &middot; no network access</span></summary>
+  <div class="inner">
+  <p><b>Permissions.</b> Camera and location. No storage or media permission.</p>
+  <p><b>Network.</b> TelCam declares no internet permission and cannot contact any
+  service. It sends nothing, to us or to anyone.</p>
+  <p><b>Location.</b> TelCam records device telemetry onto and into photographs. You
+  can toggle HUD/Watermark elements, and you can have the app save a second copy with
+  neither telemetry drawn on it nor location data in its EXIF. That second copy is off
+  unless you turn it on. If your device has no position fix, no location is written and
+  the image is marked NO FIX where the position would otherwise appear.</p>
+  <p><b>Photographs.</b> With the second copy turned on, the app saves two files. The
+  located copy
+  contains position data, the file's basic image and timestamp fields, and a TelCam
+  version stamp, and no description of your device. The No Mark copy contains the
+  camera's ordinary technical metadata &mdash; for example make, model, firmware version,
+  and exposure settings &mdash; and no location data. No file the app produces contains
+  both a position and a device description, and neither copy contains serial numbers or
+  any per-device identifier. Photographs are written to your device's photo gallery
+  through the platform's media store; the app can reach the photos it created, not the
+  rest of your gallery, and photographs remain in your gallery after uninstall.</p>
+  <p><b>On your device.</b> Settings, diagnostic records, and imported boundary files are
+  held in app-private storage and removed when you uninstall. A boundary file supplied to
+  you by email is checked against a single key built into the app before it is read, and a
+  file failing that check is refused. That check proves the file came from us and has not been altered
+  since; it is the same key in every copy of the app and identifies neither you nor your device. No network
+  is involved. Diagnostic records you choose to
+  save to Downloads are in shared storage and remain after uninstall.</p>
+  <p><b>Backup and transfer.</b> Cloud backup and phone-to-phone transfer are both
+  disabled for this app's own data.</p>
+  <p><b>Diagnostics.</b> A crash report is a file written on your device and shown to you
+  in full. Nothing is sent automatically; sending is your action, by an email you compose
+  in your own mail app. Text you type into the optional note is included as written.</p>
+
+  </div></details>
+
+  <p>If you send us a crash report, a photograph, or a file &mdash; to diagnose a
+  problem, or as a tester helping us check what an app writes into a file &mdash; we use
+  it only for that purpose. We separate your address and anything you wrote from the
+  technical contents before analysis, we do not publish or pass on what you send, and we
+  delete it on request. Files sent for testing can carry position data and whatever the
+  photograph shows, so send only what you are willing to share.</p>
+
+  <div class="kicker">// 03</div>
+  <h2>Purchases</h2>
+  <p>Paid licenses and upgrades are processed by Google Play, under the Google account
+  you already have; a subscription, if we offer one, works the same way and creates no
+  account with us. We receive transaction records &mdash; what was purchased, when, and in
+  what country &mdash; and never your payment card details.</p>
+
+  <div class="kicker">// 04</div>
+  <h2>This website</h2>
+  <p>ulgeospatial.com is informational and is hosted on Squarespace, whose platform
+  cookies and standard server logs (including IP address, browser type, and pages
+  requested) are governed by Squarespace's own privacy policy. The site loads one
+  typeface from Google Fonts, so your browser requests that file from Google's servers
+  and Google receives your IP address. We add no analytics, advertising, or trackers of
+  our own, and set no cookies of our own.</p>
+  <p><b>Do Not Track.</b> We add no trackers to this site, and our apps contain none, so
+  a Do Not Track signal has nothing of ours to switch off.</p>
+  <p><b>Email.</b> Messages to an @ulgeospatial.com address reach us through Google
+  Workspace. Beyond the mail platform that receives it, we do not feed correspondence
+  into any service permitted to train on it.</p>
+
+  <div class="kicker">// 05</div>
+  <h2>Retention and deletion</h2>
+  <p>We hold no records of yours to retain or delete: no account, no server, no copy of
+  anything you create. We hold only Google Play transaction records, kept by Google under
+  its terms and visible to us as the seller, and email correspondence, kept as long as
+  needed to answer you and deleted on request. If you commission custom work from us,
+  section 10 describes what we hold and for how long.</p>
+  <p>Everything else is on your device. Section 02 states, for each app, what uninstall
+  removes and what remains for you to manage &mdash; photographs, exported files, and
+  downloaded map sheets are in your device's own storage and are yours to delete there.</p>
+
+  <div class="kicker">// 06</div>
+  <h2>Your rights</h2>
+  <p>Because your records are on your device, you exercise most rights directly: view,
+  export, and delete your data in the app at any time. Export also serves portability
+  &mdash; the formats are open and readable by other software.</p>
+  <p>For the little we do hold &mdash; correspondence, material for commissioned work,
+  and store transaction records &mdash; you may request access, correction, deletion, a
+  copy, restriction of how we use it, or object to our use of it, at
+  <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a>. We keep
+  correspondence to answer you, commissioned material to do and support the work you
+  asked for, and invoices because tax law requires it. We operate from the United States,
+  so anything you send us is processed there.</p>
+  <p>Where the GDPR or UK GDPR applies to you, those are our legal bases &mdash; our
+  agreement with you, our legitimate interest in supporting our software, and legal
+  obligation for tax records &mdash; and you may also lodge a complaint with your
+  national data protection authority. We honor valid requests regardless of where you
+  live, and we do not discriminate against anyone for exercising a privacy right.</p>
+
+  <div class="kicker">// 07</div>
+  <h2>Children</h2>
+  <p>Our apps and this site are professional field tools intended for adults. They are
+  not directed at children under 13, and we do not knowingly collect personal information
+  from children. If you believe a child has provided us personal information, contact
+  <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a> and we will
+  delete it.</p>
+
+  <div class="kicker">// 08</div>
+  <h2>Security</h2>
+  <p>Your records are held in app-private storage, or for photographs and exports in your
+  device's own gallery and Downloads, protected by your device's security. Because we do
+  not hold your data, the measures that matter are on your device: use device encryption
+  and a screen lock, and follow your organization's device policies where they apply.</p>
+
+  <div class="kicker">// 09</div>
+  <h2>Agency and organization customers</h2>
+  <p>Organizations licensing our apps may have their own data-handling, retention, and
+  public-records obligations covering data their teams collect. Those obligations are the
+  organization's and this policy does not alter them.</p>
+  <p>For procurement review, a per-release technical inventory &mdash; declared
+  permissions, the hosts each app contacts, and what each request contains, measured
+  against a specific build &mdash; is available on request from
+  <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a>.</p>
+
+  <div class="kicker">// 10</div>
+  <h2>Custom and commissioned work</h2>
+  <p>We prepare custom geospatial material on request &mdash; for example a boundary file
+  built for a customer and delivered by email for import into TelCam. This is a service
+  engagement, and it is the one circumstance in which we hold material of yours.</p>
+  <p><b>What we receive.</b> Your contact and billing details, and whatever source
+  material you send us: coordinates, shapefiles, maps, or a description of the area to be
+  drawn.</p>
+  <p><b>What we do with it.</b> We use it to produce and support your deliverable. We do
+  not publish it, share it with anyone outside ULGS, include it in data bundled with any
+  app, or use it to train machine-learning models. Where the area is sensitive &mdash;
+  private property, culturally significant sites, or restricted or operational areas
+  &mdash; we treat it as confidential and do not redistribute it in any form.</p>
+  <p><b>How long we keep it.</b> Source material and deliverables are kept while we
+  support the work and deleted on your request; ask at
+  <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a>. Invoices and
+  correspondence are retained as long as accounting and tax rules require, which we
+  cannot delete on request.</p>
+  <p>Once a boundary file is on your device it is yours: the app reads it locally, sends
+  nothing, and removes its copy when you uninstall.</p>
+
+  <div class="kicker">// 11</div>
+  <h2>Changes</h2>
+  <p>Updates are posted to this page with a revised effective date. Changes that affect
+  what an app does with your data are also noted in that app's release notes, so you see
+  them where you install the update rather than only here.</p>
+
+  <footer>
+    <p>ULTRALIGHT GEOSPATIAL LLC &middot; 5441 S MACADAM AVE, STE N &middot; PORTLAND, OR 97239, USA</p>
+    <p><a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a></p>
+    <p class="dim">&copy; 2026 ULTRALIGHT GEOSPATIAL LLC &middot; <a href="index.html">HOME</a></p>
+  </footer>
+
+</div>
+<script>
+  addEventListener("beforeprint", function () {
+    document.querySelectorAll("details.app").forEach(function (d) { d.open = true; });
+  });
+  addEventListener("hashchange", openTarget);
+  addEventListener("DOMContentLoaded", openTarget);
+  function openTarget() {
+    var t = location.hash && document.querySelector(location.hash);
+    if (t && t.tagName === "DETAILS") { t.open = true; t.scrollIntoView(); }
+  }
+</script>
+</body>
+</html>
