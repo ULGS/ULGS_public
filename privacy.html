@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="cw-black">
+<html lang="en" class="cw-green">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,10 +13,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet" />
 <style>
-  :root { --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  :root { --font-mono: "JetBrains Mono", ui-monospace, monospace; --rail: 232px;
           --destructive: #ff5555; --warning: #ffcc00; }
-  .cw-white { --primary: #141414; --secondary: rgba(20,20,20,0.6);    --bg: #f5f4f0; --panel: #fdfdfc; }
-  .cw-black { --primary: #e8e8e8; --secondary: rgba(232,232,232,0.6); --bg: #000000; --panel: #0b0b0b; }
+  .cw-white { --primary: #141414; --secondary: rgba(20,20,20,0.6);    --bg: #f5f4f0; --panel: #fdfdfc; --topo-op: 0.10; }
+  .cw-black { --primary: #e8e8e8; --secondary: rgba(232,232,232,0.6); --bg: #000000; --panel: #0b0b0b; --topo-op: 0.14; }
+  .cw-green { --primary: #00ff00; --secondary: #008800;               --bg: #000000; --panel: #030a03; --topo-op: 0.13; }
+  .cw-red   { --primary: #ff0000; --secondary: #880000;               --bg: #000000; --panel: #0a0303; --topo-op: 0.13; }
 
   * { box-sizing: border-box; border-radius: 0 !important; }
   body {
@@ -28,9 +30,71 @@
   a:hover { background: var(--primary); color: var(--bg); }
   .dim { opacity: 0.48; }
 
+  /* ===== LEFT RAIL — carried from index.html so the colorway is switchable here too.
+     Status readout and cursor compass deliberately omitted: decorative on a
+     compliance document. Navigation, theme and identity only. ===== */
+  .rail {
+    position: fixed; top: 0; bottom: 0; left: 0; width: var(--rail);
+    border-right: 2px solid var(--primary);
+    padding: 1.4rem 1.1rem;
+    display: flex; flex-direction: column; gap: 1.3rem;
+    background: var(--bg); z-index: 20; overflow: hidden;
+  }
+  .rail::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-color: var(--primary); opacity: var(--topo-op);
+    -webkit-mask-image: url("topo-bg.svg"); mask-image: url("topo-bg.svg");
+    -webkit-mask-size: 565.65% auto; mask-size: 565.65% auto;
+    -webkit-mask-position: 68.58% 33.87%; mask-position: 68.58% 33.87%;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  }
+  .rail > * { position: relative; }
+  .rail { overflow-y: auto; scrollbar-width: thin; }
+  .rail .brand { margin: 0; font-size: 1.35rem; font-weight: 800; text-transform: uppercase;
+                 letter-spacing: 0.03em; line-height: 1.25; }
+  .rail .brand a { border-bottom: none; }
+  .rail .brand a:hover { background: none; color: var(--primary); opacity: 0.7; }
+  .rail .tag { font-size: 10.5px; opacity: 0.6; letter-spacing: 0.08em; margin-top: 3px; }
+  .idx { font-size: 10.5px; letter-spacing: 0.05em; }
+  .idx a { display: block; border: none; padding: 3px 0;
+           border-bottom: 1px solid color-mix(in srgb, var(--primary) 22%, transparent); }
+  .idx a:hover { background: none; color: var(--primary); padding-left: 6px; }
+  .idx a[aria-current="page"] { font-weight: 800; }
+  .idx .n { opacity: 0.48; margin-right: 0.6em; font-weight: 800; }
+  .theme-dots { display: flex; gap: 9px; align-items: center; margin-top: auto; }
+  .theme-dots > span { font-size: 10px; opacity: 0.48; letter-spacing: 0.12em; }
+  .tdot { width: 19px; height: 19px; border-radius: 50% !important; padding: 0; cursor: pointer;
+          border: 1px solid transparent;
+          box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 25%, transparent); }
+  .td-white { background: #ffffff; border-color: #999999; }
+  .td-black { background: #1a1a1a; border-color: #555555; }
+  .td-green { background: #00ff00; border-color: #008800; }
+  .td-red   { background: #ff0000; border-color: #880000; }
+  .tdot[aria-pressed="true"] { border-color: #ffffff; }
+  .td-white[aria-pressed="true"] { border-color: #000000; }
+  .tdot:focus-visible { outline: 2px dashed var(--primary); outline-offset: 2px; }
+  .rail .foot { font-size: 10px; opacity: 0.48; line-height: 1.7; }
+
+  body { padding-left: var(--rail); }
   .wrap { max-width: 760px; margin: 0 auto; padding: 2.2rem 1.4rem 3rem; }
 
+  @media (max-width: 1080px) {
+    body { padding-left: 0; }
+    .rail { position: static; width: auto; border-right: none;
+            border-bottom: 2px solid var(--primary);
+            flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.2rem; }
+    .rail::before { -webkit-mask-size: cover; mask-size: cover;
+                    -webkit-mask-position: center; mask-position: center;
+                    opacity: calc(var(--topo-op) * 0.6); }
+    .rail .foot { display: none; }
+    .idx { display: flex; flex-wrap: wrap; gap: 0.15rem 0.9rem; width: 100%; order: 3; }
+    .idx a { border-bottom: none; padding: 2px 0; }
+    .idx a:hover { padding-left: 0; opacity: 0.7; }
+    .theme-dots { margin-top: 0; margin-left: auto; }
+  }
+
   .crumb { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; margin-bottom: 2rem; }
+  h2[id] { scroll-margin-top: 1.2rem; }
   h1 { font-size: 1.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;
        margin: 0 0 0.3rem; }
   .meta { font-size: 11.5px; opacity: 0.6; letter-spacing: 0.06em; margin-bottom: 2rem; }
@@ -83,9 +147,42 @@
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <div class="crumb"><a href="index.html">&larr; ULTRALIGHT GEOSPATIAL</a></div>
+<aside class="rail">
+  <div>
+    <div class="brand"><a href="index.html">Ultralight Geospatial</a></div>
+    <div class="tag">FIELD DATA TOOLS</div>
+  </div>
+
+  <nav class="idx" aria-label="Privacy policy contents">
+    <a href="#our-apps"><span class="n">01</span>OUR APPS</a>
+    <a href="#each-app"><span class="n">02</span>EACH APP</a>
+    <a href="#purchases"><span class="n">03</span>PURCHASES</a>
+    <a href="#website"><span class="n">04</span>THIS WEBSITE</a>
+    <a href="#retention"><span class="n">05</span>RETENTION</a>
+    <a href="#rights"><span class="n">06</span>YOUR RIGHTS</a>
+    <a href="#children"><span class="n">07</span>CHILDREN</a>
+    <a href="#security"><span class="n">08</span>SECURITY</a>
+    <a href="#agencies"><span class="n">09</span>AGENCIES</a>
+    <a href="#commissioned"><span class="n">10</span>COMMISSIONED</a>
+    <a href="#changes"><span class="n">11</span>CHANGES</a>
+  </nav>
+
+  <div class="theme-dots" role="group" aria-label="Color theme">
+    <span>THEME</span>
+    <button class="tdot td-white" data-cw="cw-white" aria-pressed="false" title="White"></button>
+    <button class="tdot td-black" data-cw="cw-black" aria-pressed="false" title="Black"></button>
+    <button class="tdot td-green" data-cw="cw-green" aria-pressed="true"  title="Green"></button>
+    <button class="tdot td-red"   data-cw="cw-red"   aria-pressed="false" title="Red"></button>
+  </div>
+
+  <div class="foot">
+    &copy; 2026 ULTRALIGHT GEOSPATIAL LLC<br/>
+    PORTLAND, OREGON
+  </div>
+</aside>
+
+<div class="wrap">
 
   <h1>Privacy Policy</h1>
   <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE <!-- BUMP ON DEPLOY -->[[SET-AT-DEPLOY]]</div>
@@ -99,7 +196,7 @@
   through Google Play in the United States.</p>
 
   <div class="kicker">// 01</div>
-  <h2>Our apps</h2>
+  <h2 id="our-apps">Our apps</h2>
   <ul>
     <li><b>No app asks you to register, sign in, or create a profile</b>; using an app
     puts no record of you in our hands.</li>
@@ -150,7 +247,7 @@
   uses them is released.</p>
 
   <div class="kicker">// 02</div>
-  <h2>Each app</h2>
+  <h2 id="each-app">Each app</h2>
 
   <p class="dim">Select an app.</p>
 
@@ -257,20 +354,20 @@
   photograph shows, so send only what you are willing to share.</p>
 
   <div class="kicker">// 03</div>
-  <h2>Purchases</h2>
+  <h2 id="purchases">Purchases</h2>
   <p>Paid licenses and upgrades are processed by Google Play, under the Google account
   you already have; a subscription, if we offer one, works the same way and creates no
   account with us. We receive transaction records &mdash; what was purchased, when, and in
   what country &mdash; and never your payment card details.</p>
 
   <div class="kicker">// 04</div>
-  <h2>This website</h2>
+  <h2 id="website">This website</h2>
   <p>ulgeospatial.com is informational and is hosted on Squarespace, whose platform
   cookies and standard server logs (including IP address, browser type, and pages
-  requested) are governed by Squarespace's own privacy policy. The site loads one
-  typeface from Google Fonts, so your browser requests that file from Google's servers
-  and Google receives your IP address. We add no analytics, advertising, or trackers of
-  our own, and set no cookies of our own.</p>
+  requested) are governed by Squarespace's own privacy policy. The site's typeface is served from this
+  site, not from a font service, so displaying this page sends no request to any third
+  party. We add no analytics, advertising, or trackers of our own, and set no cookies of
+  our own.</p>
   <p><b>Do Not Track.</b> We add no trackers to this site, and our apps contain none, so
   a Do Not Track signal has nothing of ours to switch off.</p>
   <p><b>Email.</b> Messages to an @ulgeospatial.com address reach us through Google
@@ -278,7 +375,7 @@
   into any service permitted to train on it.</p>
 
   <div class="kicker">// 05</div>
-  <h2>Retention and deletion</h2>
+  <h2 id="retention">Retention and deletion</h2>
   <p>We hold no records of yours to retain or delete: no account, no server, no copy of
   anything you create. We hold only Google Play transaction records, kept by Google under
   its terms and visible to us as the seller, and email correspondence, kept as long as
@@ -289,7 +386,7 @@
   downloaded map sheets are in your device's own storage and are yours to delete there.</p>
 
   <div class="kicker">// 06</div>
-  <h2>Your rights</h2>
+  <h2 id="rights">Your rights</h2>
   <p>Because your records are on your device, you exercise most rights directly: view,
   export, and delete your data in the app at any time. Export also serves portability
   &mdash; the formats are open and readable by other software.</p>
@@ -307,7 +404,7 @@
   live, and we do not discriminate against anyone for exercising a privacy right.</p>
 
   <div class="kicker">// 07</div>
-  <h2>Children</h2>
+  <h2 id="children">Children</h2>
   <p>Our apps and this site are professional field tools intended for adults. They are
   not directed at children under 13, and we do not knowingly collect personal information
   from children. If you believe a child has provided us personal information, contact
@@ -315,14 +412,14 @@
   delete it.</p>
 
   <div class="kicker">// 08</div>
-  <h2>Security</h2>
+  <h2 id="security">Security</h2>
   <p>Your records are held in app-private storage, or for photographs and exports in your
   device's own gallery and Downloads, protected by your device's security. Because we do
   not hold your data, the measures that matter are on your device: use device encryption
   and a screen lock, and follow your organization's device policies where they apply.</p>
 
   <div class="kicker">// 09</div>
-  <h2>Agency and organization customers</h2>
+  <h2 id="agencies">Agency and organization customers</h2>
   <p>Organizations licensing our apps may have their own data-handling, retention, and
   public-records obligations covering data their teams collect. Those obligations are the
   organization's and this policy does not alter them.</p>
@@ -332,7 +429,7 @@
   <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a>.</p>
 
   <div class="kicker">// 10</div>
-  <h2>Custom and commissioned work</h2>
+  <h2 id="commissioned">Custom and commissioned work</h2>
   <p>We prepare custom geospatial material on request &mdash; for example a boundary file
   built for a customer and delivered by email for import into TelCam. This is a service
   engagement, and it is the one circumstance in which we hold material of yours.</p>
@@ -353,7 +450,7 @@
   nothing, and removes its copy when you uninstall.</p>
 
   <div class="kicker">// 11</div>
-  <h2>Changes</h2>
+  <h2 id="changes">Changes</h2>
   <p>Updates are posted to this page with a revised effective date. Changes that affect
   what an app does with your data are also noted in that app's release notes, so you see
   them where you install the update rather than only here.</p>
@@ -366,6 +463,14 @@
 
 </div>
 <script>
+  try {
+    const dots = document.querySelectorAll(".tdot");
+    dots.forEach(d => d.addEventListener("click", () => {
+      document.documentElement.className = d.dataset.cw;
+      dots.forEach(x => x.setAttribute("aria-pressed", String(x === d)));
+    }));
+  } catch (e) { console.error("theme dots:", e); }
+
   addEventListener("beforeprint", function () {
     document.querySelectorAll("details.app").forEach(function (d) { d.open = true; });
   });
