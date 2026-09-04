@@ -14,6 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet" />
 <style>
   :root { --font-mono: "JetBrains Mono", ui-monospace, monospace; --rail: 232px;
+          --tx: 1;  /* text scale: STANDARD 1, LARGE 1.25 */
           --destructive: #ff5555; --warning: #ffcc00; }
   .cw-white { --primary: #141414; --secondary: rgba(20,20,20,0.6);    --bg: #f5f4f0; --panel: #fdfdfc; --topo-op: 0.10; }
   .cw-black { --primary: #e8e8e8; --secondary: rgba(232,232,232,0.6); --bg: #000000; --panel: #0b0b0b; --topo-op: 0.14; }
@@ -21,10 +22,11 @@
   .cw-red   { --primary: #ff0000; --secondary: #880000;               --bg: #000000; --panel: #0a0303; --topo-op: 0.13; }
 
   * { box-sizing: border-box; border-radius: 0 !important; }
+  body.txt-lg { --tx: 1.25; }
   body {
     margin: 0; background: var(--bg); color: var(--primary);
     font-family: var(--font-mono); font-variant-numeric: tabular-nums;
-    font-size: 15px; line-height: 1.6;
+    font-size: calc(16px * var(--tx)); line-height: 1.6;
   }
   a { color: var(--primary); text-decoration: none; border-bottom: 1px solid var(--primary); }
   a:hover { background: var(--primary); color: var(--bg); }
@@ -54,15 +56,23 @@
                  letter-spacing: 0.03em; line-height: 1.25; }
   .rail .brand a { border-bottom: none; }
   .rail .brand a:hover { background: none; color: var(--primary); opacity: 0.7; }
-  .rail .tag { font-size: 10.5px; opacity: 0.6; letter-spacing: 0.08em; margin-top: 3px; }
-  .idx { font-size: 10.5px; letter-spacing: 0.05em; }
+  .rail .tag { font-size: calc(12px * var(--tx)); opacity: 0.6; letter-spacing: 0.08em; margin-top: 3px; }
+  .idx { font-size: calc(12px * var(--tx)); letter-spacing: 0.05em; }
   .idx a { display: block; border: none; padding: 3px 0;
            border-bottom: 1px solid color-mix(in srgb, var(--primary) 22%, transparent); }
   .idx a:hover { background: none; color: var(--primary); padding-left: 6px; }
   .idx a[aria-current="page"] { font-weight: 800; }
   .idx .n { opacity: 0.48; margin-right: 0.6em; font-weight: 800; }
-  .theme-dots { display: flex; gap: 9px; align-items: center; margin-top: auto; }
-  .theme-dots > span { font-size: 10px; opacity: 0.48; letter-spacing: 0.12em; }
+  .textsize { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; margin-top: auto; }
+  .textsize > span { font-size: calc(12px * var(--tx)); opacity: 0.48; letter-spacing: 0.12em; }
+  .tsz { font-family: var(--font-mono); font-size: calc(10.5px * var(--tx)); font-weight: 800;
+         letter-spacing: 0.08em; padding: 3px 7px; cursor: pointer; background: var(--panel);
+         color: var(--primary); border-radius: 0;
+         border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent); }
+  .tsz[aria-pressed="true"] { background: var(--primary); color: var(--bg); }
+  .tsz:focus-visible { outline: 2px dashed var(--primary); outline-offset: 2px; }
+  .theme-dots { display: flex; gap: 9px; align-items: center; }
+  .theme-dots > span { font-size: calc(12px * var(--tx)); opacity: 0.48; letter-spacing: 0.12em; }
   .tdot { width: 19px; height: 19px; border-radius: 50% !important; padding: 0; cursor: pointer;
           border: 1px solid transparent;
           box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 25%, transparent); }
@@ -73,7 +83,7 @@
   .tdot[aria-pressed="true"] { border-color: #ffffff; }
   .td-white[aria-pressed="true"] { border-color: #000000; }
   .tdot:focus-visible { outline: 2px dashed var(--primary); outline-offset: 2px; }
-  .rail .foot { font-size: 10px; opacity: 0.48; line-height: 1.7; }
+  .rail .foot { font-size: calc(12px * var(--tx)); opacity: 0.48; line-height: 1.7; }
 
   body { padding-left: var(--rail); }
   .wrap { max-width: 760px; margin: 0 auto; padding: 2.2rem 1.4rem 3rem; }
@@ -97,13 +107,13 @@
   h2[id] { scroll-margin-top: 1.2rem; }
   h1 { font-size: 1.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;
        margin: 0 0 0.3rem; }
-  .meta { font-size: 11.5px; opacity: 0.6; letter-spacing: 0.06em; margin-bottom: 2rem; }
+  .meta { font-size: calc(12.5px * var(--tx)); opacity: 0.6; letter-spacing: 0.06em; margin-bottom: 2rem; }
 
-  .kicker { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; opacity: 0.48;
+  .kicker { font-size: calc(12px * var(--tx)); font-weight: 800; letter-spacing: 0.2em; opacity: 0.48;
             margin: 2.6rem 0 0.5rem; }
-  h2 { font-size: 1.02rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+  h2 { font-size: calc(1.02rem * var(--tx)); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
        margin: 0 0 0.8rem; }
-  h3 { font-size: 0.9rem; font-weight: 800; letter-spacing: 0.03em; margin: 1.4rem 0 0.4rem; }
+  h3 { font-size: calc(0.9rem * var(--tx)); font-weight: 800; letter-spacing: 0.03em; margin: 1.4rem 0 0.4rem; }
   p { margin: 0 0 0.9rem; max-width: 68ch; }
   ul { margin: 0 0 0.9rem; padding-left: 1.2rem; max-width: 68ch; }
   li { margin-bottom: 0.35rem; }
@@ -112,7 +122,7 @@
   .callout { border: 2px solid var(--primary); background: var(--panel);
              padding: 1rem 1.2rem; margin: 1.4rem 0; font-weight: 700; max-width: 68ch; }
 
-  dl.spec { font-size: 12.5px; border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
+  dl.spec { font-size: calc(14px * var(--tx)); border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
             max-width: 640px; margin: 0 0 0.9rem; }
   dl.spec div { display: grid; grid-template-columns: 150px 1fr; gap: 10px; padding: 6px 0;
                 border-bottom: 1px solid color-mix(in srgb, var(--primary) 25%, transparent); }
@@ -128,7 +138,7 @@
   details.app > summary::-webkit-details-marker { display: none; }
   details.app > summary::before { content: "+"; font-weight: 800; opacity: 0.55; width: 1ch; }
   details.app[open] > summary::before { content: "\2212"; }
-  details.app > summary .note { font-weight: 400; opacity: 0.55; font-size: 12.5px; }
+  details.app > summary .note { font-weight: 400; opacity: 0.55; font-size: calc(13px * var(--tx)); }
   details.app .inner { padding: 0.2rem 0 1.1rem 1.8rem; }
   details.app .inner p:last-child { margin-bottom: 0; }
 
@@ -138,7 +148,7 @@
   }
 
   footer { margin-top: 3rem; padding-top: 1rem;
-           border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); font-size: 11.5px; }
+           border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); font-size: calc(12.5px * var(--tx)); }
   footer p { margin: 2px 0; }
 
   @media (max-width: 560px) {
@@ -167,6 +177,12 @@
     <a href="#commissioned"><span class="n">10</span>COMMISSIONED</a>
     <a href="#changes"><span class="n">11</span>CHANGES</a>
   </nav>
+
+  <div class="textsize" role="group" aria-label="Text size">
+    <span>TEXT</span>
+    <button class="tsz" data-tx="std" aria-pressed="true">STANDARD</button>
+    <button class="tsz" data-tx="lg"  aria-pressed="false">LARGE</button>
+  </div>
 
   <div class="theme-dots" role="group" aria-label="Color theme">
     <span>THEME</span>
@@ -463,6 +479,14 @@
 
 </div>
 <script>
+  try {
+    const tsz = document.querySelectorAll(".tsz");
+    tsz.forEach(b => b.addEventListener("click", () => {
+      document.body.classList.toggle("txt-lg", b.dataset.tx === "lg");
+      tsz.forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    }));
+  } catch (e) { console.error("text size:", e); }
+
   try {
     const dots = document.querySelectorAll(".tdot");
     dots.forEach(d => d.addEventListener("click", () => {
