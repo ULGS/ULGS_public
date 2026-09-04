@@ -9,10 +9,27 @@
 <meta name="description" content="Privacy policy for Ultralight Geospatial LLC apps and website: what each app stores, what it sends, and to whom. No accounts, no ads, no trackers — in every version, free or paid." />
 <meta name="author" content="Ultralight Geospatial LLC" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet" />
 <style>
+  /* JetBrains Mono, self-hosted. SIL Open Font License 1.1 — fonts/OFL.txt.
+     No request leaves the visitor's browser for a typeface. Each weight lists
+     woff2 first and ttf as fallback, so either file set works; NL = no
+     ligatures, matching what the Android apps bundle. */
+  @font-face {
+    font-family: "JetBrains Mono"; font-style: normal; font-weight: 400; font-display: swap;
+    src: url("fonts/JetBrainsMono-Regular.woff2") format("woff2"),
+         url("fonts/JetBrainsMonoNL-Regular.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "JetBrains Mono"; font-style: normal; font-weight: 700; font-display: swap;
+    src: url("fonts/JetBrainsMono-Bold.woff2") format("woff2"),
+         url("fonts/JetBrainsMonoNL-Bold.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "JetBrains Mono"; font-style: normal; font-weight: 800; font-display: swap;
+    src: url("fonts/JetBrainsMono-ExtraBold.woff2") format("woff2"),
+         url("fonts/JetBrainsMonoNL-ExtraBold.ttf") format("truetype");
+  }
+
   :root { --font-mono: "JetBrains Mono", ui-monospace, monospace; --rail: 232px;
           --tx: 1;  /* text scale: STANDARD 1, LARGE 1.25 */
           --destructive: #ff5555; --warning: #ffcc00; }
@@ -111,9 +128,9 @@
 
   .kicker { font-size: calc(12px * var(--tx)); font-weight: 800; letter-spacing: 0.2em; opacity: 0.48;
             margin: 2.6rem 0 0.5rem; }
-  h2 { font-size: calc(1.02rem * var(--tx)); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+  h2 { font-size: calc(1.28rem * var(--tx)); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
        margin: 0 0 0.8rem; }
-  h3 { font-size: calc(0.9rem * var(--tx)); font-weight: 800; letter-spacing: 0.03em; margin: 1.4rem 0 0.4rem; }
+  h3 { font-size: calc(1.05rem * var(--tx)); font-weight: 800; letter-spacing: 0.03em; margin: 1.4rem 0 0.4rem; }
   p { margin: 0 0 0.9rem; max-width: 68ch; }
   ul { margin: 0 0 0.9rem; padding-left: 1.2rem; max-width: 68ch; }
   li { margin-bottom: 0.35rem; }
@@ -238,10 +255,9 @@
   Google Play services, and using it sends those nearby signals to Google under Google's
   terms; on a device without Google's services it is whatever the manufacturer or system
   provides, or nothing at all. Either way it is your device doing the positioning, not our
-  code. Our apps are built to work from satellite positioning alone, and where an app
-  offers a positioning-source control, choosing satellites-only stops the app requesting
-  network positions rather than merely ignoring them &mdash; ULGS Nav has such a
-  control.</p>
+  code. Our apps are built to work from satellite positioning alone. Every ULGS app
+  offers a positioning-source control, and choosing satellites-only stops the app
+  requesting network positions rather than merely ignoring them.</p>
 
   <p><b>Third-party recipients.</b> Where an app fetches public map or terrain data, the
   request goes from your device to that public service under its own privacy policy; no
@@ -332,7 +348,9 @@
   <p><b>Permissions.</b> Camera and location. No storage or media permission.</p>
   <p><b>Network.</b> TelCam declares no internet permission and cannot contact any
   service. It sends nothing, to us or to anyone.</p>
-  <p><b>Location.</b> TelCam records device telemetry onto and into photographs. You
+  <p><b>Location.</b> TelCam requests satellite positioning only, unless you enable its
+  network option, which is off by default. TelCam records device telemetry onto and into
+  photographs. You
   can toggle HUD/Watermark elements, and you can have the app save a second copy with
   neither telemetry drawn on it nor location data in its EXIF. That second copy is off
   unless you turn it on. If your device has no position fix, no location is written and
