@@ -54,6 +54,7 @@
   }
 
   :root { --font-mono: "JetBrains Mono", ui-monospace, monospace; --rail: 232px;
+          --tx: 1;  /* text scale: STANDARD 1, LARGE 1.25 — readable text only */
           /* AppColors.kt semantic constants — identical across colorways */
           --destructive: #ff5555; --warning: #ffcc00; }
   /* Colorway values trued to ThemeData.kt: RED is #FF0000 (not #FF3333);
@@ -66,10 +67,11 @@
 
   * { box-sizing: border-box; border-radius: 0 !important; }
   html { scroll-behavior: smooth; }
+  body.txt-lg { --tx: 1.25; }
   body {
     margin: 0; background: var(--bg); color: var(--primary);
     font-family: var(--font-mono); font-variant-numeric: tabular-nums;
-    font-size: 15px; /* TypeScale.body — both apps agree on 15sp */
+    font-size: calc(16px * var(--tx)); /* TypeScale.body — both apps agree on 15sp */
     line-height: 1.6;
     transition: background-color 0.2s linear, color 0.2s linear;
   }
@@ -98,7 +100,7 @@
   }
   .rail > * { position: relative; }
   .rail h1 { margin: 0; font-size: 1.35rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.25; }
-  .rail .tag { font-size: 10.5px; opacity: 0.6; letter-spacing: 0.08em; margin-top: 3px; }
+  .rail .tag { font-size: calc(12px * var(--tx)); opacity: 0.6; letter-spacing: 0.08em; margin-top: 3px; }
 
   .status { font-size: 11px; border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent);
             padding: 8px 9px; background: var(--panel); }
@@ -122,17 +124,25 @@
                  background: var(--panel); padding: 8px 9px; }
   .railcompass #rc-dial { width: 54px; height: 54px; flex: none; overflow: visible; }
   .railcompass #rc-rot { transform-origin: 50px 50px; transition: transform 0.09s linear; }
-  .rc-read { font-size: 10px; line-height: 1.7; font-variant-numeric: tabular-nums; }
+  .rc-read { font-size: calc(12px * var(--tx)); line-height: 1.7; font-variant-numeric: tabular-nums; }
   .rc-read .lbl { opacity: 0.48; margin-right: 0.5em; }
   .rc-read b { font-weight: 800; }
 
-  .idx { font-size: 11.5px; letter-spacing: 0.06em; }
+  .idx { font-size: calc(12px * var(--tx)); letter-spacing: 0.06em; }
   .idx a { display: block; border: none; padding: 5px 0; border-bottom: 1px solid color-mix(in srgb, var(--primary) 22%, transparent); }
   .idx a:hover { background: none; color: var(--primary); padding-left: 6px; }
   .idx .n { opacity: 0.48; margin-right: 0.6em; font-weight: 800; }
 
-  .theme-dots { display: flex; gap: 9px; align-items: center; margin-top: auto; }
-  .theme-dots > span { font-size: 10px; opacity: 0.48; letter-spacing: 0.12em; }
+  .textsize { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; margin-top: auto; }
+  .textsize > span { font-size: calc(12px * var(--tx)); opacity: 0.48; letter-spacing: 0.12em; }
+  .tsz { font-family: var(--font-mono); font-size: calc(10.5px * var(--tx)); font-weight: 800;
+         letter-spacing: 0.08em; padding: 3px 7px; cursor: pointer; background: var(--panel);
+         color: var(--primary);
+         border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent); }
+  .tsz[aria-pressed="true"] { background: var(--primary); color: var(--bg); }
+  .tsz:focus-visible { outline: 2px dashed var(--primary); outline-offset: 2px; }
+  .theme-dots { display: flex; gap: 9px; align-items: center; }
+  .theme-dots > span { font-size: calc(12px * var(--tx)); opacity: 0.48; letter-spacing: 0.12em; }
   /* ThemeDot rule from MapUIComponents.kt: rings are uniformly 1px;
      selection reads by ring COLOR — black on the white dot, white otherwise.
      A faint halo keeps dots visible on same-color page backgrounds. */
@@ -146,7 +156,7 @@
   .tdot[aria-pressed="true"] { border-color: #ffffff; }
   .td-white[aria-pressed="true"] { border-color: #000000; }
   .tdot:focus-visible { outline: 2px dashed var(--primary); outline-offset: 2px; }
-  .rail .foot { font-size: 10px; opacity: 0.48; line-height: 1.7; }
+  .rail .foot { font-size: calc(12px * var(--tx)); opacity: 0.48; line-height: 1.7; }
 
   /* ===== CONTENT PANE ===== */
   .pane { margin-left: var(--rail);
@@ -161,6 +171,18 @@
   /* ===== DEVICE SHELF: small screens, text below ===== */
   .shelf { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.75rem; align-items: start; }
   .device h3 span { font-weight: 400; opacity: 0.5; letter-spacing: 0.03em; }
+  .moreinfo { margin-top: 0.9rem; text-align: left; font-size: calc(14.5px * var(--tx));
+              border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
+              background: var(--panel); }
+  .moreinfo summary { cursor: pointer; padding: 9px 12px; font-size: calc(12.5px * var(--tx)); font-weight: 800;
+                      letter-spacing: 0.12em; list-style: none; text-align: center; }
+  .moreinfo summary::-webkit-details-marker { display: none; }
+  .moreinfo summary::before { content: "+ "; }
+  .moreinfo[open] summary::before { content: "\2212 "; }
+  .moreinfo[open] summary { border-bottom: 1px solid color-mix(in srgb, var(--primary) 30%, transparent); }
+  .moreinfo summary:focus-visible { outline: 2px dashed var(--primary); outline-offset: -2px; }
+  .moreinfo .mi-body { padding: 13px 15px 6px; max-width: 62ch; margin: 0 auto; }
+  .moreinfo .mi-body p { margin: 0 0 0.85rem; line-height: 1.75; }
   .appmark { display: block; width: 100%; max-width: 206px; height: 182px;
              margin: 0 auto 0.7rem; color: var(--primary); }
   @media (max-width: 860px) { .appmark { max-width: 230px; height: 204px; } }
@@ -199,10 +221,10 @@
     margin: 0 0 1.1rem; font-size: clamp(1.6rem, 6vw, 2.6rem); font-weight: 800;
     text-transform: uppercase; letter-spacing: 0.01em; line-height: 1.1; text-align: center; }
   .device h3 span, .appname span {
-    display: block; font-size: 13px; font-weight: 400; opacity: 0.5; letter-spacing: 0.14em;
+    display: block; font-size: calc(13px * var(--tx)); font-weight: 400; opacity: 0.5; letter-spacing: 0.14em;
     margin-top: 7px; }
-  .device p { margin: 0 0 0.6rem; font-size: 12.5px; text-align: center; }
-  .device .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 0; font-size: 10px; font-weight: 700; }
+  .device p { margin: 0 0 0.6rem; font-size: calc(14.5px * var(--tx)); text-align: center; }
+  .device .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 0; font-size: calc(12px * var(--tx)); font-weight: 700; }
   .device .facts span { border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
                         padding: 2px 7px; margin: 0 -1px -1px 0; background: var(--panel); }
 
@@ -310,9 +332,9 @@
   .land-screen .livehalo { fill: none; stroke: var(--primary); stroke-opacity: 0.45;
                            stroke-width: 1; vector-effect: non-scaling-stroke; }
   .land-caption { margin-top: 0.7rem; text-align: center; }
-  .land-caption h3 { margin: 0 0 0.25rem; font-size: 13.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
-  .land-caption p { margin: 0 auto 0.6rem; font-size: 12.5px; max-width: 60ch; }
-  .land-caption .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 0; font-size: 10px; font-weight: 700; }
+  .land-caption h3 { margin: 0 0 0.25rem; font-size: calc(14.5px * var(--tx)); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+  .land-caption p { margin: 0 auto 0.6rem; font-size: calc(14.5px * var(--tx)); max-width: 60ch; }
+  .land-caption .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 0; font-size: calc(12px * var(--tx)); font-weight: 700; }
   .land-caption .facts span { border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
                         padding: 2px 7px; margin: 0 -1px -1px 0; background: var(--panel); }
 
@@ -325,15 +347,15 @@
                          stroke-opacity: 0.45; stroke-width: 0.5; }
   .land-screen .wptext { font-family: var(--font-mono); font-weight: 700; }
   .land-caption .estnote {
-    display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 0.06em;
+    display: inline-block; font-size: calc(12px * var(--tx)); font-weight: 800; letter-spacing: 0.06em;
     border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent);
     padding: 3px 7px; margin: 0 0 0.55rem; opacity: 0.8;
   }
 
   /* ===== SPECS (common) ===== */
   .sec { margin-top: 2.4rem; padding-top: 0.5rem; border-top: 2px solid var(--primary); }
-  .sec .kicker { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; opacity: 0.48; margin-bottom: 0.5rem; text-align: center; }
-  .spec { font-size: 12.5px; border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); max-width: 640px; margin: 0 auto; }
+  .sec .kicker { font-size: calc(12px * var(--tx)); font-weight: 800; letter-spacing: 0.2em; opacity: 0.48; margin-bottom: 0.5rem; text-align: center; }
+  .spec { font-size: calc(14px * var(--tx)); border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); max-width: 640px; margin: 0 auto; }
   .spec div { display: grid; grid-template-columns: 130px 1fr; gap: 10px; padding: 6px 0;
               border-bottom: 1px solid color-mix(in srgb, var(--primary) 25%, transparent); }
   .spec dt { opacity: 0.48; } .spec dd { margin: 0; font-weight: 700; }
@@ -344,12 +366,12 @@
     padding: 1.4rem 1.6rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2rem; align-items: center;
     text-align: center; flex-direction: column;
   }
-  .contact p { margin: 0; font-size: 13px; max-width: 62ch; text-align: left; }
+  .contact p { margin: 0; font-size: calc(14.5px * var(--tx)); max-width: 62ch; text-align: left; }
   .contact b { font-weight: 800; }
   .contact .cta { display: inline-block; border: 1px solid var(--primary); padding: 12px 20px;
-                  font-size: 12px; font-weight: 800; letter-spacing: 0.1em; }
+                  font-size: calc(13px * var(--tx)); font-weight: 800; letter-spacing: 0.1em; }
 
-  .pane footer { margin-top: 2.2rem; padding-top: 1rem; border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); font-size: 11.5px; text-align: center; }
+  .pane footer { margin-top: 2.2rem; padding-top: 1rem; border-top: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); font-size: calc(12px * var(--tx)); text-align: center; }
   .pane footer p { margin: 2px 0; }
 
   @media (max-width: 1080px) {
@@ -359,7 +381,7 @@
     .rail .status, .rail .foot { display: none; }
     .railcompass { padding: 4px 8px; gap: 8px; }
     .railcompass #rc-dial { width: 38px; height: 38px; }
-    .rc-read { display: flex; gap: 0.8em; line-height: 1.2; align-items: center; font-size: 9.5px; }
+    .rc-read { display: flex; gap: 0.8em; line-height: 1.2; align-items: center; font-size: 12px; }
     .rail .idx { display: flex; gap: 1.1rem; width: 100%; order: 3; }
     .idx a { border-bottom: none; padding: 2px 0; }
     .idx a:hover { padding-left: 0; opacity: 0.7; }
@@ -379,8 +401,8 @@
   .contrast-wrap { margin: 0 0 2.2rem; }
   .contrast-lead { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
                    justify-content: center; text-align: center; margin-bottom: 0.9rem; }
-  .contrast-lead .tag { font-size: 11px; font-weight: 800; letter-spacing: 0.16em; opacity: 0.48; }
-  .contrast-lead p { margin: 0; font-size: 13px; max-width: 52ch; }
+  .contrast-lead .tag { font-size: calc(12px * var(--tx)); font-weight: 800; letter-spacing: 0.16em; opacity: 0.48; }
+  .contrast-lead p { margin: 0; font-size: calc(14.5px * var(--tx)); max-width: 52ch; }
   .contrast-row { display: grid; grid-template-columns: 150px minmax(0, 430px); gap: 1.75rem;
                   align-items: center; justify-content: center; }
   /* the dead phone */
@@ -422,9 +444,9 @@
                background: color-mix(in srgb, var(--primary) 12%, transparent); padding: 3px 0; }
   .deadphone .banner.blink { animation: bannerblink 1.4s steps(1) infinite; }
   @keyframes bannerblink { 0%,60%{opacity:1;} 61%,100%{opacity:0.25;} }
-  .contrast-cap { text-align: center; font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+  .contrast-cap { text-align: center; font-size: calc(12px * var(--tx)); font-weight: 800; letter-spacing: 0.1em;
                opacity: 0.48; margin-top: 8px; }
-  .contrast-answer { font-size: 13px; text-align: center; }
+  .contrast-answer { font-size: calc(14.5px * var(--tx)); text-align: center; }
   .contrast-answer b { font-weight: 800; }
   .contrast-answer .arrow { opacity: 0.48; margin: 0 0.4em; }
   @media (max-width: 900px) { .contrast-row { grid-template-columns: 1fr; gap: 1.25rem; justify-items: center; } }
@@ -494,11 +516,17 @@
 
   <nav class="idx" aria-label="Sections">
     <a href="#tools"><span class="n">01</span>THE TOOLS</a>
-    <a href="#profile"><span class="n">02</span>PROFILE</a>
+    <a href="#profile"><span class="n">02</span>R WHAT?</a>
     <a href="#specs"><span class="n">03</span>SPECS</a>
     <a href="#contact"><span class="n">04</span>CONTACT</a>
     <a href="privacy.html"><span class="n">05</span>PRIVACY</a>
   </nav>
+
+  <div class="textsize" role="group" aria-label="Text size">
+    <span>TEXT</span>
+    <button class="tsz" data-tx="std" aria-pressed="true">STANDARD</button>
+    <button class="tsz" data-tx="lg"  aria-pressed="false">LARGE</button>
+  </div>
 
   <div class="theme-dots" role="group" aria-label="Color theme">
     <span>THEME</span>
@@ -524,8 +552,10 @@
   <!-- CONTRAST: what a consumer map app does past the last tower -->
   <section class="contrast-wrap" aria-label="The problem with consumer map apps">
     <div class="contrast-lead">
-      <span class="tag">// WHEN THE SIGNAL DROPS</span>
-      <p>Ever been left a blue dot in a sea of empty space?</p>
+      <span class="tag">// NAVIGATING WITHOUT SERVICE?</span>
+      <p>Made the wrong swipe, accepted arrival, or closed the app &mdash; and lost the cached
+        view of your surroundings, with no offline copy? Stared at a location dot in an empty
+        polygon or a blank &ldquo;map&rdquo; and tried to remember where you last had service?</p>
     </div>
     <div class="contrast-row">
       <div class="deadphone" aria-label="Generic consumer map, offline">
@@ -622,9 +652,11 @@
           <div class="n">N</div>
           <svg viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="44" fill="none" stroke-width="5"/>
-            <line x1="50" y1="50" x2="50" y2="64" stroke-width="5" opacity="0.6"/>
-            <line x1="50" y1="50" x2="50" y2="15" stroke-width="5"/>
-            <circle cx="50" cy="15" r="3.5" fill="var(--primary)" stroke="none"/>
+            <g id="cam-rot">
+              <line x1="50" y1="50" x2="50" y2="64" stroke-width="5" opacity="0.6"/>
+              <line x1="50" y1="50" x2="50" y2="15" stroke-width="5"/>
+              <circle cx="50" cy="15" r="3.5" fill="var(--primary)" stroke="none"/>
+            </g>
             <circle cx="50" cy="50" r="4" fill="var(--primary)" stroke="none" opacity="0.5"/>
           </svg>
           <div class="brg" id="cam-brg">247°</div>
@@ -655,10 +687,38 @@
         <div class="flash" aria-hidden="true"></div>
         <div class="confirm">SAVED ✓</div>
       </div>
-      <p>Location on every frame &mdash; and a second copy without it.</p>
+      <p>Telemetry burned in at capture &mdash; and &ldquo;NO FIX&rdquo; rather than an invented position.</p>
       <div class="facts">
-        <span>NO INTERNET PERMISSION</span><span>BURN-IN + EXIF GPS</span><span>NO-LOCATION COPY</span><span>CUSTOM BOUNDARY FILES</span>
+        <span>NO INTERNET PERMISSION</span><span>BURN-IN + EXIF GPS</span><span>OPTIONAL NO-MARK COPY</span><span>CUSTOM BOUNDARY FILES</span>
       </div>
+      <details class="moreinfo">
+        <summary>MORE ABOUT TELCAM</summary>
+        <div class="mi-body">
+          <p>TelCam is built for field documentation &mdash; for watershed councils, survey
+          crews, and agency field staff whose photos need to hold up as records. Each photo
+          is watermarked and encoded with the telemetry your device provides at capture
+          &mdash; GPS position, compass heading, roll and pitch &mdash; burned into the
+          image and recorded in EXIF. If your device has no GPS fix, the photo says so
+          (&ldquo;NO FIX&rdquo;) rather than carrying an invented position. Absence is
+          honest; a fake point is not.</p>
+
+          <p>TelCam can also place your position inside custom map overlays you load
+          &mdash; an administrative boundary, a job site &mdash; giving each capture quick
+          spatial context alongside the telemetry. Your captures not only tell where you
+          stood &mdash; they can show it too.</p>
+
+          <p>TelCam requires no internet or data permissions structurally. The app cannot
+          transmit anything off your phone: no accounts, no cloud services, no analytics,
+          no ads, no AI photo editing. Your photographs and data stay on your device by
+          design, and sharing them is entirely your action.</p>
+
+          <p>In the event your social media person wants shareables from the field, the
+          <b>+&nbsp;No&nbsp;Mark</b> option saves an additional copy when you take a picture
+          &mdash; without the watermark and without location EXIF. Ordinary camera
+          details (device model, exposure) remain in EXIF. + No Mark is off by
+          default; the button is inside settings when you need it.</p>
+        </div>
+      </details>
     </div>
 
     </section>
@@ -771,8 +831,7 @@
       </div>
 
       <div class="land-caption">
-        <p>Read the canyon's shape before you drop in. What a drop means at the
-        anchor is your call, not the app's.</p>
+        <p>Study the canyon's shape before you enter. Get a sense of where you are while out of service.</p>
         <div class="estnote">HEIGHTS ARE ESTIMATES &mdash; VERIFY AT THE LIP</div>
         <div class="facts">
           <span>THE DESCENT AS A PROFILE</span><span>DROPS ANNOTATED &mdash; EST</span><span>YOUR NOTES ON THE LINE</span><span>GPX IN / OUT</span>
@@ -828,6 +887,8 @@
       return e;
     }
     let unwrapped = 0;
+    const camRot = document.getElementById("cam-rot");
+    const camBrg = document.getElementById("cam-brg");
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) rot.style.transition = "none";
     function onMove(ev) {
@@ -853,6 +914,16 @@
       const u = ev.clientX / window.innerWidth;
       const v = ev.clientY / Math.max(1, document.documentElement.clientHeight);
       elevEl.textContent = Math.round(terrain(u, v)).toLocaleString() + "\u2032";
+
+      // the TelCam mock's CompassCluster points from its own centre, not the rail's
+      if (camRot) {
+        const cs = camRot.ownerSVGElement.getBoundingClientRect();
+        let b2 = Math.atan2(ev.clientX - (cs.left + cs.width/2),
+                            -(ev.clientY - (cs.top + cs.height/2))) * 180 / Math.PI;
+        if (b2 < 0) b2 += 360;
+        camRot.setAttribute("transform", `rotate(${b2} 50 50)`);
+        if (camBrg) camBrg.textContent = String(Math.round(b2) % 360).padStart(3, "0") + "\u00b0";
+      }
     }
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("mousemove", onMove, { passive: true });
@@ -860,7 +931,15 @@
   })();
 
   try {
-    const dots = document.querySelectorAll(".tdot");
+    try {
+    const tsz = document.querySelectorAll(".tsz");
+    tsz.forEach(b => b.addEventListener("click", () => {
+      document.body.classList.toggle("txt-lg", b.dataset.tx === "lg");
+      tsz.forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    }));
+  } catch (e) { console.error("text size:", e); }
+
+  const dots = document.querySelectorAll(".tdot");
     dots.forEach(d => d.addEventListener("click", () => {
       document.documentElement.className = d.dataset.cw;
       dots.forEach(x => x.setAttribute("aria-pressed", String(x === d)));
@@ -922,7 +1001,7 @@
     camEls[0].innerHTML = c.site;
     camEls[1].textContent = c.lat;
     camEls[2].textContent = c.lon;
-    camEls[3].textContent = c.brg;
+    // camEls[3] is cam-brg — left to the cursor compass, not the scene loop
     camEls[4].setAttribute("d", c.subj);
     camEls[5].setAttribute("d", c.bnd);
     camEls[6].setAttribute("d", c.h2o);
