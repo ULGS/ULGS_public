@@ -218,15 +218,16 @@
 <div class="wrap">
 
   <h1>Privacy Policy</h1>
-  <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE <!-- BUMP ON DEPLOY -->September 5, 2026</div>
+  <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE <!-- BUMP ON DEPLOY -->September 6, 2026</div>
 
   <p>Ultralight Geospatial LLC ("ULGS," "we," "us") is the data controller for this
   policy. Address and contact are in the footer. This page covers our mobile apps and
   this website, and applies to every version of every app we publish.</p>
 
-  <p>Our apps are <b>ULGS Nav</b> (navigation), <b>R What?</b> (canyon elevation
-  profiles), and <b>TelCam</b> (field camera) &mdash; Android applications, distributed
-  through Google Play in the United States.</p>
+  <p>The application we currently publish is <b>TelCam</b> (field camera) &mdash; an
+  Android application, distributed through Google Play in the United States. Other
+  applications are in development; this policy will describe each one when it is
+  released.</p>
 
   <div class="kicker">// 01</div>
   <h2 id="our-apps">Our apps</h2>
@@ -255,9 +256,9 @@
   Google Play services, and using it sends those nearby signals to Google under Google's
   terms; on a device without Google's services it is whatever the manufacturer or system
   provides, or nothing at all. Either way it is your device doing the positioning, not our
-  code. Our apps are built to work from satellite positioning alone. Every ULGS app
-  offers a positioning-source control, and choosing satellites-only stops the app
-  requesting network positions rather than merely ignoring them.</p>
+  code. TelCam is built to work from satellite positioning alone and offers a
+  positioning-source control; choosing satellites-only stops the app requesting network
+  positions rather than merely ignoring them.</p>
 
   <p><b>Third-party recipients.</b> Where an app fetches public map or terrain data, the
   request goes from your device to that public service under its own privacy policy; no
@@ -281,67 +282,9 @@
   <div class="kicker">// 02</div>
   <h2 id="each-app">Each app</h2>
 
-  <p class="dim">Select an app.</p>
+  <p class="dim">The application this policy currently covers.</p>
 
-  <details class="app" id="ulgs-nav"><summary>ULGS NAV <span class="note">navigation &middot; contacts public map and terrain services</span></summary>
-  <div class="inner">
-  <p><b>Permissions.</b> Location, network access, notifications, and the
-  foreground-service permissions that let a recording continue while the screen is off.
-  One further permission is declared but used by no current feature,
-  and one manifest entry is defined by a Google support library for its own internal use
-  rather than requested by us. No storage or media permission. The exact declaration list
-  for a given release is in the technical inventory described in section 09.</p>
-  <p><b>Network.</b> The app contacts USGS (elevation service and map-sheet catalog),
-  Oregon DOGAMI, Washington DNR, the USDA Forest Service, and the OpenStreetMap Overpass
-  project. Requests carry the map area being loaded or the coordinates of the route being
-  processed; no name, account, or identifier we control accompanies them. Two behaviors
-  are worth stating plainly: opening a saved route's elevation profile <b>automatically</b>
-  sends points from that route to the Overpass service, once per route, without a
-  separate action by you; and one map-search mode sends your current position as the
-  search center. Map-sheet downloads follow a download link supplied by the federal
-  catalog's reply, so the host serving a download is chosen by that service rather than
-  fixed by our code.</p>
-  <p><b>Location.</b> A recording you start continues while the screen is off or locked,
-  shown by an ongoing notification. Stopping the recording ends the recording; leaving
-  the app ends location delivery. A GPS-only mode is available and requests satellite
-  positioning only.</p>
-  <p><b>On your device.</b> Tracks, routes, waypoints, settings, and fetched map and
-  terrain caches are held in app-private storage and removed when you uninstall. Cached
-  files are named for the areas fetched, so the cache is a record of where you loaded
-  data; it can be cleared in the app. Exported files and downloaded map sheets are
-  written to shared storage such as Downloads: they are readable by other software, they
-  remain after uninstall, and exports carry geometry, your labels, and creation times.</p>
-  <p><b>Backup and transfer.</b> Cloud backup is disabled. App data is included in
-  phone-to-phone migration, so moving to a new handset does not destroy unexported
-  records.</p>
-  <p><b>Diagnostics.</b> A crash report is a file written on your device and shown to you
-  in full. Nothing is sent automatically. Saving it to Downloads is your action, and
-  sharing it afterward is entirely yours. Text you type into the optional note is
-  included as written.</p>
 
-  </div></details>
-
-  <details class="app" id="r-what"><summary>R WHAT? <span class="note">canyon elevation profiles &middot; contacts one elevation service</span></summary>
-  <div class="inner">
-  <p><b>Permissions.</b> Location only. No storage or media permission, no background
-  location, and no foreground service.</p>
-  <p><b>Network.</b> The app contacts one service: the USGS 3DEP elevation service. Every
-  time you open or import a track &mdash; whether or not it already has elevations &mdash;
-  the app <b>automatically</b> sends a set of coordinates derived from that line, which
-  may be several thousand points, and stores the returned elevations with the track. No
-  name, account, or identifier we control accompanies the request.</p>
-  <p><b>Location.</b> Your live position is used only while the app is open, to show your
-  position against the profile. It is never stored and never transmitted.</p>
-  <p><b>On your device.</b> Profiles, elevations, and cached terrain are held in
-  app-private storage and removed when you uninstall. Files you export are written to
-  shared storage and remain after uninstall. They contain route geometry and elevations
-  &mdash; no live position and no timestamps &mdash; and any name or description you
-  typed onto a waypoint, as you wrote it.</p>
-  <p><b>Backup and transfer.</b> Cloud backup is disabled. App data is included in
-  phone-to-phone migration.</p>
-  <p><b>Diagnostics.</b> The app has no crash-reporting mechanism.</p>
-
-  </div></details>
 
   <details class="app" id="telcam"><summary>TELCAM <span class="note">field camera &middot; no network access</span></summary>
   <div class="inner">
@@ -368,15 +311,16 @@
   <p><b>On your device.</b> Settings, diagnostic records, and imported boundary files are
   held in app-private storage and removed when you uninstall. A boundary file supplied to
   you by email is checked against a single key built into the app before it is read, and a
-  file failing that check is refused. That check proves the file came from us and has not been altered
-  since; it is the same key in every copy of the app and identifies neither you nor your device. No network
-  is involved. Diagnostic records you choose to
-  save to Downloads are in shared storage and remain after uninstall.</p>
-  <p><b>Backup and transfer.</b> Cloud backup and phone-to-phone transfer are both
-  disabled for this app's own data.</p>
+  file failing that check is refused. That check proves the file came from us and has not
+  been altered since; it is the same key in every copy of the app and identifies neither
+  you nor your device. No network is involved.</p>
   <p><b>Diagnostics.</b> A crash report is a file written on your device and shown to you
   in full. Nothing is sent automatically; sending is your action, by an email you compose
-  in your own mail app. Text you type into the optional note is included as written.</p>
+  in your own mail app. Text you type into the optional note is included as written.
+  Diagnostic records you choose to save to Downloads are in shared storage and remain
+  after uninstall.</p>
+  <p><b>Backup and transfer.</b> Cloud backup and phone-to-phone transfer are both
+  disabled for this app's own data.</p>
 
   </div></details>
 
@@ -489,6 +433,10 @@
   <p>Updates are posted to this page with a revised effective date. Changes that affect
   what an app does with your data are also noted in that app's release notes, so you see
   them where you install the update rather than only here.</p>
+
+  <p>The prior version, effective September 5, 2026, also covered two applications then
+  in development; their sections were removed pending release and will return when each
+  application reaches testers.</p>
 
   <footer>
     <p>ULTRALIGHT GEOSPATIAL LLC &middot; 5441 S MACADAM AVE, STE N &middot; PORTLAND, OR 97239, USA</p>
