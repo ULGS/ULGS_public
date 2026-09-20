@@ -90,7 +90,7 @@
   .idx a:hover { background: none; color: var(--primary); padding-left: 6px; }
   .idx a[aria-current="page"] { font-weight: 800; }
   .idx .n { opacity: 0.48; margin-right: 0.6em; font-weight: 800; }
-  .textsize { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; margin-top: auto; }
+  .textsize { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
   .textsize > span { font-size: calc(12px * var(--tx)); opacity: 0.48; letter-spacing: 0.12em; }
   .tsz { font-family: var(--font-mono); font-size: calc(10.5px * var(--tx)); font-weight: 800;
          letter-spacing: 0.08em; padding: 3px 7px; cursor: pointer; background: var(--panel);
@@ -110,7 +110,7 @@
   .tdot[aria-pressed="true"] { border-color: #ffffff; }
   .td-white[aria-pressed="true"] { border-color: #000000; }
   .tdot:focus-visible { outline: 2px dashed var(--primary); outline-offset: 2px; }
-  .rail .foot { font-size: calc(12px * var(--tx)); opacity: 0.48; line-height: 1.7; }
+  .rail .foot { font-size: calc(12px * var(--tx)); opacity: 0.48; line-height: 1.7; margin-top: auto; }
 
   body { padding-left: var(--rail); }
   .wrap { max-width: 760px; margin: 0 auto; padding: 2.2rem 1.4rem 3rem; }
@@ -209,20 +209,6 @@
     </div>
   </div>
 
-  <nav class="idx" aria-label="Privacy policy contents">
-    <a href="#our-apps"><span class="n">01</span>OUR APPS</a>
-    <a href="#each-app"><span class="n">02</span>EACH APP</a>
-    <a href="#purchases"><span class="n">03</span>PURCHASES</a>
-    <a href="#website"><span class="n">04</span>THIS WEBSITE</a>
-    <a href="#retention"><span class="n">05</span>RETENTION</a>
-    <a href="#rights"><span class="n">06</span>YOUR RIGHTS</a>
-    <a href="#children"><span class="n">07</span>CHILDREN</a>
-    <a href="#security"><span class="n">08</span>SECURITY</a>
-    <a href="#agencies"><span class="n">09</span>AGENCIES</a>
-    <a href="#commissioned"><span class="n">10</span>COMMISSIONED</a>
-    <a href="#changes"><span class="n">11</span>CHANGES</a>
-  </nav>
-
   <div class="textsize" role="group" aria-label="Text size">
     <span>TEXT</span>
     <button class="tsz" data-tx="std" aria-pressed="true">STANDARD</button>
@@ -236,6 +222,20 @@
     <button class="tdot td-green" data-cw="cw-green" aria-pressed="true"  title="Green"></button>
     <button class="tdot td-red"   data-cw="cw-red"   aria-pressed="false" title="Red"></button>
   </div>
+
+  <nav class="idx" aria-label="Privacy policy contents">
+    <a href="#our-apps"><span class="n">01</span>OUR APPS</a>
+    <a href="#each-app"><span class="n">02</span>EACH APP</a>
+    <a href="#purchases"><span class="n">03</span>PURCHASES</a>
+    <a href="#website"><span class="n">04</span>THIS WEBSITE</a>
+    <a href="#retention"><span class="n">05</span>RETENTION</a>
+    <a href="#rights"><span class="n">06</span>YOUR RIGHTS</a>
+    <a href="#children"><span class="n">07</span>CHILDREN</a>
+    <a href="#security"><span class="n">08</span>SECURITY</a>
+    <a href="#agencies"><span class="n">09</span>AGENCIES</a>
+    <a href="#commissioned"><span class="n">10</span>COMMISSIONED</a>
+    <a href="#changes"><span class="n">11</span>CHANGES</a>
+  </nav>
 
   <div class="foot">
     &copy; 2026 ULTRALIGHT GEOSPATIAL LLC<br/>
