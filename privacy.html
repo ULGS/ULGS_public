@@ -6,11 +6,11 @@
 <title>Privacy Policy | Ultralight Geospatial</title>
 
 <meta name="robots" content="index, follow, noai, noimageai" />
-<meta name="description" content="Privacy policy for Ultralight Geospatial LLC apps and website: what each app stores, what it sends, and to whom. No accounts, no ads, no trackers — in every version, free or paid." />
+<meta name="description" content="Privacy policy for Ultralight Geospatial LLC software and website: what TelCam stores, what it sends, and to whom. No ULGS accounts, no ads, no trackers, in every version." />
 <meta name="author" content="Ultralight Geospatial LLC" />
 
 <style>
-  /* JetBrains Mono, self-hosted. SIL Open Font License 1.1 — fonts/OFL.txt.
+  /* JetBrains Mono, self-hosted. SIL Open Font License 1.1, see fonts/OFL.txt.
      No request leaves the visitor's browser for a typeface. Each weight lists
      woff2 first and ttf as fallback, so either file set works; NL = no
      ligatures, matching what the Android apps bundle. */
@@ -49,7 +49,7 @@
   a:hover { background: var(--primary); color: var(--bg); }
   .dim { opacity: 0.48; }
 
-  /* ===== LEFT RAIL — carried from index.html so the colorway is switchable here too,
+  /* ===== LEFT RAIL: carried from index.html so the colorway is switchable here too,
      cursor compass included for visual consistency across all three pages. The device
      status readout (SIGNAL/LOCATION mock) stays omitted here: decorative on a
      compliance document. ===== */
@@ -191,7 +191,7 @@
     <div class="tag">FIELD DATA TOOLS</div>
   </div>
 
-  <div class="railcompass" aria-label="Compass — follows your cursor">
+  <div class="railcompass" aria-label="Compass, follows your cursor">
     <svg id="rc-dial" viewBox="0 0 100 100" aria-hidden="true">
       <circle cx="50" cy="50" r="45" fill="none" stroke="var(--primary)" stroke-width="2"/>
       <g id="rc-rot">
@@ -224,8 +224,8 @@
   </div>
 
   <nav class="idx" aria-label="Privacy policy contents">
-    <a href="#our-apps"><span class="n">01</span>OUR APPS</a>
-    <a href="#each-app"><span class="n">02</span>EACH APP</a>
+    <a href="#our-apps"><span class="n">01</span>OUR APPROACH</a>
+    <a href="#each-app"><span class="n">02</span>THE APP</a>
     <a href="#purchases"><span class="n">03</span>PURCHASES</a>
     <a href="#website"><span class="n">04</span>THIS WEBSITE</a>
     <a href="#retention"><span class="n">05</span>RETENTION</a>
@@ -246,61 +246,76 @@
 <div class="wrap">
 
   <h1>Privacy Policy</h1>
-  <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE <!-- BUMP ON DEPLOY -->September 6, 2026</div>
+  <div class="meta">ULTRALIGHT GEOSPATIAL LLC &middot; EFFECTIVE <!-- BUMP ON DEPLOY -->September 23, 2026</div>
 
   <p>Ultralight Geospatial LLC ("ULGS," "we," "us") is the data controller for this
-  policy. Address and contact are in the footer. This page covers our mobile apps and
+  policy. Address and contact are in the footer. This page covers our mobile software and
   this website, and applies to every version of every app we publish.</p>
 
-  <p>The application we currently publish is <b>TelCam</b> (field camera) &mdash; an
-  Android application, distributed through Google Play in the United States. Other
-  applications are in development; this policy will describe each one when it is
+  <p>The application we currently publish is <b>TelCam</b> (field camera), distributed
+  through Google Play in the United States and, for testers, through Apple's TestFlight.
+  Other applications are in development; this policy will describe each one when it is
   released.</p>
 
   <div class="kicker">// 01</div>
-  <h2 id="our-apps">Our apps</h2>
+  <h2 id="our-apps">Our approach</h2>
   <ul>
-    <li><b>No app asks you to register, sign in, or create a profile</b>; using an app
-    puts no record of you in our hands.</li>
-    <li><b>No ULGS servers.</b> We operate no service any app contacts. Nothing you
-    create is transmitted to us, and no app checks a license with us.</li>
+    <li><b>No ULGS accounts.</b> Our software never asks you to register, sign in, or create
+    a profile, and using it puts no record of you in our hands. Getting the app does involve
+    accounts that are not ours: Google Play requires a Google account, TestFlight requires
+    an Apple ID, and applying to test adds your contact details to our tester list, as
+    section 04 describes.</li>
+    <li><b>No ULGS servers.</b> We operate no service our software contacts. Nothing you
+    create in the app is transmitted to us, and no license is checked with us.</li>
     <li><b>No third-party advertising, analytics, or crash-reporting SDKs</b> in any
-    version. Where an app has a crash reporter it is our own, it writes to your device,
-    and it sends nothing on its own &mdash; see each app below.</li>
+    version. Diagnostic information is captured by ULGS code, not third-party code, is
+    written to your device, and reaches us for analysis only if you choose to send it.
+    Section 02 describes what is captured on each platform.</li>
     <li><b>No sale or sharing of personal information</b>, as those terms are used in
     California law. We hold no user records to sell.</li>
     <li><b>We do not use your personal information to train machine-learning models</b>,
-    and we do not sell or license it to anyone for that purpose. Anything you send us
-    &mdash; a crash report, a photograph or file for testing or support, or material for
-    commissioned work &mdash; is used only for what you sent it for.</li>
-    <li><b>Export is not restricted</b> in any version of any app.</li>
-    <li><b>Permissions</b> may be declined or revoked in your device settings; the
-    corresponding feature stops and the rest of the app continues.</li>
+    and we do not sell or license it to anyone for that purpose. Anything you send us,
+    such as a diagnostic record, a photograph or file for testing or support, a tester
+    application, or material for commissioned work, is used only for what you sent it
+    for.</li>
+    <li><b>Your content is never locked.</b> You never need to pay to export or unlock
+    anything you create.</li>
+    <li><b>Permissions</b> may be declined or revoked at any time in your device
+    settings.</li>
   </ul>
 
-  <p><b>Your device's location.</b> Your device fixes its position either from
-  satellites (GNSS) or from a network-based service that estimates position from nearby
-  cell towers and Wi-Fi. On most Android phones that network service is Google's, part of
-  Google Play services, and using it sends those nearby signals to Google under Google's
-  terms; on a device without Google's services it is whatever the manufacturer or system
-  provides, or nothing at all. Either way it is your device doing the positioning, not our
-  code. TelCam is built to work from satellite positioning alone and offers a
-  positioning-source control; choosing satellites-only stops the app requesting network
-  positions rather than merely ignoring them.</p>
+  <p><b>Your device's location.</b> Your device fixes its position either from satellites
+  (GNSS) or from a network-based service that estimates position from nearby cell towers
+  and Wi-Fi. Which of those happens, and who provides the network service, depends on your
+  platform. Either way it is your device doing the positioning, not our code.</p>
 
-  <p><b>Third-party recipients.</b> TelCam makes no such requests &mdash; it has no internet
-  permission and cannot fetch anything. For a future app that fetches public map or terrain
-  data, the request would go from your device to that public service under its own privacy
-  policy; no ULGS system would be in the path. Some of those services reach you through
-  third-party infrastructure: content delivery networks that carry the traffic, and storage
-  hosts that serve the files. We neither control nor observe those operators' logs.</p>
+  <p><b>On Android</b>, you can set TelCam to request satellite positions only, so that
+  network positions are never requested rather than merely ignored. The network service
+  is typically Google's, part of Google Play services, and using it sends those nearby
+  signals to Google under Google's terms; on a device without Google's services it is
+  whatever the manufacturer or system provides, or nothing at all.</p>
 
-  <p><b>AI and machine learning.</b> We use software tools, including AI-assisted
-  analysis, on our own engineering and testing data, on public datasets, and on our own
+  <p><b>On Apple devices</b>, positioning runs through the system location service, backed
+  by Apple's infrastructure rather than Google's. The system offers apps no
+  satellites-only mode, so no app can present one there. What you control instead is Apple's own per-app <b>Precise Location</b> setting, in iOS
+  Settings. That setting behaves differently from the Android control: with Precise
+  Location off, the system still returns a position, just a deliberately coarsened one,
+  rather than declining to use network positioning.</p>
+
+  <p><b>Third-party recipients.</b> Whether an app contacts anything at all, and what, is
+  stated in its own entry in section 02. Where an app fetches public map or terrain data,
+  the request goes from your device to that public service under its own privacy policy;
+  no ULGS system is in the path. Some of those services reach you
+  through third-party infrastructure: content delivery networks that carry the traffic, and
+  storage hosts that serve the files. We neither control nor observe those operators'
+  logs.</p>
+
+  <p><b>AI and machine learning.</b> We use software tools, including AI-assisted analysis
+  and tools, on our own engineering and testing data, on public datasets, and on our own
   source code. We do not knowingly submit anything you send us to a service that trains
-  on it. What we cannot promise is control of the platforms we run the business on
-  &mdash; email, storage, developer tools &mdash; each of which applies its own terms to
-  what passes through it, including AI features we neither operate nor audit &mdash; our
+  on it. What we cannot promise is control of all the platforms we run the business on
+  (for example email, storage, and developer tools), each of which applies its own terms
+  to what passes through it, including AI features we neither operate nor audit. Our
   email provider, named in section 04, is one example. We send no more than a task needs and use the settings and account
   types that restrict such use where they are offered, but this area is changing quickly
   and we would rather state the limit than imply a guarantee we cannot give.</p>
@@ -309,7 +324,7 @@
   uses them is released.</p>
 
   <div class="kicker">// 02</div>
-  <h2 id="each-app">Each app</h2>
+  <h2 id="each-app">The app</h2>
 
   <p class="dim">The application this policy currently covers.</p>
 
@@ -317,12 +332,25 @@
 
   <details class="app" id="telcam"><summary>TELCAM <span class="note">field camera &middot; no network access</span></summary>
   <div class="inner">
-  <p><b>Permissions.</b> Camera and location. No storage or media permission.</p>
-  <p><b>Network.</b> TelCam declares no internet permission and cannot contact any
-  service. It sends nothing, to us or to anyone.</p>
-  <p><b>Location.</b> TelCam requests satellite positioning only, unless you enable its
-  network option, which is off by default. TelCam records device telemetry onto and into
-  photographs. You
+  <!-- TODO(iOS): confirm iOS permission set and photo-library access mode, then replace the
+       Android-scoped sentences in Permissions and Photographs with cross-platform wording. -->
+  <p><b>Permissions.</b> On Android: camera and location, and no storage or media
+  permission.</p>
+  <p><b>Network.</b> TelCam contacts no service and sends nothing, to us or to anyone, on
+  either platform. On Android it declares no internet permission and therefore cannot;
+  on Apple devices, where no such permission exists to omit, it contains no networking
+  code, and we check each release by scanning the compiled application for it.</p>
+  <p><b>Testing on Apple devices.</b> Testers install TelCam through Apple's TestFlight,
+  which Apple operates under its own terms and which may collect its own usage and
+  diagnostic data. If TelCam closes unexpectedly, TestFlight may ask whether to share a
+  crash report with us; if you send it, or send feedback through TestFlight, it reaches us
+  through Apple's developer console with your device details, your comments, and your
+  email address where Apple provides it. Nothing is shared this way unless you choose
+  to.</p>
+  <p><b>Location.</b> TelCam records device telemetry onto and into photographs. On
+  Android it requests satellite positioning only unless you enable its network option,
+  which is off by default; on Apple devices that control does not exist and positioning
+  follows your system Precise Location setting, as described in section 01. You
   can toggle HUD/Watermark elements, and you can have the app save a second copy with
   neither telemetry drawn on it nor location data in its EXIF. That second copy is off
   unless you turn it on. If your device has no position fix, no location is written and
@@ -331,41 +359,49 @@
   located copy
   contains position data, the file's basic image and timestamp fields, and a TelCam
   version stamp, and no description of your device. The No Mark copy contains the
-  camera's ordinary technical metadata &mdash; for example make, model, firmware version,
-  and exposure settings &mdash; and no location data. No file the app produces contains
+  camera's ordinary technical metadata (for example make, model, firmware version,
+  and exposure settings) and no location data. No file the app produces contains
   both a position and a device description, and neither copy contains serial numbers or
-  any per-device identifier. Photographs are written to your device's photo gallery
-  through the platform's media store; the app can reach the photos it created, not the
-  rest of your gallery, and photographs remain in your gallery after uninstall.</p>
+  any per-device identifier. Photographs are written to your device's photo library and
+  remain there after uninstall. On Android they are written through the platform's media
+  store, and the app can reach the photos it created, not the rest of your gallery.</p>
   <p><b>On your device.</b> Settings, diagnostic records, and imported boundary files are
   held in app-private storage and removed when you uninstall. A boundary file supplied to
   you by email is checked against a single key built into the app before it is read, and a
   file failing that check is refused. That check proves the file came from us and has not
   been altered since; it is the same key in every copy of the app and identifies neither
   you nor your device. No network is involved.</p>
-  <p><b>Diagnostics.</b> A crash report is a file written on your device and shown to you
-  in full. Nothing is sent automatically; sending is your action, by an email you compose
-  in your own mail app. Text you type into the optional note is included as written.
-  Diagnostic records you choose to save to Downloads are in shared storage and remain
-  after uninstall.</p>
-  <p><b>Backup and transfer.</b> Cloud backup and phone-to-phone transfer are both
-  disabled for this app's own data.</p>
+  <p><b>Diagnostics.</b> TelCam writes a diagnostic record when it detects a problem
+  itself, such as a failed capture or a rejected boundary file, and, on Android, when
+  the app closes unexpectedly. On Apple devices an app cannot record its own unexpected
+  closure; TestFlight's crash reporting, above, covers that case. A record stays on your device and
+  is shown to you in full before anything happens with it; nothing is sent automatically.
+  On Android, you send it as an email you compose in your own mail app, or keep it saved
+  to Downloads, where it remains after uninstall. A copy is saved there when you choose
+  to, or automatically when no mail app is available. On Apple devices, you send it through the system share sheet
+  and choose the destination yourself. Text you type into the optional note is included
+  as written.</p>
+  <p><b>Backup and transfer.</b> On Android, cloud backup and phone-to-phone transfer are
+  both disabled for this app's own data. On Apple devices, the app's own data, including
+  diagnostic records, is included in your iCloud or computer backup if you have backup
+  turned on, as Apple does for apps by default; that backup is held by Apple or on your
+  computer, never by us.</p>
 
   </div></details>
 
-  <p>If you send us a crash report, a photograph, or a file &mdash; to diagnose a
-  problem, or as a tester helping us check what an app writes into a file &mdash; we use
-  it only for that purpose. We separate your address and anything you wrote from the
+  <p>If you send us a diagnostic record, a photograph, or a file, whether to diagnose a
+  problem or as a tester helping us check what an app writes into a file, we use it only
+  for that purpose. We separate your address and anything you wrote from the
   technical contents before analysis, we do not publish or pass on what you send, and we
   delete it on request. Files sent for testing can carry position data and whatever the
   photograph shows, so send only what you are willing to share.</p>
 
   <div class="kicker">// 03</div>
   <h2 id="purchases">Purchases</h2>
-  <p>Paid licenses and upgrades are processed by Google Play, under the Google account
-  you already have; a subscription, if we offer one, works the same way and creates no
-  account with us. We receive transaction records &mdash; what was purchased, when, and in
-  what country &mdash; and never your payment card details.</p>
+  <p>Purchases of our software are processed by Google Play, under the Google account you
+  already have, and create no account with us; a subscription, if we ever offer one, works
+  the same way. We receive transaction records (what was purchased, when, and in what
+  country) and never your payment card details.</p>
 
   <div class="kicker">// 04</div>
   <h2 id="website">This website</h2>
@@ -376,7 +412,12 @@
   from this site, not from a font service, so displaying this page sends no request beyond
   the host that serves it. We add no analytics, advertising, or trackers of our own, and
   set no cookies of our own.</p>
-  <p><b>Do Not Track.</b> We add no trackers to this site, and our apps contain none, so
+  <p><b>Tester applications.</b> Applying to test uses a Google Form, so what you enter is
+  collected by Google and held in our Google Workspace account. We use it only to choose
+  testers and to add your email address to the Google Play or TestFlight tester list, keep
+  it while the testing program runs, and delete it on request. Links to other sites, such
+  as our Instagram page, take you to services governed by their own privacy policies.</p>
+  <p><b>Do Not Track.</b> We add no trackers to this site, and TelCam contains none, so
   a Do Not Track signal has nothing of ours to switch off.</p>
   <p><b>Email.</b> Messages to an @ulgeospatial.com address reach us through Google
   Workspace. Beyond the mail platform that receives it, we do not feed correspondence
@@ -384,36 +425,39 @@
 
   <div class="kicker">// 05</div>
   <h2 id="retention">Retention and deletion</h2>
-  <p>We hold no records of yours to retain or delete: no account, no server, no copy of
-  anything you create. We hold only Google Play transaction records, kept by Google under
-  its terms and visible to us as the seller, and email correspondence, kept as long as
-  needed to answer you and deleted on request. If you commission custom work from us,
+  <p>We keep no account for you, run no server, and hold no copy of anything you create in
+  the app. What we do hold is limited to Google Play transaction records, kept by Google under
+  its terms and visible to us as the seller; email correspondence, kept as long as needed
+  to answer you and deleted on request; and, if you test for us, your tester application
+  and anything you choose to share through TestFlight, described in sections 02 and
+  04. If you commission custom work from us,
   section 10 describes what we hold and for how long.</p>
-  <p>Everything else is on your device. Section 02 states, for each app, what uninstall
-  removes and what remains for you to manage &mdash; photographs, exported files, and
-  downloaded map sheets are in your device's own storage and are yours to delete there.</p>
+  <p>Everything else is on your device. Section 02 states what uninstall
+  removes and what remains for you to manage. Photographs and exported files are in
+  your device's own storage and are yours to delete there.</p>
 
   <div class="kicker">// 06</div>
   <h2 id="rights">Your rights</h2>
   <p>Because your records are on your device, you exercise most rights directly: view,
-  export, and delete your data in the app at any time. Export also serves portability
-  &mdash; the formats are open and readable by other software.</p>
-  <p>For the little we do hold &mdash; correspondence, material for commissioned work,
-  and store transaction records &mdash; you may request access, correction, deletion, a
+  export, and delete your data in the app at any time. Export also serves portability:
+  the formats are open and readable by other software.</p>
+  <p>For the little we do hold (correspondence, tester applications and TestFlight
+  submissions, material for commissioned work, and store transaction records), you may
+  request access, correction, deletion, a
   copy, restriction of how we use it, or object to our use of it, at
   <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a>. We keep
   correspondence to answer you, commissioned material to do and support the work you
   asked for, and invoices because tax law requires it. We operate from the United States,
   so anything you send us is processed there.</p>
-  <p>Where the GDPR or UK GDPR applies to you, those are our legal bases &mdash; our
+  <p>Where the GDPR or UK GDPR applies to you, our legal bases are our
   agreement with you, our legitimate interest in supporting our software, and legal
-  obligation for tax records &mdash; and you may also lodge a complaint with your
+  obligation for tax records. You may also lodge a complaint with your
   national data protection authority. We honor valid requests regardless of where you
   live, and we do not discriminate against anyone for exercising a privacy right.</p>
 
   <div class="kicker">// 07</div>
   <h2 id="children">Children</h2>
-  <p>Our apps and this site are professional field tools intended for adults. They are
+  <p>Our software and this site are professional field tools intended for adults. They are
   not directed at children under 13, and we do not knowingly collect personal information
   from children. If you believe a child has provided us personal information, contact
   <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a> and we will
@@ -422,24 +466,25 @@
   <div class="kicker">// 08</div>
   <h2 id="security">Security</h2>
   <p>Your records are held in app-private storage, or for photographs and exports in your
-  device's own gallery and Downloads, protected by your device's security. Because we do
+  device's own photo library or, on Android, Downloads, protected by your device's
+  security. Because we do
   not hold your data, the measures that matter are on your device: use device encryption
   and a screen lock, and follow your organization's device policies where they apply.</p>
 
   <div class="kicker">// 09</div>
   <h2 id="agencies">Agency and organization customers</h2>
-  <p>Organizations licensing our apps may have their own data-handling, retention, and
+  <p>Organizations licensing our software may have their own data-handling, retention, and
   public-records obligations covering data their teams collect. Those obligations are the
   organization's and this policy does not alter them.</p>
-  <p>For procurement review, a per-release technical inventory &mdash; declared
-  permissions, the hosts each app contacts, and what each request contains, measured
-  against a specific build &mdash; is available on request from
+  <p>For procurement review, a per-release technical inventory is available on
+  request: declared permissions, the hosts the app contacts, and what each request
+  contains, measured against a specific build. Ask at
   <a href="mailto:support@ulgeospatial.com">support@ulgeospatial.com</a>.</p>
 
   <div class="kicker">// 10</div>
   <h2 id="commissioned">Custom and commissioned work</h2>
-  <p>We prepare custom geospatial material and custom emblem configurations on request
-  &mdash; for example a boundary file, or an organization's logo or emblem burned into
+  <p>We prepare custom geospatial material and custom emblem configurations on request,
+  for example a boundary file, or an organization's logo or emblem burned into
   captures, built for a customer and delivered by email for import into TelCam. This is a
   service engagement, and it is the one circumstance in which we hold material of yours.</p>
   <p><b>What we receive.</b> Your contact and billing details, and whatever source
@@ -447,9 +492,9 @@
   drawn, or a logo, trademark, or other emblem artwork.</p>
   <p><b>What we do with it.</b> We use it to produce and support your deliverable. We do
   not publish it, share it with anyone outside ULGS, include it in data bundled with any
-  app, or use it to train machine-learning models. Where the area is sensitive &mdash;
-  private property, culturally significant sites, or restricted or operational areas
-  &mdash; we treat it as confidential and do not redistribute it in any form. The same
+  app, or use it to train machine-learning models. Where the area is sensitive, such as
+  private property, culturally significant sites, or restricted or operational areas,
+  we treat it as confidential and do not redistribute it in any form. The same
   confidentiality applies to any logo, trademark, or emblem artwork you send us: it is used
   only to build your configuration and is never redistributed or reused for another
   customer.</p>
@@ -466,10 +511,6 @@
   <p>Updates are posted to this page with a revised effective date. Changes that affect
   what an app does with your data are also noted in that app's release notes, so you see
   them where you install the update rather than only here.</p>
-
-  <p>The prior version, effective September 5, 2026, also covered two applications then
-  in development; their sections were removed pending release and will return when each
-  application reaches testers.</p>
 
   <footer>
     <p>ULTRALIGHT GEOSPATIAL LLC &middot; 5441 S MACADAM AVE, STE N &middot; PORTLAND, OR 97239, USA</p>
