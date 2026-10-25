@@ -37,6 +37,8 @@
   .cw-black { --primary: #e8e8e8; --secondary: rgba(232,232,232,0.6); --bg: #000000; --panel: #0b0b0b; --topo-op: 0.14; }
   .cw-green { --primary: #00ff00; --secondary: #008800;               --bg: #000000; --panel: #030a03; --topo-op: 0.13; }
   .cw-red   { --primary: #ff0000; --secondary: #880000;               --bg: #000000; --panel: #0a0303; --topo-op: 0.13; }
+  .cw-yellow { --primary: #ccff00; --secondary: #6d8800;              --bg: #000000; --panel: #090a03; --topo-op: 0.13; }
+  .cw-pink  { --primary: #ff69b4; --secondary: #883860;              --bg: #000000; --panel: #0a0608; --topo-op: 0.13; }
 
   * { box-sizing: border-box; border-radius: 0 !important; }
   body.txt-lg { --tx: 1.25; }
@@ -103,8 +105,11 @@
   .td-black { background: #1a1a1a; border-color: #555555; }
   .td-green { background: #00ff00; border-color: #008800; }
   .td-red   { background: #ff0000; border-color: #880000; }
+  .td-yellow { background: #ccff00; border-color: #6d8800; }
+  .td-pink   { background: #ff69b4; border-color: #883860; }
   .tdot[aria-pressed="true"] { border-color: #ffffff; }
   .td-white[aria-pressed="true"] { border-color: #000000; }
+  .td-yellow[aria-pressed="true"] { border-color: #000000; } /* white ring on #ccff00 ~1.18:1; dark ring, as in the app */
   .tdot:focus-visible { outline: 2px dashed var(--primary); outline-offset: 2px; }
   .rail .foot { font-size: calc(12px * var(--tx)); opacity: 0.48; line-height: 1.7; margin-top: auto; }
 
@@ -189,6 +194,8 @@
     <button class="tdot td-black" data-cw="cw-black" aria-pressed="false" title="Black"></button>
     <button class="tdot td-green" data-cw="cw-green" aria-pressed="true"  title="Green"></button>
     <button class="tdot td-red"   data-cw="cw-red"   aria-pressed="false" title="Red"></button>
+    <button class="tdot td-yellow" data-cw="cw-yellow" aria-pressed="false" title="Yellow"></button>
+    <button class="tdot td-pink"  data-cw="cw-pink"  aria-pressed="false" title="Pink"></button>
   </div>
 
   <nav class="idx" aria-label="EULA contents">
