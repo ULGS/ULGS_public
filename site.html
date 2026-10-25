@@ -64,6 +64,11 @@
   .cw-black { --primary: #e8e8e8; --secondary: rgba(232,232,232,0.6); --bg: #000000; --panel: #0b0b0b; --topo-op: 0.14; }
   .cw-green { --primary: #00ff00; --secondary: #008800;               --bg: #000000; --panel: #030a03; --topo-op: 0.13; }
   .cw-red   { --primary: #ff0000; --secondary: #880000;               --bg: #000000; --panel: #0a0303; --topo-op: 0.13; }
+  .cw-yellow { --primary: #ccff00; --secondary: #6d8800;              --bg: #000000; --panel: #090a03; --topo-op: 0.13; }
+  .cw-pink  { --primary: #ff69b4; --secondary: #883860;              --bg: #000000; --panel: #0a0608; --topo-op: 0.13; }
+  /* Standing site rule: no yellow on the elevation profile. Under YELLOW the R What?
+     section keeps GREEN (owner to confirm the fallback). */
+  .cw-yellow #profile { --primary: #00ff00; --secondary: #008800; --panel: #030a03; color: var(--primary); }
 
   * { box-sizing: border-box; border-radius: 0 !important; }
   html { scroll-behavior: smooth; }
@@ -153,8 +158,11 @@
   .td-black { background: #1a1a1a; border-color: #555555; }
   .td-green { background: #00ff00; border-color: #008800; }
   .td-red   { background: #ff0000; border-color: #880000; }
+  .td-yellow { background: #ccff00; border-color: #6d8800; }
+  .td-pink   { background: #ff69b4; border-color: #883860; }
   .tdot[aria-pressed="true"] { border-color: #ffffff; }
   .td-white[aria-pressed="true"] { border-color: #000000; }
+  .td-yellow[aria-pressed="true"] { border-color: #000000; } /* white ring on #ccff00 ~1.18:1; dark ring, as in the app */
   .tdot:focus-visible { outline: 2px dashed var(--primary); outline-offset: 2px; }
   .rail .foot { font-size: calc(12px * var(--tx)); opacity: 0.48; line-height: 1.7; }
 
@@ -286,6 +294,7 @@
   .scr-cam .comp svg { width: 28px; height: 28px; display: block; margin: 0 auto; }
   .scr-cam .comp circle, .scr-cam .comp line { stroke: var(--primary); }
   .scr-cam .comp .brg { font-size: 6.5px; margin-top: 1px; }
+  .scr-cam .comp .ref { font-size: 5.5px; letter-spacing: 0.02em; opacity: 0.8; }
   /* BL: MapContainer — boundary outline, waterway, location dot, name below */
   .scr-cam .vmap { position: absolute; left: 5px; bottom: 30px; z-index: 3; width: 44px; text-align: center; }
   .scr-cam .vmap svg { width: 38px; height: 34px; display: block; margin: 0 auto 1px; }
@@ -539,6 +548,8 @@
     <button class="tdot td-black" data-cw="cw-black" aria-pressed="false" title="Black"></button>
     <button class="tdot td-green" data-cw="cw-green" aria-pressed="true" title="Green"></button>
     <button class="tdot td-red" data-cw="cw-red" aria-pressed="false" title="Red"></button>
+    <button class="tdot td-yellow" data-cw="cw-yellow" aria-pressed="false" title="Yellow"></button>
+    <button class="tdot td-pink" data-cw="cw-pink" aria-pressed="false" title="Pink"></button>
   </div>
 
   <div class="foot">
@@ -665,6 +676,7 @@
             <circle cx="50" cy="50" r="4" fill="var(--primary)" stroke="none" opacity="0.5"/>
           </svg>
           <div class="brg" id="cam-brg">247°</div>
+          <div class="ref">MAGNETIC</div>
         </div>
         <div class="vmap" aria-hidden="true">
           <svg viewBox="0 0 38 34">
@@ -729,10 +741,17 @@
           spatial context alongside the telemetry. Your captures not only tell where you
           stood; they can show it too.</p>
 
-          <p>Switch on <b>GPX</b> and TelCam also saves a GPS waypoint for each photo taken
+          <p>Switch on <b>GPX</b> in Advanced Settings and TelCam also saves a GPS waypoint for each photo taken
           with a fix, as a small .gpx file. The waypoint carries the coordinates, fix time,
           accuracy, your description, and the photo&rsquo;s filename, so each point can be
           matched to its picture in your mapping or GIS software. GPX is off by default.</p>
+
+          <p>For grant photo-point monitoring, every photo carries its date and time, and your
+          description (project, point ID) stays set between sessions. Headings are marked
+          magnetic or true north, corrected on the phone with no network. Advanced Settings
+          adds an optional 8 MB photo-size cap for grant-portal uploads. Photo text stays
+          readable in bright sun, and there are six color themes, including hi-vis yellow and
+          survey pink.</p>
 
           <p>TelCam requires no internet or data permissions structurally. The app cannot
           transmit anything off your phone: no accounts, no cloud services, no analytics,
