@@ -578,7 +578,7 @@
 
       const px = Math.hypot(dx, dy);
       const miles = px / window.innerWidth * 2.4;
-      distEl.textContent = (miles < 0.1 ? miles.toFixed(3) : miles.toFixed(2)) + " MI";
+      distEl.textContent = miles.toFixed(2) + " MI";
 
       const u = ev.clientX / window.innerWidth;
       const v = ev.clientY / Math.max(1, document.documentElement.clientHeight);
